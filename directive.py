@@ -31,4 +31,17 @@ if __name__ == '__main__':
     print('** %s ' % ScriptName )
     print('************************************\n')
 
+    
 
+    #----Read in 3D simulation data----#
+
+    # import [plotting script file]
+    # read in 3D data into arrays using imported software
+    # v_con_3D = 
+    # r_sh_3D = 
+    # Y_e_prof_3D = 
+    # S_prof_3D = 
+
+    #----Read in previous 1D simulation data----#
+
+    # read in data from mixing-length parameter study for calibrating starting points
