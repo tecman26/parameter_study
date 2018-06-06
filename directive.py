@@ -26,13 +26,23 @@ if __name__ == '__main__':
 
     # This prints the program name. Not necessary, put nice to do
     # before other output. Stylish.
+
     print('\n************************************')
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-
-
     #----Read in 3D simulation data----#
+    # Looks like only the shock radius is in the 3D .txt file.
+    # The other variables will have to come from elsewhere.
+    # There's also probably a better way to do this reading of data, 
+    # but this is fine for now.
+
+    dataDir = "./data/"
+    threeD_File = "%smesa20_v_LR.dat" % dataDir
+    data = np.genfromtxt(threeD_File)
+
+    mean_shock_radius = data[:,11]
+
 
     # import [plotting script file]
     # read in 3D data into arrays using imported software
@@ -40,6 +50,12 @@ if __name__ == '__main__':
     # r_sh_3D = 
     # y_e_prof_3D = 
     # s_prof_3D = 
+
+    # --------------------------------------------------------------------------------------
+    #  Depending on how this should be done, we may need a large outer loop
+    #  that loops of various values of the parameters, runs the appropriate simulation,
+    #  and goes on. 
+    # --------------------------------------------------------------------------------------
 
     #----Read in previous 1D simulation data----#
 
