@@ -15,6 +15,7 @@ from scipy.stats import chisquare
 import numpy as np
 import sys, os
 from optparse import OptionParser
+#import runsetup
 
 # import yt?
 # from optparse import OptionParser # For if we need commad line arguments
@@ -29,6 +30,8 @@ if __name__ == '__main__':
     
     parser = OptionParser()
     parser.add_option("-r", "--read_file", action="store", dest="filename", help="Submit data file from previous simulation to set initial walker positions")
+    
+    output_directory = "~/BANG/parameter_study/trial0/step1/"
     
     if filename != "none":
         first_sim = False
@@ -71,41 +74,58 @@ if __name__ == '__main__':
     #  and goes on. 
     # --------------------------------------------------------------------------------------
     
-    num_walkers = 1
+    num_walkers = 1 #number of Markov chain walkers
     
-    start_positions = []
+    start_positions = [] #initialize starting position array
+    next_positions = [] #initialize next position array
     
     if first_sim == True:
-        #----Read in single-parameter alpha_lambda study----#
+        #----Hard-coded results from single-parameter alpha_lambda study----#
 
         # v_con_sing = 
         # r_sh_sing = 
         # y_e_prof_sing = 
         # s_prof_sing =
     
-        lambda_min = 0
-        lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
+        alpha_lambda_min = 0
+        alpha_lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
         
-        #----Generate array of random starting points--#
-        alpha_lambda_range = (lambda_min,lambda_max) 
+        #----Generate array of random starting points----#
+        alpha_lambda_range = (alpha_lambda_min,alpha_lambda_max)
         alpha_d_range = (0,1)
         
         for i in range(num_walkers):
-            alpha_lambda = (lambda_max-lambda_min)*np.random.random_sample() + lambda_min
+            alpha_lambda = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample() + alpha_lambda_min
             alpha_d = np.random.random_sample() #no multiplier or shift, since range is 0,1 (can change later if necessary)
             
-            start_positions.append(alpha_lambda, alpha_d)
+            next_positions.append(alpha_lambda, alpha_d)
             
-        start_positions = np.array(start_positions)
+        next_positions = np.array(next_positions)
     
      else:
+        
+        
         #----Read in previous simulation data----#
-
+         
+        # --------------------------------------------------------------------------------------
+        #  File format:
+        #  alpha_lambda_0, alpha_d_0
+        #  alpha_lambda_1, alpha_d_1
+        #  ... for num_walkers lines
+        # --------------------------------------------------------------------------------------
 
         # v_con_prev = 
         # r_sh_prev = 
         # y_e_prof_prev = 
         # s_prof_prev =
-
     
-    
+    positions_filename = output_directory+"positions.txt"
+    with open(positions_filename) as file:
+        for i in range(num_walkers):
+            file.write("%f, %f" % next_positions[i][0], next_positions[i][1])
+        
+    for i in range(num_walkers):
+        #runsetup.[function to be named](alpha_lambda=next_positions[i][0], alpha_dnext_positions[i][1],
+        # pathname=output_directory)
+        
+        
