@@ -17,7 +17,7 @@ import sys, os
 from optparse import OptionParser
 import glob
 #import readData1D
-#import runsetup
+#import ps_setup
 
 # import yt?
 # from optparse import OptionParser # For if we need commad line arguments
@@ -110,7 +110,7 @@ if __name__ == '__main__':
             
         next_positions = np.array(next_positions)
     
-     else:
+    else:
         
         
         #----Read in previous simulation data----#
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     
     #----Set up next simulation----#
     
-    for i in range(num_walkers):
+    #for i in range(num_walkers):
         #runsetup.[function to be named](alpha_lambda=next_positions[i][0], alpha_dnext_positions[i][1],
         # pathname=output_directory)
         
