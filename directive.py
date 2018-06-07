@@ -144,7 +144,7 @@ if __name__ == '__main__':
             
         for i in range(1,num_walkers):
             data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
-            readData1D.readData1D(data_pathname+"/output")
+            readData1D.readData1D(data_pathname+"/output") #read data from output file
             
  
 
