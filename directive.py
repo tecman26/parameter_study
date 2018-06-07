@@ -14,6 +14,8 @@
 from scipy.stats import chisquare
 import numpy as np
 import sys, os
+from optparse import OptionParser
+
 # import yt?
 # from optparse import OptionParser # For if we need commad line arguments
 
@@ -21,6 +23,18 @@ import sys, os
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 if __name__ == '__main__':
+    
+    first_sim = True
+    filename = "none"
+    
+    parser = OptionParser()
+    parser.add_option("-r", "--read_file", action="store", dest="filename", help="Submit data file from previous simulation to set initial walker positions")
+    
+    if filename != "none":
+        first_sim = False
+    elif os.path.isfile(filename) == False:
+        print("File does not exist.")
+        return
 
     # Put initialization stuff here. Define timestep etc etc etc
 
@@ -56,14 +70,36 @@ if __name__ == '__main__':
     #  that loops of various values of the parameters, runs the appropriate simulation,
     #  and goes on. 
     # --------------------------------------------------------------------------------------
-
-    #----Read in previous 1D simulation data----#
-
-    # read in data from mixing-length parameter study for calibrating starting points into arrays
-    # v_con_prev = 
-    # r_sh_prev = 
-    # y_e_prof_prev = 
-    # s_prof_prev =
     
+    num_walkers = 1
+    
+    start_positions = []
+    
+    if first_sim == True:
+        #----Read in single-parameter alpha_lambda study----#
+
+        # v_con_sing = 
+        # r_sh_sing = 
+        # y_e_prof_sing = 
+        # s_prof_sing =
+    
+        lambda_min = 0
+        lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
+        
+        #----Generate array of random starting points--#
+        alpha_lambda_range = range(lambda_min,lambda_max) 
+        alpha_d_range = range(0,1)
+        
+        
+    
+     else:
+        #----Read in previous simulation data----#
+
+
+        # v_con_prev = 
+        # r_sh_prev = 
+        # y_e_prof_prev = 
+        # s_prof_prev =
+
     
     
