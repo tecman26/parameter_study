@@ -75,6 +75,7 @@ if __name__ == '__main__':
     # --------------------------------------------------------------------------------------
     
     num_walkers = 1 #number of Markov chain walkers
+    num_parameters = 2 #number of parameters being varied
     
     start_positions = [] #initialize starting position array
     next_positions = [] #initialize next position array
@@ -98,7 +99,7 @@ if __name__ == '__main__':
             alpha_lambda = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample() + alpha_lambda_min
             alpha_d = np.random.random_sample() #no multiplier or shift, since range is 0,1 (can change later if necessary)
             
-            next_positions.append(alpha_lambda, alpha_d)
+            next_positions.append((alpha_lambda, alpha_d))
             
         next_positions = np.array(next_positions)
     
@@ -108,22 +109,47 @@ if __name__ == '__main__':
         #----Read in previous simulation data----#
          
         # --------------------------------------------------------------------------------------
-        #  File format:
-        #  alpha_lambda_0, alpha_d_0
-        #  alpha_lambda_1, alpha_d_1
+        #  positions.txt format:
+        #  0, alpha_lambda_0, alpha_d_0
+        #  1, alpha_lambda_1, alpha_d_1
+        #  ... 
+        #  i, alpha_lambda_i, alpha_d_i
+        #  
+        #  for num_walkers lines
+        # --------------------------------------------------------------------------------------
+        # integrated_data_i.txt format:
+        # r (km), v_con (km/s), 
+        # y_e_prof_prev = 
+        # s_prof_prev =
         #  ... for num_walkers lines
         # --------------------------------------------------------------------------------------
 
-        # v_con_prev = 
-        # r_sh_prev = 
-        # y_e_prof_prev = 
-        # s_prof_prev =
+        positions_prev = []
+        with open(filename) as positions:
+            
+            for i in range(num_walkers):
+                for 
+                positions.read(
+ 
+            # v_con_prev = 
+            # r_sh_prev = 
+            # y_e_prof_prev = 
+            # s_prof_prev =
+            
+            
+    
+    
+    #----Output positions file----#
     
     positions_filename = output_directory+"positions.txt"
     with open(positions_filename) as file:
         for i in range(num_walkers):
-            file.write("%f, %f" % next_positions[i][0], next_positions[i][1])
-        
+            for parameter in next_positions[i]:
+                file.write(("%f, " % parameter).rstrip('\n'))
+                file.write('\n')
+    
+    #----Set up next simulation----#
+    
     for i in range(num_walkers):
         #runsetup.[function to be named](alpha_lambda=next_positions[i][0], alpha_dnext_positions[i][1],
         # pathname=output_directory)
