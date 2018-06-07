@@ -87,10 +87,16 @@ if __name__ == '__main__':
         lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
         
         #----Generate array of random starting points--#
-        alpha_lambda_range = range(lambda_min,lambda_max) 
-        alpha_d_range = range(0,1)
+        alpha_lambda_range = (lambda_min,lambda_max) 
+        alpha_d_range = (0,1)
         
-        
+        for i in range(num_walkers):
+            alpha_lambda = (lambda_max-lambda_min)*np.random.random_sample() + lambda_min
+            alpha_d = np.random.random_sample() #no multiplier or shift, since range is 0,1 (can change later if necessary)
+            
+            start_positions.append(alpha_lambda, alpha_d)
+            
+        start_positions = np.array(start_positions)
     
      else:
         #----Read in previous simulation data----#
