@@ -15,6 +15,8 @@ from scipy.stats import chisquare
 import numpy as np
 import sys, os
 from optparse import OptionParser
+import glob
+#import readData1D
 #import runsetup
 
 # import yt?
@@ -26,18 +28,23 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 if __name__ == '__main__':
     
     first_sim = True
-    filename = "none"
+    dirname = "none"
     
     parser = OptionParser()
-    parser.add_option("-r", "--read_file", action="store", dest="filename", help="Submit data file from previous simulation to set initial walker positions")
+    parser.add_option("-r", "--read_dir", action="store", dest="dirname", help="Submit directory from previous batch of simulations")
+    
+    positions_filename_ref = dirname+"/positions.txt"
+    
+    if dirname != "none":
+        first_sim = False
+    elif os.path.isdir(dirname) == False:
+        print("Please enter the name of a directory")
+        return
+    elif os.path.isfile(positions_filename_ref) == False:
+        print("No 'positions.txt' file found")
+        return
     
     output_directory = "~/BANG/parameter_study/trial0/step1/"
-    
-    if filename != "none":
-        first_sim = False
-    elif os.path.isfile(filename) == False:
-        print("File does not exist.")
-        return
 
     # Put initialization stuff here. Define timestep etc etc etc
 
@@ -110,27 +117,37 @@ if __name__ == '__main__':
          
         # --------------------------------------------------------------------------------------
         #  positions.txt format:
-        #  0, alpha_lambda_0, alpha_d_0
         #  1, alpha_lambda_1, alpha_d_1
+        #  2, alpha_lambda_2, alpha_d_3
         #  ... 
         #  i, alpha_lambda_i, alpha_d_i
         #  
         #  for num_walkers lines
         # --------------------------------------------------------------------------------------
         # integrated_data_i.txt format:
-        # r (km), v_con (km/s), 
-        # y_e_prof_prev = 
-        # s_prof_prev =
-        #  ... for num_walkers lines
+        # r (km), v_con (km/s), y_e_prof_prev, s_prof_prev
         # --------------------------------------------------------------------------------------
 
-        positions_prev = []
-        with open(filename) as positions:
+        positions_ref = [] #reference positions from previous trial
+        sim_dict = {} #dictionary relating simulation number to parameters
+
+        with open(positions_filename_ref) as f:
             
             for i in range(num_walkers):
-                for 
-                positions.read(
+                
+                line_list = f.readline().split(", ") #read in line of positions file and split into a list
+                sim_num = line_list[0] #simulation number is first entry
+                parameters = line_list[1:] #parameters are the rest of line
+                
+                positions_ref.append(parameters)
+                sim_dict[sim_num] = parameters
+            
+        for i in range(1,num_walkers):
+            data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
+            readData1D.readData1D(data_pathname+"/output")
+            
  
+
             # v_con_prev = 
             # r_sh_prev = 
             # y_e_prof_prev = 
@@ -141,12 +158,12 @@ if __name__ == '__main__':
     
     #----Output positions file----#
     
-    positions_filename = output_directory+"positions.txt"
-    with open(positions_filename) as file:
+    positions_filename_out = output_directory+"positions.txt"
+    with open(positions_filename_out) as f:
         for i in range(num_walkers):
             for parameter in next_positions[i]:
-                file.write(("%f, " % parameter).rstrip('\n'))
-                file.write('\n')
+                f.write(("%f, " % parameter).rstrip('\n'))
+                f.write('\n')
     
     #----Set up next simulation----#
     
