@@ -122,7 +122,7 @@ if __name__ == '__main__':
             sim_dict[sim_num] = parameters
 
 
-    for i in range(1,num_walkers):
+    for i in range(1,num_walkers+1):
         data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
 
 
@@ -150,10 +150,5 @@ if __name__ == '__main__':
     
 
     
-    #----Set up next simulation----#
-    
-    #for i in range(num_walkers):
-        #runsetup.[function to be named](alpha_lambda=next_positions[i][0], alpha_dnext_positions[i][1],
-        # pathname=output_directory)
-        
+
         
