@@ -16,18 +16,31 @@ import numpy as np
 import sys, os
 from optparse import OptionParser
 import glob
-#import readData1D
+from read3d import *
 #import ps_setup
 
 # import yt?
-# from optparse import OptionParser # For if we need commad line arguments
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
-if __name__ == '__main__':
+
+def readOutput3D(pathname): #Reads in FLASH output data for 3D
     
-    first_sim = True
+    data_3D_array = readOutput(data_pathname+"/output") #read data from output file
+    
+    v_con_prev = 
+        y_e_prof_prev, s_prof_prev, r_sh_prev
+
+        #Column 1: radius
+        #Column 2: convective velocity
+        #Column 3: entropy
+        #Column 4: electron fraction
+        
+        
+
+if __name__ == '__main__':
+
     dirname = "none"
     
     parser = OptionParser()
@@ -35,16 +48,15 @@ if __name__ == '__main__':
     
     positions_filename_ref = dirname+"/positions.txt"
     
-    if dirname != "none":
-        first_sim = False
-    elif os.path.isdir(dirname) == False:
-        print("Please enter the name of a directory")
+    if dirname != "none" or os.path.isdir(dirname) == False:
+        print("Please enter the name of a valid directory")
         return
     elif os.path.isfile(positions_filename_ref) == False:
         print("No 'positions.txt' file found")
         return
     
-    output_directory = "~/BANG/parameter_study/trial0/step1/"
+    step_num = input("Enter step number")
+    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num)
 
     # Put initialization stuff here. Define timestep etc etc etc
 
@@ -80,80 +92,72 @@ if __name__ == '__main__':
     #  that loops of various values of the parameters, runs the appropriate simulation,
     #  and goes on. 
     # --------------------------------------------------------------------------------------
+
+    
+    
+    
     
     num_walkers = 1 #number of Markov chain walkers
     num_parameters = 2 #number of parameters being varied
     
-    start_positions = [] #initialize starting position array
     next_positions = [] #initialize next position array
-    
-    if first_sim == True:
-        #----Hard-coded results from single-parameter alpha_lambda study----#
 
-        # v_con_sing = 
-        # r_sh_sing = 
-        # y_e_prof_sing = 
-        # s_prof_sing =
-    
-        alpha_lambda_min = 0
-        alpha_lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
         
-        #----Generate array of random starting points----#
-        alpha_lambda_range = (alpha_lambda_min,alpha_lambda_max)
-        alpha_d_range = (0,1)
-        
+    #----Read in previous simulation data----#
+
+    # --------------------------------------------------------------------------------------
+    #  positions.txt format:
+    #  1, alpha_lambda_1, alpha_d_1
+    #  2, alpha_lambda_2, alpha_d_3
+    #  ... 
+    #  i, alpha_lambda_i, alpha_d_i
+    #  
+    #  for num_walkers lines
+    # --------------------------------------------------------------------------------------
+    # integrated_data_i.txt format:
+    # r (km), v_con (km/s), y_e_prof_prev, s_prof_prev
+    # --------------------------------------------------------------------------------------
+
+    sim_dict = {} #dictionary relating simulation number to parameters
+    positions_prev = [] #positions from previous trial
+
+    with open(positions_filename_ref) as f:
+
         for i in range(num_walkers):
-            alpha_lambda = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample() + alpha_lambda_min
-            alpha_d = np.random.random_sample() #no multiplier or shift, since range is 0,1 (can change later if necessary)
-            
-            next_positions.append((alpha_lambda, alpha_d))
-            
-        next_positions = np.array(next_positions)
-    
-    else:
+
+            line_list = f.readline().split(", ") #read in line of positions file and split into a list
+            sim_num = line_list[0] #simulation number is first entry
+            parameters = line_list[1:] #parameters are the rest of line
+
+            positions_prev.append(parameters)
+            sim_dict[sim_num] = parameters
+
+
+    for i in range(1,num_walkers):
+        data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
+
+
         
-        
-        #----Read in previous simulation data----#
-         
-        # --------------------------------------------------------------------------------------
-        #  positions.txt format:
-        #  1, alpha_lambda_1, alpha_d_1
-        #  2, alpha_lambda_2, alpha_d_3
-        #  ... 
-        #  i, alpha_lambda_i, alpha_d_i
-        #  
-        #  for num_walkers lines
-        # --------------------------------------------------------------------------------------
-        # integrated_data_i.txt format:
-        # r (km), v_con (km/s), y_e_prof_prev, s_prof_prev
-        # --------------------------------------------------------------------------------------
 
-        positions_ref = [] #reference positions from previous trial
-        sim_dict = {} #dictionary relating simulation number to parameters
 
-        with open(positions_filename_ref) as f:
-            
-            for i in range(num_walkers):
-                
-                line_list = f.readline().split(", ") #read in line of positions file and split into a list
-                sim_num = line_list[0] #simulation number is first entry
-                parameters = line_list[1:] #parameters are the rest of line
-                
-                positions_ref.append(parameters)
-                sim_dict[sim_num] = parameters
-            
-        for i in range(1,num_walkers):
-            data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
-            readData1D.readData1D(data_pathname+"/output") #read data from output file
-            
- 
+        #----Metropolis-Hastings Algorithm----#
 
-            # v_con_prev = 
-            # r_sh_prev = 
-            # y_e_prof_prev = 
-            # s_prof_prev =
-            
-            
+        lambda_step = 0.03
+        d_step = 0.03
+
+        data_3D = readData3D.readData3D("/mnt/research/SNAPhU/STIR/run_ps/data_3D") #3D simulation data for comparison. This is the "data" that we are fitting our model to.
+        """data_3D format: """
+
+        #Pull previous parameter positions 
+        alpha_lambda_prev = sim_dict[i][0] 
+        alpha_d_prev = sim_dict[i][1]
+
+        alpha_lambda_guess = 
+
+
+    for i in range(1,num_walkers):
+
+
     
     
     #----Output positions file----#
@@ -161,6 +165,7 @@ if __name__ == '__main__':
     positions_filename_out = output_directory+"positions.txt"
     with open(positions_filename_out) as f:
         for i in range(num_walkers):
+            f.write(("%d, " % i+1).rstrip('\n'))
             for parameter in next_positions[i]:
                 f.write(("%f, " % parameter).rstrip('\n'))
                 f.write('\n')
