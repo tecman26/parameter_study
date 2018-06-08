@@ -17,7 +17,8 @@ import numpy as np
 import sys, os
 from optparse import OptionParser
 import glob
-#import readData1D
+import helper_functions
+
 #import ps_setup
 
 # This "gets" the program name and assigns it to a variable.
@@ -56,3 +57,13 @@ if __name__ == '__main__':
             next_positions.append((alpha_lambda, alpha_d))
             
         next_positions = np.array(next_positions)
+        
+        #----Output positions file----#
+    
+    positions_filename_out = output_directory+"positions.txt"
+    with open(positions_filename_out) as f:
+        for i in range(num_walkers):
+            f.write(("%d, " % i+1).rstrip('\n'))
+            for parameter in next_positions[i]:
+                f.write(("%f, " % parameter).rstrip('\n'))
+                f.write('\n')

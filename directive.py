@@ -16,7 +16,8 @@ import numpy as np
 import sys, os
 from optparse import OptionParser
 import glob
-from read3d import *
+import helper_functions
+
 #import ps_setup
 
 # import yt?
@@ -25,17 +26,7 @@ from read3d import *
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 
-def readOutput3D(pathname): #Reads in FLASH output data for 3D
-    
-    data_3D_array = readOutput(data_pathname+"/output") #read data from output file
-    
-    v_con_prev = 
-        y_e_prof_prev, s_prof_prev, r_sh_prev
 
-        #Column 1: radius
-        #Column 2: convective velocity
-        #Column 3: entropy
-        #Column 4: electron fraction
         
         
 
@@ -93,9 +84,7 @@ if __name__ == '__main__':
     #  and goes on. 
     # --------------------------------------------------------------------------------------
 
-    
-    
-    
+  
     
     num_walkers = 1 #number of Markov chain walkers
     num_parameters = 2 #number of parameters being varied
@@ -155,20 +144,11 @@ if __name__ == '__main__':
         alpha_lambda_guess = 
 
 
-    for i in range(1,num_walkers):
 
 
     
     
-    #----Output positions file----#
-    
-    positions_filename_out = output_directory+"positions.txt"
-    with open(positions_filename_out) as f:
-        for i in range(num_walkers):
-            f.write(("%d, " % i+1).rstrip('\n'))
-            for parameter in next_positions[i]:
-                f.write(("%f, " % parameter).rstrip('\n'))
-                f.write('\n')
+
     
     #----Set up next simulation----#
     
