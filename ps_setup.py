@@ -1,7 +1,16 @@
-# ----------------------------------------------------
+# ----------------------------------------------------------------
+#  
 #  Creates the job submission script and flash.par
 #  files for running the various simulations.
-# ----------------------------------------------------
+#  Tailored for use in the MCMC Parameter Study
+#
+#  3D Shock Radius Data: 
+#    /mnt/research/SNAPhU/STIR/mesa20/mesa20_v_LR.dat
+#  3D Other: /mnt/research/SNAPhU/STIR/3dData/
+#    vconData, profileData.
+#  1D Data: /mnt/research/SNAPhU/STIR/run_mesa20/output_may6_b*
+#
+# ----------------------------------------------------------------
 import io
 import os
 import shutil
