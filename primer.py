@@ -47,21 +47,48 @@ if __name__ == '__main__':
     # THE PREVIOUS PARAMETER STUDY THAT MACKENZIE DID
     #-------------------------------------------------------------------#
 
-    num_walkers = 1 #IMPORTANT PARAMETER: this determines how many simulations to set up
+    #IMPORTANT PARAMETERS: these determines how many simulation walkers to set up
+    alpha_lambda_num = 1 # number of alpha_lambda options (for method 2)
+    alpha_d_num = 1 # number of alpha_d options (for method 2)
+    num_walkers = alpha_lambda_options*alpha_d_options
+    
     next_positions = []
+    
+    #----Generate array of random starting points----#
+    
+    method = 1
+    """Method 1 creates array of totally random starting points within the area. Method 2 creates two arrays with
+    16 alpha_lambda values and 32 alpha_d values and takes their Cartesian product"""
     
     alpha_lambda_min = 0
     alpha_lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
-
-    #----Generate array of random starting points----#
+    
+    alpha_d_min = 0
+    alpha_d_max = 1
+    
     alpha_lambda_range = (alpha_lambda_min,alpha_lambda_max)
-    alpha_d_range = (0,1)
+    alpha_d_range = (alpha_d_min,alpha_d_max)
+    
+    
+    if method == 1:
 
-    for i in range(num_walkers):
-        alpha_lambda = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample() + alpha_lambda_min
-        alpha_d = np.random.random_sample() #no multiplier or shift, since range is 0,1 (can change later if necessary)
+        for i in range(num_walkers):
+            alpha_lambda = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample() + alpha_lambda_min
+            alpha_d = (alpha_d_max-alpha_d_min)*np.random.random_sample() + alpha_d_min
 
-        next_positions.append([alpha_lambda, alpha_d])
+            next_positions.append([alpha_lambda, alpha_d])
+            
+    else:
+        
+        alpha_lambda_options = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample(16) + alpha_lambda_min
+        alpha_d_options = (alpha_d_max-alpha_d_min)*np.random.random_sample(32) + alpha_d_min
+        
+        for i in range(alpha_lambda_options):
+            for j in range(alpha_d_options):
+                alpha_lambda = alpha_lambda_options[i]
+                alpha_d = alpha_d_options[j]
+                next_positions.append([alpha_lambda, alpha_d])
+       
 
     #----Output positions file----#
     
