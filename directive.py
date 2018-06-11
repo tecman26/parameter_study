@@ -37,42 +37,31 @@ if __name__ == '__main__':
     print('************************************\n')
 
     
+    #----Read in 3D simulation data for comparison----#
+    
     dataDir = "./data/"
 
     r_sh_3D, r, v_con_3D, y_e_3D, s_3D = readOutput(dataDir, 3)
 
-    # --------------------------------------------------------------------------------------
-    #  Depending on how this should be done, we may need a large outer loop
-    #  that loops of various values of the parameters, runs the appropriate simulation,
-    #  and goes on.
-    # --------------------------------------------------------------------------------------
 
-
-
-    num_walkers = 1 #number of Markov chain walkers
-    num_parameters = 2 #number of parameters being varied
-
-    next_positions = [] #initialize next position array
-
-
-    dirname = "none"
+    #----specify which walker step is being run----#
     
-    parser = OptionParser()
-#    parser.add_option("-r", "--read_dir", action="store", dest="dirname", help="Submit directory from previous batch of simulations")
+    step_num = input("Enter step number")
+    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num)
     
-    positions_filename_ref = dirname+"/positions.txt"
+    input_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num-1)
     
-    if dirname != "none" or os.path.isdir(dirname) == False:
-        print("Please enter the name of a valid directory")
+    
+    positions_filename_ref = input_directory+"/positions.txt"
+    
+    if input_directory != "none" or os.path.isdir(input_directory) == False:
+        print("Please enter a valid step number")
         return
     elif os.path.isfile(positions_filename_ref) == False:
         print("No 'positions.txt' file found")
         return
     
-    #----specify which walker step is being run----#
-    
-    step_num = input("Enter step number")
-    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num)
+
         
     #----Read in previous simulation data----#
 
@@ -97,29 +86,61 @@ if __name__ == '__main__':
     #dictionary relating simulation number to positions and list containing tuples of positions
 
     
-    ############################################################################
-    #--------------------------------MAIN LOOP---------------------------------#
-     ############################################################################
+    #----Loop for generating guess positions----#
+    
+    parameter_guess_list = []
+    
     for i in range(1,num_walkers+1):
+        #In this loop, 'alpha' is left out of variable names to save space
         
-        #Run batch of simulations from previous positions.txt
+        lambda_step = 0.03
+        d_step = 0.03
         
-        
-        
-        
-        data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
+        #Pull previous parameter positions
+        lambda_prev = sim_dict[i][0]
+        d_prev = sim_dict[i][1]
 
-
+        lambda_guess = lambda_prev + np.random(-lambda_step, lambda_step)
+        d_guess = d_prev + np.random(-d_step, d_step)
+        
+        parameter_guess_list.append([lambda_guess, d_guess])
+    
+    #----Write guess positions to file----#
+    
+    writePositions(output_directory, parameter_guess_list) #See helper_functions.py for documentations
+    
+    #----Set up and run batch of simulations----#
+    
+    command = "./ps_setup.py"
+    print(command)
+    os.system(command)
+    
+    
+    
+    #----Read and compare results of simulations----#
+    
+    for i in range(num_walkers):
+        
+        #glob function returns a list that should have only one file (the one with sim_num = i)
+        prev_data_pathname = glob.glob(os.path.join(input_directory,"run_mcmcPS_"+str(i)+"*"))
+        prev_data_pathname = prev_data_pathname[0]
+        
+        guess_data_pathname = glob.glob(os.path.join(output_directory,"run_mcmcPS_"+str(i)+"*"))
+        guess_data_pathname = guess_data_pathname[0]
+        
+        
+        r_sh_prev, r_prev, v_con_prev, y_e_prev, s_prev = readOutput(prev_data_pathname, 1)
+        r_sh_guess, r_guess, v_con_guess, y_e_guess, s_guess = readOutput(guess_data_pathname, 1)
+        
+        
+        
 
         #----Metropolis-Hastings Algorithm----#
 
-        lambda_step = 0.03
-        d_step = 0.03
+        
 
 
-        #Pull previous parameter positions
-        alpha_lambda_prev = sim_dict[i][0]
-        alpha_d_prev = sim_dict[i][1]
+        
 
         alpha_lambda_guess = 
 

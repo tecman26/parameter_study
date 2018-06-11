@@ -93,15 +93,9 @@ if __name__ == '__main__':
 
     #----Output positions file----#
     
-    positions_filename_out = os.path.join(output_directory,"positions.txt")
-    with open(positions_filename_out, "w+") as f:
-        for i in range(0,num_walkers):
-            f.write(("%d" % (i+1)).rstrip('\n'))
-            parameters = next_positions[i]
-            for parameter in parameters:
-                f.write((", %f" % parameter).rstrip('\n'))
-            f.write('\n')
-
+    
+    writePositions(output_directory, next_positions)
+    
             
     #----Output all_positions file----#
     

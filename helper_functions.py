@@ -60,3 +60,15 @@ def readPositions(positions_filename_ref):
             sim_dict[sim_num] = parameters
             
     return sim_dict, positions_list
+
+def writePositions(output_directory, positions_list):
+    """Function writes new positions.txt file to 'output_directory'"""
+    positions_filename = os.path.join(output_directory,"positions.txt")
+    with open(positions_filename, "w+") as f:
+        num_walkers = len(positions_list)
+        for i in range(0,num_walkers):
+            f.write(("%d" % (i+1)).rstrip('\n'))
+            parameters = positions_list[i]
+            for parameter in parameters:
+                f.write((", %f" % parameter).rstrip('\n'))
+            f.write('\n')
