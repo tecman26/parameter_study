@@ -27,26 +27,26 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 
 
-        
-        
+
+
 
 if __name__ == '__main__':
 
     dirname = "none"
-    
+
     parser = OptionParser()
     parser.add_option("-r", "--read_dir", action="store", dest="dirname", help="Submit directory from previous batch of simulations")
-    
+
     positions_filename_ref = dirname+"/positions.txt"
-    
+
     if dirname != "none" or os.path.isdir(dirname) == False:
         print("Please enter the name of a valid directory")
         return
     elif os.path.isfile(positions_filename_ref) == False:
         print("No 'positions.txt' file found")
         return
-    
-    step_num = input("Enter step number")
+
+    step_num = input("Enter step number") #!# We Should Simply Hardcode 
     output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num)
 
     # Put initialization stuff here. Define timestep etc etc etc
@@ -58,49 +58,33 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    #----Read in 3D simulation data----#
-    # Looks like only the shock radius is in the 3D .txt file.
-    # The other variables will have to come from elsewhere.
-    # There's also probably a better way to do this reading of data, 
-    # but this is fine for now.
-
     dataDir = "./data/"
-    threeD_File = "%smesa20_v_LR.dat" % dataDir
-    data = np.genfromtxt(threeD_File)
+    profileData, r_sh = read3d(dataDir)
 
-    mean_shock_radius = data[:,11]
-
-
-    # import [plotting script file]
-    # read in 3D data into arrays using imported software
-    # v_con_3D = 
-    # r_sh_3D = 
-    # y_e_prof_3D = 
-    # s_prof_3D = 
 
     # --------------------------------------------------------------------------------------
     #  Depending on how this should be done, we may need a large outer loop
     #  that loops of various values of the parameters, runs the appropriate simulation,
-    #  and goes on. 
+    #  and goes on.
     # --------------------------------------------------------------------------------------
 
-  
-    
+
+
     num_walkers = 1 #number of Markov chain walkers
     num_parameters = 2 #number of parameters being varied
-    
+
     next_positions = [] #initialize next position array
 
-        
+
     #----Read in previous simulation data----#
 
     # --------------------------------------------------------------------------------------
     #  positions.txt format:
     #  1, alpha_lambda_1, alpha_d_1
     #  2, alpha_lambda_2, alpha_d_3
-    #  ... 
+    #  ...
     #  i, alpha_lambda_i, alpha_d_i
-    #  
+    #
     #  for num_walkers lines
     # --------------------------------------------------------------------------------------
     # integrated_data_i.txt format:
@@ -126,7 +110,7 @@ if __name__ == '__main__':
         data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
 
 
-        
+
 
 
         #----Metropolis-Hastings Algorithm----#
@@ -137,18 +121,8 @@ if __name__ == '__main__':
         data_3D = readData3D.readData3D("/mnt/research/SNAPhU/STIR/run_ps/data_3D") #3D simulation data for comparison. This is the "data" that we are fitting our model to.
         """data_3D format: """
 
-        #Pull previous parameter positions 
-        alpha_lambda_prev = sim_dict[i][0] 
+        #Pull previous parameter positions
+        alpha_lambda_prev = sim_dict[i][0]
         alpha_d_prev = sim_dict[i][1]
 
-        alpha_lambda_guess = 
-
-
-
-
-    
-    
-
-    
-
-        
+        alpha_lambda_guess =

@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------
-#  
+#
 #  Creates the job submission script and flash.par
 #  files for running the various simulations.
 #  Tailored for use in the MCMC Parameter Study
 #
-#  3D Shock Radius Data: 
+#  3D Shock Radius Data:
 #    /mnt/research/SNAPhU/STIR/mesa20/mesa20_v_LR.dat
 #  3D Other: /mnt/research/SNAPhU/STIR/3dData/
 #    vconData, profileData.
@@ -15,18 +15,26 @@ import io
 import os
 import shutil
 import simfiles
+import numpy as np
 
 # ----------------------------------------
-#  We will want to read in all of the 
+#  We will want to read in all of the
 #  alpha values from input files.
 # ----------------------------------------
-alphaL = (0.0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4)
-alphaD = (0.3333333333, 0.666666666)
+path = "/mnt/research/SNAPhU/STIR/run_ps/"
+paramFile = os.path.join(path,"positions.txt")
+param = np.loadtxt(paramFile)
+alphaL = param[:,1]
+alphaD = param[:,2]
+
+#alphaL = (0.0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4)
+#alphaD = (0.3333333333, 0.666666666)
 runname = "mcmcPS"
 restart = False
 mcmcRun = "1"
 
-for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
+#for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
+for a,b in zip(alphaL,alphaD):
     i = 1 # counter for file names
 
     #mass = (9.0,9.25,9.5,9.75,10.0,10.25,10.5,10.75,11.0,11.25,11.5,11.75,12.0,12.25,12.5,12.75,13.0, \
@@ -42,12 +50,12 @@ for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
     #            22.0,22.1,22.2,22.3,22.4,22.5,22.6,22.7,22.8,22.9, \
     #            23.0,23.1,24.0,25.0,26.0,27.0,28.0,29.0, \
     #            30.0,31,32,33,35,40,45,50,55,60,70,80,100,120)
-    mass = (20.0)
+    mass = [20.0]
 
-    path1 = "run_"+runname+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
+    path1 = "run_"+runname+"mcmcRun_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
     if not os.path.isdir(path1): # returns true if a directory exists.
         os.makedirs(path1) # Creates a run directory if it doesn't exist
-    filename = "run.mlt" 
+    filename = "run.mlt"
     fullpath = os.path.join(path1, filename)
     # ----------------------------------------
     #  This loop writes the bash script to run
@@ -78,7 +86,7 @@ for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
             file.write("module load HDF5/1.8.18\n")
             file.write("\n")
             file.write("### change to the working directory where your code is located\n")
-            # --- Change this On Runtime --- 
+            # --- Change this On Runtime ---
             file.write("cd /mnt/research/SNAPhU/STIR/run_ps/"+path1+"/output${PBS_ARRAYID}\n")
             file.write("\n")
             file.write("### call your executable\n")
@@ -87,16 +95,16 @@ for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
     #dest = os.path.join(path1,"flash4")
     #if os.path.isfile(dest):
     #    print('file exists')
-    #    os.remove(dest)   
+    #    os.remove(dest)
     ## Source for flash executable:
     #src = "/mnt/research/SNAPhU/STIR/run_sukhbold/flash4_1f31289"
-    #shutil.copy(src,dest) 
+    #shutil.copy(src,dest)
 
     # --- Do We Need This? ---
     # I think that we do not need loops over mass.
     # Creates output files labelled by mass.
 
-    for m in [mass]:
+    for m in mass:
         path = "output"#+str(mass.index(m)+1) # We don't need so many
         dest1 = os.path.join(path1,path)
         if not os.path.isdir(dest1):
