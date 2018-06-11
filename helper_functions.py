@@ -18,9 +18,9 @@ def readOutput(pathname, dim):
     data_array = []
     
     if dim == 3:
-        r_sh, data_array = readOutput3D(pathname) #read data from output file
+        data_array, r_sh = read3d(pathname) #read data from output file
     elif dim == 1:
-        r_sh, data_array = readOutput1D(pathname)
+        data_array, r_sh = read1d(pathname)
     else:
         print("Enter either '1' or '3' for number of dimensions")
     
@@ -41,5 +41,22 @@ def readOutput(pathname, dim):
     
     return (r_sh, r, v_con, y_e_prof, s_prof)
 
+def readPositions(positions_filename_ref):
+    """Function parses positions.txt file and returns dictionary and list giving parameter positions.
+       Works for any number of parameters being studied."""
+    
+    sim_dict = {} #dictionary relating simulation number to parameters
+    positions_list = [] #positions from previous trial
 
+    with open(positions_filename_ref) as f:
 
+        for i in range(num_walkers):
+
+            line_list = f.readline().split(", ") #read in line of positions file and split into a list
+            sim_num = line_list[0] #simulation number is first entry
+            parameters = line_list[1:] #parameters are the rest of line
+
+            positions_list.append(parameters)
+            sim_dict[sim_num] = parameters
+            
+    return sim_dict, positions_list

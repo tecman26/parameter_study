@@ -33,8 +33,9 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    #output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step0"
-    output_directory = "."
+    trial_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0"
+    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step0"
+    #output_directory = "."
     
     #----Hard-coded results from single-parameter alpha_lambda study----#
     
@@ -101,6 +102,18 @@ if __name__ == '__main__':
                 f.write((", %f" % parameter).rstrip('\n'))
             f.write('\n')
 
+            
+    #----Output all_positions file----#
+    
+    positions_filename_out = os.path.join(trial_directory,"all_positions.txt")
+    with open(positions_filename_out, "w+") as f:
+        for i in range(0,num_walkers):
+            f.write(("%d" % (i+1)).rstrip('\n'))
+            parameters = next_positions[i]
+            for parameter in parameters:
+                f.write((", %f" % parameter).rstrip('\n'))
+            f.write('\n')
+            
     #----Set up next simulation----#
     
     command = "./ps_setup.py"
