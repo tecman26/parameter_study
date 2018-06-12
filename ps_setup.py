@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # ----------------------------------------------------------------
 #
 #  Creates the job submission script and flash.par
@@ -16,16 +17,18 @@ import os
 import shutil
 import simfiles
 import numpy as np
+from settings import *
 
 # ----------------------------------------
 #  We will want to read in all of the
 #  alpha values from input files.
 # ----------------------------------------
-path = "/mnt/research/SNAPhU/STIR/run_ps/"
-paramFile = os.path.join(path,"positions.txt")
+#path = "/mnt/research/SNAPhU/STIR/run_ps/"
+path = "./"
+paramFile = os.path.join(path,"positions_cp.txt")
 param = np.loadtxt(paramFile)
-alphaL = param[:,1]
-alphaD = param[:,2]
+alphaL = param[:,0]
+alphaD = param[:,1]
 
 #alphaL = (0.0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4)
 #alphaD = (0.3333333333, 0.666666666)
@@ -52,7 +55,7 @@ for a,b in zip(alphaL,alphaD):
     #            30.0,31,32,33,35,40,45,50,55,60,70,80,100,120)
     mass = [20.0]
 
-    path1 = "run_"+runname+"mcmcRun_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
+    path1 = "run_"+runname+"_step"+str(mcmc_step)+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
     if not os.path.isdir(path1): # returns true if a directory exists.
         os.makedirs(path1) # Creates a run directory if it doesn't exist
     filename = "run.mlt"
@@ -115,10 +118,10 @@ for a,b in zip(alphaL,alphaD):
         if not os.path.isdir(outfull):
                os.makedirs(outfull)
         ## Now make symlinks to copied executable
-        src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289"
+        src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f312899"#-l9
         dest = os.path.join(dest1,"flash4")
         if os.path.isfile(dest):
-  	        os.remove(dest)
+               os.remove(dest)
         os.symlink(src,dest)
         print(dest)
         ## EOS table
@@ -371,10 +374,10 @@ for a,b in zip(alphaL,alphaD):
             file.write("rt_NumGroups			= 12 #must match m1_groups used in setup\n")
             file.write("rt_opacTable			= \"./NuLib_SFHo.h5\"\n")
             file.write("rt_dtFactor			= 0.3d0\n")
- 	        file.write("rt_fluxCorrect 			= .false. \n")
- 	        file.write("rt_rkTime			= .false. \n")
- 	        file.write("rt_doVel			= .true.\n")
- 	        file.write("rt_pushFac			= 1.0d0\n")
+            file.write("rt_fluxCorrect 			= .false. \n")
+            file.write("rt_rkTime			= .false. \n")
+            file.write("rt_doVel			= .true.\n")
+            file.write("rt_pushFac			= 1.0d0\n")
             file.write("\n")
             file.write("# Neutrino Heating/Cooling\n")
             file.write("useHeat			       = .false.\n")

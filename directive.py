@@ -11,124 +11,73 @@
 #
 ############################################################################
 
-from scipy.stats import chisquare
 import numpy as np
+import numpy.random as npr
 import sys, os
 from optparse import OptionParser
 import glob
 import helper_functions
-
-#import ps_setup
-
-# import yt?
-
-# This "gets" the program name and assigns it to a variable.
-ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
+from settings import *
 
 
 if __name__ == '__main__':
-    # Put initialization stuff here. Define timestep etc etc etc
 
-    # This prints the program name. Not necessary, put nice to do
-    # before other output. Stylish.
+    ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
     print('\n************************************')
     print('**          %s ' % ScriptName )
+    print('**          MCMC Step %d ' % mcmc_step )
     print('************************************\n')
 
-    
-    dataDir = "./data/"
+    if ( mcmc_step < nSteps ):
 
-    r_sh_3D, r, v_con_3D, y_e_3D, s_3D = readOutput(dataDir, 3)
+        dataDir = "./data"
+        path = "./"
+        pos_filename = os.path.join(path, "positions.txt") # cumulative list of pairs
+        pos_old_filename = os.path.join(path, "positions_old.txt")
 
-    # --------------------------------------------------------------------------------------
-    #  Depending on how this should be done, we may need a large outer loop
-    #  that loops of various values of the parameters, runs the appropriate simulation,
-    #  and goes on.
-    # --------------------------------------------------------------------------------------
+        if ( mcmc_step == 1 ):
 
+            next_positions = []
 
+            alpha_l_options = (2)*np.random.random_sample(num_alpha_l) + 0
+            alpha_d_options = (1)*np.random.random_sample(num_alpha_d) + 0
 
-    num_walkers = 1 #number of Markov chain walkers
-    num_parameters = 2 #number of parameters being varied
+            helper_functions.writeParameters(alpha_l_options, alpha_d_options)
 
-    next_positions = [] #initialize next position array
+            # ------------------------------------------
+            # runs the setup and job submission scripts.
+            # ------------------------------------------
+            cmd = "python ps_setup.py"
+            print(cmd)
+        #    os.system(cmd)
+            cmd = "python ps_runjob.py"
+            print(cmd)
+            #os.system(cmd)
 
+        # --------------------------------------------------------------
+        #  Main Section of the MCMC Implementation
+        # --------------------------------------------------------------
+        else:
 
-    dirname = "none"
-    
-    parser = OptionParser()
-#    parser.add_option("-r", "--read_dir", action="store", dest="dirname", help="Submit directory from previous batch of simulations")
-    
-    positions_filename_ref = dirname+"/positions.txt"
-    
-    if dirname != "none" or os.path.isdir(dirname) == False:
-        print("Please enter the name of a valid directory")
-        return
-    elif os.path.isfile(positions_filename_ref) == False:
-        print("No 'positions.txt' file found")
-        return
-    
-    #----specify which walker step is being run----#
-    
-    step_num = input("Enter step number")
-    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num)
-        
-    #----Read in previous simulation data----#
+            alphaL_guess = []
+            alphaD_guess = []
 
-    # --------------------------------------------------------------------------------------
-    #  positions.txt format:
-    #  1, alpha_lambda_1, alpha_d_1
-    #  2, alpha_lambda_2, alpha_d_2
-    #  ... 
-    #  i, alpha_lambda_i, alpha_d_i
-    #
-    #  for num_walkers lines
-    # --------------------------------------------------------------------------------------
-    # integrated_data_i.txt format:
-    # r (km), v_con (km/s), y_e_prof_prev, s_prof_prev
-    # --------------------------------------------------------------------------------------
+            # Read in old alphas
+            #path = "/mnt/research/SNAPhU/STIR/run_ps/"
+            path = "./" # Path to parameter list files.
+            paramFile = os.path.join(path,"positions_old.txt") #
 
-    sim_dict, positions_prev = readPositions(positions_filename_ref)
-    
-    num_walkers = len(positions_prev) #number of Markov chain walkers
-    num_parameters = len(positions_prev[0]) #number of parameters being varied
-        
-    #dictionary relating simulation number to positions and list containing tuples of positions
+            # Read in old values.
+            alphaL_old, alphaD_old = helper_functions.getOldAlphas(paramFile)
 
-    
-    ############################################################################
-    #--------------------------------MAIN LOOP---------------------------------#
-     ############################################################################
-    for i in range(1,num_walkers+1):
-        
-        #Run batch of simulations from previous positions.txt
-        
-        
-        
-        
-        data_pathname = str(glob.glob(dirname+"/run_mcmcPS_"+str(i)+"*")) #glob function returns a list that should have only one file (the one with sim_num = i)
+            # Get new guess values for the alphas
+            for i in range(num_alpha_l):
+                guess = alphaL_old[i] + npr.uniform(-dA,dA)
+                alphaL_guess.append(guess)
+            for i in range(num_alpha_d):
+                guess = alphaD_old[i] + npr.uniform(-dA,dA)
+                alphaD_guess.append(guess)
 
-
-
-        #----Metropolis-Hastings Algorithm----#
-
-        lambda_step = 0.03
-        d_step = 0.03
-
-
-        #Pull previous parameter positions
-        alpha_lambda_prev = sim_dict[i][0]
-        alpha_d_prev = sim_dict[i][1]
-
-        alpha_lambda_guess = 
-
-
-
-
-    next_positions = [] #initialize next position array
-    
-
-    
-
-        
+            # write guesses to positions_old.txt
+            helper_functions.writeParameters(alphaL_guess, alphaD_guess)
