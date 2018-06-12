@@ -99,14 +99,32 @@ if __name__ == '__main__':
             
     #----Output all_positions file----#
     
+    #--------------------------------------------------------------
+    # all_positions format:
+    #--------------------------------------------------------------
+    # 1, 2, ..., num_walkers
+    # (param_1_1, param_1_2), (param_2_1, param_2_2), ..., (  ) for step 0
+    # (param_1_1, param_1_2), (param_2_1, param_2_2), ..., (  ) for step 1
+    #--------------------------------------------------------------
+    
     positions_filename_out = os.path.join(trial_directory,"all_positions.txt")
     with open(positions_filename_out, "w+") as f:
-        for i in range(0,num_walkers):
-            f.write(("%d" % (i+1)).rstrip('\n'))
+        for i in range(num_walkers-1):
+            f.write(("%d, " % (i+1)).rstrip('\n'))
+        f.write("%d\n" % num_walkers)
+        for i in range(num_walkers-1):
             parameters = next_positions[i]
-            for parameter in parameters:
+            f.write(("(").rstrip('\n'))
+            f.write((parameters[0]).rstrip('\n'))
+            for parameter in parameters[1:]:
                 f.write((", %f" % parameter).rstrip('\n'))
-            f.write('\n')
+            f.write(("), ").rstrip('\n'))
+        parameters = next_positions[num_walkers-1]
+        f.write(("(").rstrip('\n'))
+        f.write((parameters[0]).rstrip('\n'))
+        for parameter in parameters[1:]:
+            f.write((", %f" % parameter).rstrip('\n'))
+        f.write(")")
             
     #----Set up next simulation----#
     

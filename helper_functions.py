@@ -50,7 +50,7 @@ def readPositions(positions_filename_ref):
 
     with open(positions_filename_ref) as f:
 
-        for i in range(num_walkers):
+        for i in range(1,num_walkers+1):
 
             line_list = f.readline().split(", ") #read in line of positions file and split into a list
             sim_num = line_list[0] #simulation number is first entry

@@ -25,6 +25,9 @@ import helper_functions
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
+def chi2_mod(array): # returns chi2 without p-value
+    return chisquare(array)[0]
+
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -41,7 +44,7 @@ if __name__ == '__main__':
     
     dataDir = "./data/"
 
-    r_sh_3D, r, v_con_3D, y_e_3D, s_3D = readOutput(dataDir, 3)
+    r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(dataDir, 3)
 
 
     #----specify which walker step is being run----#
@@ -78,17 +81,19 @@ if __name__ == '__main__':
     # r (km), v_con (km/s), y_e_prof_prev, s_prof_prev
     # --------------------------------------------------------------------------------------
 
-    sim_dict, positions_prev = readPositions(positions_filename_ref)
+    # Fill a dictionary and a list with the sets of parameters output by the previous sim
+    pos_prev_dict, pos_prev_list = readPositions(positions_filename_ref)
     
-    num_walkers = len(positions_prev) #number of Markov chain walkers
-    num_parameters = len(positions_prev[0]) #number of parameters being varied
+    num_walkers = len(pos_prev_list) #number of Markov chain walkers
+    num_parameters = len(pos_prev_list[0]) #number of parameters being varied
         
     #dictionary relating simulation number to positions and list containing tuples of positions
 
     
     #----Loop for generating guess positions----#
     
-    parameter_guess_list = []
+    pos_g_list = [] # Position guess list
+    pos_g_dict = [] # Position guess dict
     
     for i in range(1,num_walkers+1):
         #In this loop, 'alpha' is left out of variable names to save space
@@ -97,17 +102,18 @@ if __name__ == '__main__':
         d_step = 0.03
         
         #Pull previous parameter positions
-        lambda_prev = sim_dict[i][0]
-        d_prev = sim_dict[i][1]
+        lambda_prev = pos_prev_dict[i][0]
+        d_prev = pos_prev_dict[i][1]
 
         lambda_guess = lambda_prev + np.random(-lambda_step, lambda_step)
         d_guess = d_prev + np.random(-d_step, d_step)
         
-        parameter_guess_list.append([lambda_guess, d_guess])
+        pos_g_list.append([lambda_guess, d_guess])
+        pos_g_dict[i] = [lambda_guess, d_guess]
     
     #----Write guess positions to file----#
     
-    writePositions(output_directory, parameter_guess_list) #See helper_functions.py for documentations
+    writePositions(output_directory, pos_g_list) #See helper_functions.py for documentations
     
     #----Set up and run batch of simulations----#
     
@@ -119,9 +125,11 @@ if __name__ == '__main__':
     
     #----Read and compare results of simulations----#
     
+    final_positions = []
+    
     for i in range(num_walkers):
         
-        #glob function returns a list that should have only one file (the one with sim_num = i)
+        # glob function returns a list that should have only one file (the one with sim_num = i)
         prev_data_pathname = glob.glob(os.path.join(input_directory,"run_mcmcPS_"+str(i)+"*"))
         prev_data_pathname = prev_data_pathname[0]
         
@@ -133,23 +141,61 @@ if __name__ == '__main__':
         r_sh_guess, r_guess, v_con_guess, y_e_guess, s_guess = readOutput(guess_data_pathname, 1)
         
         
-        
 
         #----Metropolis-Hastings Algorithm----#
 
+        # Calculate chi-squared for prev position and guess position
         
-
-
+        """r = []
         
+        if len(r_prev) < len(r_3D):
+            r = r_prev
+        else:
+            r = r_3D """
 
-        alpha_lambda_guess = 
+        # These chi2 terms can be weighted later
+        chi2_p = chi2_mod(r_sh_prev) + chi2_mod(v_con_prev) + chi2_mod(v_con_prev) + chi2_mod(s_prev)
+        chi2_g = chi2_mod(r_sh_guess) + chi2_mod(v_con_guess) + chi2_mod(v_con_guess) + chi2_mod(s_guess)
 
-
-
-
-    next_positions = [] #initialize next position array
+        # Likelihood ratio of both sets of data (also known as acceptance probability)
+        p_acc = np.exp(-chi2_g + chi2_p)
+        
+        p_thresh = np.random() # threshold probability, chosen randomly between 0 and 1
+        
+        if p_acc < p_thresh: # if acceptance probability doesn't exceed threshold
+            
+            final_positions.append(pos_prev_dict[i])
+            
+            # Remove the guess data files from directory and replace with previous data, for use in
+            # next step.
+            os.system("rm "+guess_data_pathname)
+            os.system("cp "+prev_data_pathname+" "+output_directory)
+            
+        else: # if acceptance probability exceeds the threshold
+            
+            final_positions.append(pos_g_dict[i])
+            
+    #----Write new positions file----#
     
-
+    writePositions(final_positions, output_directory)
     
+    #----Append new positions to all_positions file---#
 
-        
+    trial_pathname = os.path.join(output_directory,"..")
+    all_positions_filename = os.path.join(trial_pathname,"all_positions.txt"
+    
+    with open(all_positions_filename, "a+") as f:
+        for i in range(num_walkers-1):
+            parameters = final_positions[i]
+            f.write(("(").rstrip('\n'))
+            f.write((parameters[0]).rstrip('\n'))
+            for parameter in parameters[1:]:
+                f.write((", %f" % parameter).rstrip('\n'))
+            f.write(("), ").rstrip('\n'))
+        parameters = final_positions[num_walkers-1]
+        f.write(("(").rstrip('\n'))
+        f.write((parameters[0]).rstrip('\n'))
+        for parameter in parameters[1:]:
+            f.write((", %f" % parameter).rstrip('\n'))
+        f.write(")")
+                                       
