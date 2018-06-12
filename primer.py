@@ -17,9 +17,7 @@ import numpy as np
 import sys, os
 from optparse import OptionParser
 import glob
-import helper_functions
-from ps_setup import *
-from ps_runjob import *
+from helper_functions import *
 
 
 # This "gets" the program name and assigns it to a variable.
@@ -34,9 +32,10 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    trial_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0"
-    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step0"
-    #output_directory = "."
+    #trial_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0"
+    #output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step0"
+    trial_directory = "./trial_test"
+    output_directory = os.path.join(trial_directory, "step0")
     
     #----Hard-coded results from single-parameter alpha_lambda study----#
     
@@ -50,9 +49,9 @@ if __name__ == '__main__':
     #-------------------------------------------------------------------#
 
     #IMPORTANT PARAMETERS: these determines how many simulation walkers to set up
-    alpha_lambda_num = 1 # number of alpha_lambda options (for method 2)
+    alpha_lambda_num = 2 # number of alpha_lambda options (for method 2)
     alpha_d_num = 1 # number of alpha_d options (for method 2)
-    num_walkers = alpha_lambda_options*alpha_d_options
+    num_walkers = alpha_lambda_num*alpha_d_num
     
     next_positions = []
     
@@ -71,7 +70,7 @@ if __name__ == '__main__':
     alpha_lambda_range = (alpha_lambda_min,alpha_lambda_max)
     alpha_d_range = (alpha_d_min,alpha_d_max)
     
-    
+    print("method == "+str(method))
     if method == 1:
 
         for i in range(num_walkers):
@@ -82,8 +81,8 @@ if __name__ == '__main__':
             
     else:
         
-        alpha_lambda_options = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample(16) + alpha_lambda_min
-        alpha_d_options = (alpha_d_max-alpha_d_min)*np.random.random_sample(32) + alpha_d_min
+        alpha_lambda_options = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample(alpha_lambda_num) + alpha_lambda_min
+        alpha_d_options = (alpha_d_max-alpha_d_min)*np.random.random_sample(alpha_d_num) + alpha_d_min
         
         for i in range(alpha_lambda_options):
             for j in range(alpha_d_options):
@@ -116,23 +115,23 @@ if __name__ == '__main__':
         for i in range(num_walkers-1):
             parameters = next_positions[i]
             f.write(("(").rstrip('\n'))
-            f.write((parameters[0]).rstrip('\n'))
+            f.write(str(parameters[0]).rstrip('\n'))
             for parameter in parameters[1:]:
                 f.write((", %f" % parameter).rstrip('\n'))
             f.write(("), ").rstrip('\n'))
         parameters = next_positions[num_walkers-1]
         f.write(("(").rstrip('\n'))
-        f.write((parameters[0]).rstrip('\n'))
+        f.write(str(parameters[0]).rstrip('\n'))
         for parameter in parameters[1:]:
             f.write((", %f" % parameter).rstrip('\n'))
         f.write(")")
             
     #----Set up and run next simulation batch----#
     
-    setup_command = "./ps_setup.py"
+    setup_command = "python ps_setup.py"
     print(setup_command)
     os.system(setup_command)
-    run_command = "./ps_runjob.py"
+    run_command = "python ps_runjob.py"
     print(run_command)
     os.system(run_command)
         

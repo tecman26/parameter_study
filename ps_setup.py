@@ -22,7 +22,7 @@ import numpy as np
 #  alpha values from input files.
 # ----------------------------------------
 #path = "/mnt/research/SNAPhU/STIR/run_ps/"
-path = "./"
+path = "./trial_test/step0"
 paramFile = os.path.join(path,"positions.txt")
 param = np.loadtxt(paramFile, delimiter=",")
 alphaL = param[:,1]
@@ -34,10 +34,11 @@ runname = "mcmcPS"
 restart = False
 mcmcRun = "1"
 
+i = 1
+
 #for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
 for a,b in zip(alphaL,alphaD):
-    i = 1 # counter for file names
-
+     # counter for file names
     #mass = (9.0,9.25,9.5,9.75,10.0,10.25,10.5,10.75,11.0,11.25,11.5,11.75,12.0,12.25,12.5,12.75,13.0, \
     #            13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,13.9, \
     #            14.0,14.1,14.2,14.3,14.4,14.5,14.6,14.7,14.8,14.9, \
@@ -53,16 +54,18 @@ for a,b in zip(alphaL,alphaD):
     #            30.0,31,32,33,35,40,45,50,55,60,70,80,100,120)
     mass = [20.0]
 
-    path1 = "run_"+runname+"mcmcRun_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
-    if not os.path.isdir(path1): # returns true if a directory exists.
-        os.makedirs(path1) # Creates a run directory if it doesn't exist
+    path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
+    dir_loc = os.path.join(path, path1)
+    if not os.path.isdir(dir_loc): # returns true if a directory exists.
+        os.makedirs(dir_loc) # Creates a run directory if it doesn't exist
     filename = "run.mlt"
-    fullpath = os.path.join(path1, filename)
+    fullpath = os.path.join(dir_loc, filename)
+    print("fullpath = "+str(fullpath))
     # ----------------------------------------
     #  This loop writes the bash script to run
     #  the simulations.
     # ----------------------------------------
-    with open(fullpath, "w") as file:
+    with open(fullpath, "w+") as file:
             file.write("#!/bin/bash -login\n")
             file.write("\n")
             file.write("### define resources needed:\n")
@@ -107,7 +110,7 @@ for a,b in zip(alphaL,alphaD):
 
     for m in mass:
         path = "output"#+str(mass.index(m)+1) # We don't need so many
-        dest1 = os.path.join(path1,path)
+        dest1 = os.path.join(path,path1)
         if not os.path.isdir(dest1):
             os.makedirs(dest1)
         out = "output"
@@ -145,9 +148,9 @@ for a,b in zip(alphaL,alphaD):
     ## Source for progenitor:
     src = os.path.join("/mnt/research/SNAPhU/Progenitors2","s"+str(m)+"_5mspb.FLASH")
     os.symlink(src,dest)
-    path = os.path.join(dest1,"output")
+    path2 = os.path.join(dest1,"output")
     if restart:
-        path = os.path.join(path,"stir_"+runname+"_s"+str(m)+"_alpha"+str(a))
+        path2 = os.path.join(path,"stir_"+runname+"_s"+str(m)+"_alpha"+str(a))
         myFiles = simfiles.FlashOutputFiles(path)
         myChkfiles = myFiles.chkFilePaths()
         files = [chkfiles for chkfiles in myChkfiles]
@@ -155,12 +158,13 @@ for a,b in zip(alphaL,alphaD):
         refile = files[-1]
         refile = refile[-4:]
 
-    filename = "flash.par"
-    fullpath = os.path.join(dest1, filename)
+    filename2 = "flash.par"
+    fullpath2 = os.path.join(dest1, filename2)
+    print("fullpath2 = "+str(fullpath2))
     # ----------------------------------------
     #  Write the flash.par file
     # ----------------------------------------
-    with open(fullpath, "w") as file:
+    with open(fullpath2, "w") as file:
         file.write("# Parameters file for 1D M1 Core Collapse with MLT\n")
         file.write("basenm                      = \"stir_"+runname+"_s"+str(m)+"_alpha"+str(a)+"_\"\n")
         if restart:
@@ -405,4 +409,4 @@ for a,b in zip(alphaL,alphaD):
         file.write("smallu                         = 1.E-10\n")
         file.write("smallx                         = 1.E-100\n")
         file.write("small                          = 1.E-100\n")
-i = i + 1
+    i = i + 1
