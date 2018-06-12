@@ -25,7 +25,7 @@ import helper_functions
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
-chi2_mod = lambda array: chisquare(array)[0] # returns chi2 without p-value
+chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -137,8 +137,8 @@ if __name__ == '__main__':
         guess_data_pathname = guess_data_pathname[0]
         
         
-        r_sh_prev, r_prev, v_con_prev, y_e_prev, s_prev = readOutput(prev_data_pathname, 1)
-        r_sh_guess, r_guess, v_con_guess, y_e_guess, s_guess = readOutput(guess_data_pathname, 1)
+        r_sh_p, r_p, v_con_p, y_e_p, s_p = readOutput(prev_data_pathname, 1)
+        r_sh_g, r_g, v_con_g, y_e_g, s_g = readOutput(guess_data_pathname, 1)
         
         
 
@@ -148,14 +148,14 @@ if __name__ == '__main__':
         
         """r = []
         
-        if len(r_prev) < len(r_3D):
-            r = r_prev
+        if len(r_p) < len(r_3D):
+            r = r_p
         else:
             r = r_3D """
 
         # These chi2 terms can be weighted later
-        chi2_p = chi2_mod(r_sh_prev) + chi2_mod(v_con_prev) + chi2_mod(v_con_prev) + chi2_mod(s_prev)
-        chi2_g = chi2_mod(r_sh_guess) + chi2_mod(v_con_guess) + chi2_mod(v_con_guess) + chi2_mod(s_guess)
+        chi2_p = chi2_mod(r_sh_p, r_sh_3D) + chi2_mod(v_con_p, v_con_3D) + chi2_mod(y_e_p, y_e_3D) + chi2_mod(s_p, s_3D)
+        chi2_g = chi2_mod(r_sh_g, r_sh_3D) + chi2_mod(v_con_g, v_con_3D) + chi2_mod(y_e_g, y_e_3D) + chi2_mod(s_g, s_3D)
 
         # Likelihood ratio of both sets of data (also known as acceptance probability)
         p_acc = np.exp(-chi2_g + chi2_p)
