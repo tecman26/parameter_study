@@ -30,6 +30,6 @@ for a,b in zip(alphaL,alphaD):
 
     cmd = "qsub " + fullpath
 
-    print cmd
+    print(cmd)
     os.system(cmd)
     i = i + 1

@@ -116,7 +116,8 @@ for a,b in zip(alphaL,alphaD):
         if not os.path.isdir(outfull):
                os.makedirs(outfull)
         ## Now make symlinks to copied executable
-        src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289"
+        #src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289" #change this once in HPC
+        src = "/Users/tecman26/Documents/College/ACRES_REU/parameter_study/flash4_1f31289"
         dest = os.path.join(dest1,"flash4")
         if os.path.isfile(dest):
               os.remove(dest)
@@ -125,8 +126,8 @@ for a,b in zip(alphaL,alphaD):
         ## EOS table
         dest = os.path.join(dest1,"SFHo.h5")
         if os.path.isfile(dest):
-                print('file exists')
-                os.remove(dest)
+            print('file exists')
+            os.remove(dest)
     ## Source for eos table:
     src = "/mnt/research/SNAPhU/Tables/SFHo.h5"
     os.symlink(src,dest)
@@ -159,7 +160,7 @@ for a,b in zip(alphaL,alphaD):
     # ----------------------------------------
     #  Write the flash.par file
     # ----------------------------------------
-    with io.FileIO(fullpath, "w") as file:
+    with open(fullpath, "w") as file:
         file.write("# Parameters file for 1D M1 Core Collapse with MLT\n")
         file.write("basenm                      = \"stir_"+runname+"_s"+str(m)+"_alpha"+str(a)+"_\"\n")
         if restart:
