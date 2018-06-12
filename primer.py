@@ -126,10 +126,12 @@ if __name__ == '__main__':
             f.write((", %f" % parameter).rstrip('\n'))
         f.write(")")
             
-    #----Set up next simulation----#
+    #----Set up and run next simulation batch----#
     
-    command = "./ps_setup.py"
-    print(command)
-    os.system(command)
-
+    setup_command = "./ps_setup.py"
+    print(setup_command)
+    os.system(setup_command)
+    run_command = "./ps_runjob.py"
+    print(run_command)
+    os.system(run_command)
         

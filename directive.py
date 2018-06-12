@@ -115,13 +115,14 @@ if __name__ == '__main__':
     
     writePositions(output_directory, pos_g_list) #See helper_functions.py for documentations
     
-    #----Set up and run batch of simulations----#
+    #----Set up and run batch of guess simulations----#
     
     command = "./ps_setup.py"
     print(command)
     os.system(command)
-    
-    
+    run_command = "./ps_runjob.py"
+    print(run_command)
+    os.system(run_command)
     
     #----Read and compare results of simulations----#
     
