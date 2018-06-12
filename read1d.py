@@ -15,7 +15,7 @@ import yt
 def read1d(dataDir):
 
     # Will have to update the filename appropriately
-    shockRadiusFile = os.path.join(dataDir,"mesa20_v_LR.dat")
+    shockRadiusFile = os.path.join(dataDir,"run_mcmcPS.dat")
     data = np.genfromtxt(shockRadiusFile)
     mean_shock_radius = data[:,11]
     time = data[:,0]
