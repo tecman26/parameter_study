@@ -29,12 +29,23 @@ if __name__ == '__main__':
     print('**          MCMC Step %d ' % mcmc_step )
     print('************************************\n')
 
+    dataDir = "./data"
+    pathBase = "mcmc_step" + str(mcmc_step)
+    pos_filename = os.path.join(pathBase, "positions.txt") # cumulative list of pairs
+    pos_old_filename = os.path.join(pathBase, "positions_old.txt")
+
+    if not os.path.isdir(pathBase): # returns true if a directory exists.
+        os.makedirs(pathBase) # Creates a run directory if it doesn't exist
+
     if ( mcmc_step < nSteps ):
 
         dataDir = "./data"
-        path = "./"
-        pos_filename = os.path.join(path, "positions.txt") # cumulative list of pairs
-        pos_old_filename = os.path.join(path, "positions_old.txt")
+        pathBase = "mcmc_step" + str(mcmc_step)
+        pos_filename = os.path.join(pathBase, "positions.txt") # cumulative list of pairs
+        pos_old_filename = os.path.join(pathBase, "positions_old.txt")
+
+        if not os.path.isdir(pathBase): # returns true if a directory exists.
+            os.makedirs(pathBase) # Creates a run directory if it doesn't exist
 
         if ( mcmc_step == 1 ):
 
@@ -50,15 +61,22 @@ if __name__ == '__main__':
             # ------------------------------------------
             cmd = "python ps_setup.py"
             print(cmd)
-        #    os.system(cmd)
+            os.system(cmd)
             cmd = "python ps_runjob.py"
             print(cmd)
-            #os.system(cmd)
+            os.system(cmd)
 
         # --------------------------------------------------------------
         #  Main Section of the MCMC Implementation
         # --------------------------------------------------------------
         else:
+
+            pathBase = "mcmc_step" + str(mcmc_step-1)
+            pos_filename = os.path.join(pathBase, "positions.txt") # cumulative list of pairs
+            pos_old_filename = os.path.join(pathBase, "positions_old.txt")
+
+            if not os.path.isdir(pathBase): # returns true if a directory exists.
+                os.makedirs(pathBase) # Creates a run directory if it doesn't exist
 
             alphaL_guess = []
             alphaD_guess = []
@@ -66,7 +84,7 @@ if __name__ == '__main__':
             # Read in old alphas
             #path = "/mnt/research/SNAPhU/STIR/run_ps/"
             path = "./" # Path to parameter list files.
-            paramFile = os.path.join(path,"positions_old.txt") #
+            paramFile = os.path.join(pathBase,"positions_old.txt") #
 
             # Read in old values.
             alphaL_old, alphaD_old = helper_functions.getOldAlphas(paramFile)
@@ -81,3 +99,10 @@ if __name__ == '__main__':
 
             # write guesses to positions_old.txt
             helper_functions.writeParameters(alphaL_guess, alphaD_guess)
+
+            cmd = "python ps_setup.py"
+            print(cmd)
+            os.system(cmd)
+            cmd = "python ps_runjob.py"
+            print(cmd)
+            os.system(cmd)

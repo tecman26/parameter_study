@@ -5,3 +5,6 @@ dA = 0.02
 num_alpha_l = 32
 num_alpha_d = 16
 dataDir = "./data"
+runname = "mcmcPS"
+size_3d = 794
+size_1d = 279

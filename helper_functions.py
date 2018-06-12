@@ -8,6 +8,7 @@
 import numpy as np
 import os
 from read3d import *
+from settings import *
 #from read1D import *
 
 def readOutput(pathname, dim):
@@ -79,10 +80,10 @@ def writeParameters(alpha_l_options, alpha_d_options):
     num_alpha_d = 16
 
     dataDir = "./data"
-    path = "./"
-    pos_filename = os.path.join(path, "positions.txt") # cumulative list of pairs
-    pos_old_filename = os.path.join(path, "positions_old.txt")
-    pos_filename_cp = os.path.join(path, "positions_cp.txt")
+    pathBase = "mcmc_step" + str(mcmc_step)
+    pos_filename = os.path.join(pathBase, "positions.txt") # cumulative list of pairs
+    pos_old_filename = os.path.join(pathBase, "positions_old.txt")
+    pos_filename_cp = os.path.join(pathBase, "positions_cp.txt")
 
     if os.path.isfile(pos_filename_cp):
         os.remove(pos_filename_cp)
