@@ -12,7 +12,6 @@
 #
 ############################################################################
 
-from scipy.stats import chisquare
 import numpy as np
 import sys, os
 from optparse import OptionParser
