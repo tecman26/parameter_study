@@ -32,6 +32,10 @@ def read3d(dataDir):
     entropy = data_profile[:,9]
     ye = data_profile[:,11]
 
-    data = np.array([radius, vcon, entropy, ye])
+    trunc = np.where(vcon == 0)
+    print(" -- TRUNCATE AT INDEX %f ---" % trunc[0][0])
+
+    data = np.array([radius[:trunc[0][0]], vcon[:trunc[0][0]], \
+      entropy[:trunc[0][0]], ye[:trunc[0][0]]])
 
     return np.transpose(data), np.transpose( mean_rs )
