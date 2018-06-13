@@ -7,8 +7,8 @@
 
 import numpy as np
 import os
-from read3D import *
-from read1D import *
+from read3d import *
+from read1d import *
 
 def readOutput(pathname, dim):
     # Reads in FLASH output data for 1D or 3D. Pathname should give output

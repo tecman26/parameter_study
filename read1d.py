@@ -15,11 +15,20 @@ import yt
 
 def read1d(dataDir):
 
+<<<<<<< HEAD
     # ---------------------
     # Read 3D Data
     # ---------------------
     data_array, r_sh = read3d(dataDir)
     r_shock = r_sh[:,1]
+=======
+    # Will have to update the filename appropriately
+    shockRadiusFile = os.path.join(dataDir,"run_mcmcPS.dat")
+    data = np.genfromtxt(shockRadiusFile)
+    mean_shock_radius = data[:,11]
+    time = data[:,0]
+    mean_rs = np.array( [time, mean_shock_radius] )
+>>>>>>> 6dfa507252e88ca603b12c3e5e76334a451d39cf
 
 
     fn_1d = "stir_may10_s13.3_alpha0.9_hdf5_chk_0100"

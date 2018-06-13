@@ -18,8 +18,9 @@ import sys, os
 from optparse import OptionParser
 import glob
 import helper_functions
+from ps_setup import *
+from ps_runjob import *
 
-#import ps_setup
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]

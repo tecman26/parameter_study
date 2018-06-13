@@ -25,9 +25,7 @@ import helper_functions
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
-def chi2_mod(array): # returns chi2 without p-value
-    return chisquare(array)[0]
-
+chi2_mod = lambda array: chisquare(array)[0] # returns chi2 without p-value
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -39,10 +37,11 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
+    trial_pathname = "/mnt/research/SNAPhU/STIR/run_ps/trial0/"
     
     #----Read in 3D simulation data for comparison----#
     
-    dataDir = "./data/"
+    dataDir = os.path.join(trial_pathname, "..")
 
     r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(dataDir, 3)
 
@@ -50,9 +49,9 @@ if __name__ == '__main__':
     #----specify which walker step is being run----#
     
     step_num = input("Enter step number")
-    output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num)
+    output_directory = os.path.join(trial_pathname,"step"+str(step_num))
     
-    input_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step"+str(step_num-1)
+    input_directory = os.path.join(trial_pathname,"step"+str(step_num-1))
     
     
     positions_filename_ref = input_directory+"/positions.txt"

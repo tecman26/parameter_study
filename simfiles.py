@@ -101,13 +101,13 @@ def main():
 
     myFiles = FlashOutputFiles(pathToOutputDir)
 
-    print myFiles.dirname
+    print(myFiles.dirname)
     myChkfiles = myFiles.chkFilePaths()
     files = [chkfiles for chkfiles in myChkfiles]
-    print "first checkpoint:", files[0]
-    print "last checkpoint:", files[-1]
-    print "datfile:", myFiles.datfile
-    print "\nTest passed!"
+    print("first checkpoint:"+str(files[0]))
+    print("last checkpoint:"+str(files[-1]))
+    print("datfile:"+str(myFiles.datfile))
+    print("\nTest passed!")
 
 
 if __name__ == '__main__':
