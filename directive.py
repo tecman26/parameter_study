@@ -17,6 +17,7 @@ import sys, os
 from optparse import OptionParser
 import glob
 from helper_functions import *
+from ps_setup import *
 
 #import ps_setup
 
@@ -123,9 +124,11 @@ if __name__ == '__main__':
     
     #----Set up and run batch of guess simulations----#
     
-    command = "./ps_setup.py"
-    print(command)
-    os.system(command)
+    # command = "./ps_setup.py"
+    # print(command)
+    # os.system(command)
+    setup(output_directory) #run the "setup" function from the ps_setup.py script
+    
     run_command = "./ps_runjob.py"
     print(run_command)
     os.system(run_command)
