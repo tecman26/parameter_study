@@ -48,13 +48,12 @@ def readPositions(positions_filename_ref):
     sim_dict = {} #dictionary relating simulation number to parameters
     positions_list = [] #positions from previous trial
 
-    with open(positions_filename_ref) as f:
+    with open(positions_filename_ref, "r") as f:
 
-        for i in range(1,num_walkers+1):
-
-            line_list = f.readline().split(", ") #read in line of positions file and split into a list
-            sim_num = line_list[0] #simulation number is first entry
-            parameters = line_list[1:] #parameters are the rest of line
+        for line in f:
+            line_list = line.split(", ") #read in line of positions file and split into a list
+            sim_num = int(line_list[0]) #simulation number is first entry
+            parameters = [float(x) for x in line_list[1:]] #parameters are the rest of line
 
             positions_list.append(parameters)
             sim_dict[sim_num] = parameters

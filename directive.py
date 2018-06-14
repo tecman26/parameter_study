@@ -16,7 +16,7 @@ import numpy as np
 import sys, os
 from optparse import OptionParser
 import glob
-import helper_functions
+from helper_functions import *
 
 #import ps_setup
 
@@ -37,31 +37,34 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    trial_pathname = "/mnt/research/SNAPhU/STIR/run_ps/trial0/"
-    
+    data_dir = "/mnt/research/SNAPhU/STIR/3dData"
+    trial_pathname = "./trial_test/"    
+
     #----Read in 3D simulation data for comparison----#
     
-    dataDir = os.path.join(trial_pathname, "..")
 
-    r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(dataDir, 3)
+    r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir, 3)
 
 
     #----specify which walker step is being run----#
     
-    step_num = input("Enter step number")
+    step_num = input("Enter step number ")
     output_directory = os.path.join(trial_pathname,"step"+str(step_num))
-    
-    input_directory = os.path.join(trial_pathname,"step"+str(step_num-1))
-    
+    if os.path.isdir(output_directory) == True:
+        print("Warning: step directory already exists")
+    else:
+        os.mkdir(output_directory)
+
+    input_directory = os.path.join(trial_pathname,"step"+str(int(step_num)-1))
     
     positions_filename_ref = input_directory+"/positions.txt"
     
-    if input_directory != "none" or os.path.isdir(input_directory) == False:
+    if  os.path.isdir(input_directory) == False:
         print("Please enter a valid step number")
-        return
+        sys.exit()
     elif os.path.isfile(positions_filename_ref) == False:
         print("No 'positions.txt' file found")
-        return
+        sys.exit()
     
 
         
@@ -83,16 +86,19 @@ if __name__ == '__main__':
     # Fill a dictionary and a list with the sets of parameters output by the previous sim
     pos_prev_dict, pos_prev_list = readPositions(positions_filename_ref)
     
+    print(pos_prev_dict)
+
     num_walkers = len(pos_prev_list) #number of Markov chain walkers
     num_parameters = len(pos_prev_list[0]) #number of parameters being varied
-        
+    
+    print(num_walkers)    
     #dictionary relating simulation number to positions and list containing tuples of positions
 
     
     #----Loop for generating guess positions----#
     
     pos_g_list = [] # Position guess list
-    pos_g_dict = [] # Position guess dict
+    pos_g_dict = {} # Position guess dict
     
     for i in range(1,num_walkers+1):
         #In this loop, 'alpha' is left out of variable names to save space
@@ -101,11 +107,12 @@ if __name__ == '__main__':
         d_step = 0.03
         
         #Pull previous parameter positions
+        print(pos_prev_dict[i])
         lambda_prev = pos_prev_dict[i][0]
         d_prev = pos_prev_dict[i][1]
 
-        lambda_guess = lambda_prev + np.random(-lambda_step, lambda_step)
-        d_guess = d_prev + np.random(-d_step, d_step)
+        lambda_guess = lambda_prev + 2*lambda_step*np.random.random_sample() - lambda_step
+        d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
         
         pos_g_list.append([lambda_guess, d_guess])
         pos_g_dict[i] = [lambda_guess, d_guess]
@@ -131,6 +138,7 @@ if __name__ == '__main__':
         
         # glob function returns a list that should have only one file (the one with sim_num = i)
         prev_data_pathname = glob.glob(os.path.join(input_directory,"run_mcmcPS_"+str(i)+"*"))
+        print(prev_data_pathname)
         prev_data_pathname = prev_data_pathname[0]
         
         guess_data_pathname = glob.glob(os.path.join(output_directory,"run_mcmcPS_"+str(i)+"*"))
@@ -182,7 +190,7 @@ if __name__ == '__main__':
     #----Append new positions to all_positions file---#
 
     trial_pathname = os.path.join(output_directory,"..")
-    all_positions_filename = os.path.join(trial_pathname,"all_positions.txt"
+    all_positions_filename = os.path.join(trial_pathname,"all_positions.txt")
     
     with open(all_positions_filename, "a+") as f:
         for i in range(num_walkers-1):

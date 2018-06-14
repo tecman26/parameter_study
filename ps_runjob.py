@@ -28,11 +28,13 @@ for a,b in zip(alphaL,alphaD):
     filename = "run.mlt"
     fullpath = os.path.join(path, os.path.join(path1, filename))
     
-    perm = "chmod u+x "+fullpath #give permission CHANGE ONCE IN HPC
+    #perm = "chmod u+x "+fullpath #give permission CHANGE ONCE IN HPC
 
-    #cmd = "qsub " + fullpath #CHANGE ONCE IN HPC
-    cmd = fullpath
+    cmd = "qsub " + fullpath #CHANGE ONCE IN HPC
+    #cmd = fullpath
 
-    os.system(perm)
+    #os.system(perm)
     os.system(cmd)
+    #os.system("command1 > out.txt 2> err.txt")
+    #os.system("command2 -f -z -y > out.txt 2> err.txt")
     i = i + 1

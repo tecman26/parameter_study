@@ -57,31 +57,32 @@ for a,b in zip(alphaL,alphaD):
     path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
     dir_loc = os.path.join(path, path1)
     if not os.path.isdir(dir_loc): # returns true if a directory exists.
+        print("Making "+str(dir_loc))
         os.makedirs(dir_loc) # Creates a run directory if it doesn't exist
-    filename = "run.mlt"
-    fullpath = os.path.join(dir_loc, filename)
-    print("fullpath = "+str(fullpath))
+    mlt_filename = "run.mlt"
+    mltpath = os.path.join(dir_loc, mlt_filename)
+    #print("fullpath = "+str(fullpath))
     # ----------------------------------------
     #  This loop writes the bash script to run
     #  the simulations.
     # ----------------------------------------
-    with open(fullpath, "w+") as file:
+    with open(mltpath, "w+") as file:
             file.write("#!/bin/bash -login\n")
             file.write("\n")
             file.write("### define resources needed:\n")
             file.write("### walltime - how long you expect the job to run\n")
-            file.write("#PBS -l walltime=24:00:00\n")
+            file.write("#PBS -l walltime=04:00:00\n")
             file.write("\n")
             file.write("### nodes:ppn - how many nodes & cores per node (ppn) that you require\n")
-            file.write("#PBS -l nodes=1:ppn=2,feature=intel16\n")
+            file.write("#PBS -l nodes=1:ppn=28,feature=intel16\n")
             file.write("\n")
             file.write("### mem: amount of memory that the job will need\n")
             file.write("#PBS -l mem=4gb\n")
-            file.write("#PBS -A ptg\n") # Can Theo and I use this?
+            #file.write("#PBS -A ptg\n") # Can Theo and I use this?
             file.write("###Batch job\n")
             # file.write("#PBS -t 1-138\n") # Will have to edit this
             file.write("### you can give your job a name for easier identification\n")
-            file.write("#PBS -N param_study"+str(a)+"_"+str(b)+"\n")
+            file.write("#PBS -N +"os.path.join(dir_loc,"param_study"+str(a)+"_"+str(b)+"\n"))
             file.write("\n")
             file.write("### load necessary modules, e.g.\n")
             file.write("module purge\n")
@@ -108,47 +109,47 @@ for a,b in zip(alphaL,alphaD):
     # I think that we do not need loops over mass.
     # Creates output files labelled by mass.
 
+    outfull = ""
     for m in mass:
-        path = "output"#+str(mass.index(m)+1) # We don't need so many
+        #path = "output"#+str(mass.index(m)+1) # We don't need so many
         dest1 = os.path.join(path,path1)
         if not os.path.isdir(dest1):
             os.makedirs(dest1)
         out = "output"
-        #outfull = os.path.join(dest1, out)
-        outfull = dest1 # Just one output directory in the run directory.
+        outfull = os.path.join(dest1, out)
         if not os.path.isdir(outfull):
                os.makedirs(outfull)
         ## Now make symlinks to copied executable
         #src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289" #change this once in HPC
         src = "/Users/tecman26/Documents/College/ACRES_REU/parameter_study/flash4_1f31289"
-        dest = os.path.join(dest1,"flash4")
+        dest = os.path.join(outfull,"flash4")
         if os.path.isfile(dest):
               os.remove(dest)
         os.symlink(src,dest)
         print(dest)
         ## EOS table
-        dest = os.path.join(dest1,"SFHo.h5")
+        dest = os.path.join(outfull,"SFHo.h5")
         if os.path.isfile(dest):
             print('file exists')
             os.remove(dest)
     ## Source for eos table:
     src = "/mnt/research/SNAPhU/Tables/SFHo.h5"
     os.symlink(src,dest)
-    dest = os.path.join(dest1,"NuLib_SFHo.h5")
+    dest = os.path.join(outfull,"NuLib_SFHo.h5")
     if os.path.isfile(dest):
         print('file exists')
         os.remove(dest)
     ## Source for opacity table:
     src = "/mnt/research/SNAPhU/Tables/NuLib_SFHo_noweakrates_rho82_temp65_ye60_ng12_ns3_Itemp65_Ieta61_version1.0_20170719.h5"
     os.symlink(src,dest)
-    dest = os.path.join(dest1,"s"+str(m)+"_5mspb.FLASH")
+    dest = os.path.join(outfull,"s"+str(m)+"_5mspb.FLASH")
     if os.path.isfile(dest):
         print('file exists')
         os.remove(dest)
     ## Source for progenitor:
     src = os.path.join("/mnt/research/SNAPhU/Progenitors2","s"+str(m)+"_5mspb.FLASH")
     os.symlink(src,dest)
-    path2 = os.path.join(dest1,"output")
+    path2 = outfull
     if restart:
         path2 = os.path.join(path,"stir_"+runname+"_s"+str(m)+"_alpha"+str(a))
         myFiles = simfiles.FlashOutputFiles(path)
@@ -158,13 +159,13 @@ for a,b in zip(alphaL,alphaD):
         refile = files[-1]
         refile = refile[-4:]
 
-    filename2 = "flash.par"
-    fullpath2 = os.path.join(dest1, filename2)
-    print("fullpath2 = "+str(fullpath2))
+    par_filename = "flash.par"
+    par_path = os.path.join(outfull, par_filename)
+    #print("fullpath2 = "+str(fullpath2))
     # ----------------------------------------
     #  Write the flash.par file
     # ----------------------------------------
-    with open(fullpath2, "w") as file:
+    with open(par_path, "w") as file:
         file.write("# Parameters file for 1D M1 Core Collapse with MLT\n")
         file.write("basenm                      = \"stir_"+runname+"_s"+str(m)+"_alpha"+str(a)+"_\"\n")
         if restart:
@@ -202,7 +203,7 @@ for a,b in zip(alphaL,alphaD):
         file.write("\n")
         file.write("# Time\n")
         file.write("tinitial                       = 0.005\n")
-        file.write("tmax                           = 1.50\n") # May need to change
+        file.write("tmax                           = 0.135\n") # May need to change
         file.write("nend                           = 1000000000\n")
         file.write("#nend                           = 1\n")
         file.write("tstep_change_factor            = 1.05\n")
