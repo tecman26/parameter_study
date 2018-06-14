@@ -39,7 +39,9 @@ def setup(step_path):
     i = 1
 
     #for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
-    for a,b in zip(alphaL,alphaD):
+    for k in range(len(alphaL)):
+        a = alphaL[k]
+        b = alphaD[k]
          # counter for file names
         #mass = (9.0,9.25,9.5,9.75,10.0,10.25,10.5,10.75,11.0,11.25,11.5,11.75,12.0,12.25,12.5,12.75,13.0, \
         #            13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,13.9, \
@@ -84,7 +86,7 @@ def setup(step_path):
                 file.write("###Batch job\n")
                 # file.write("#PBS -t 1-138\n") # Will have to edit this
                 file.write("### you can give your job a name for easier identification\n")
-                file.write("#PBS -N +"os.path.join(dir_loc,"param_study"+str(a)+"_"+str(b)+"\n"))
+                file.write("#PBS -N "+os.path.join(dir_loc,"param_study"+str(a)+"_"+str(b)+"\n"))
                 file.write("\n")
                 file.write("### load necessary modules, e.g.\n")
                 file.write("module purge\n")
@@ -94,7 +96,8 @@ def setup(step_path):
                 file.write("\n")
                 file.write("### change to the working directory where your code is located\n")
                 # --- Change this On Runtime ---
-                file.write("cd /mnt/research/SNAPhU/STIR/run_ps/"+path1+"/output${PBS_ARRAYID}\n")
+                #file.write("cd /mnt/research/SNAPhU/STIR/run_ps/"+path1+"/output${PBS_ARRAYID}\n")
+                file.write("cd "+str(dir_loc)+"/output\n")
                 file.write("\n")
                 file.write("### call your executable\n")
                 file.write("mpirun -np 2 flash4 \n")
@@ -114,7 +117,7 @@ def setup(step_path):
         outfull = ""
         for m in mass:
             #path = "output"#+str(mass.index(m)+1) # We don't need so many
-            dest1 = os.path.join(path,path1)
+            dest1 = os.path.join(step_path,path1)
             if not os.path.isdir(dest1):
                 os.makedirs(dest1)
             out = "output"
@@ -123,7 +126,7 @@ def setup(step_path):
                    os.makedirs(outfull)
             ## Now make symlinks to copied executable
             #src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289" #change this once in HPC
-            src = "/Users/tecman26/Documents/College/ACRES_REU/parameter_study/flash4_1f31289"
+            src = "/mnt/research/SNAPhU/STIR/run_sukhbold/flash4_may6"
             dest = os.path.join(outfull,"flash4")
             if os.path.isfile(dest):
                   os.remove(dest)
@@ -134,6 +137,7 @@ def setup(step_path):
             if os.path.isfile(dest):
                 print('file exists')
                 os.remove(dest)
+        os.mkdir(os.path.join(outfull,"sim_output"))
         ## Source for eos table:
         src = "/mnt/research/SNAPhU/Tables/SFHo.h5"
         os.symlink(src,dest)
@@ -169,7 +173,7 @@ def setup(step_path):
         # ----------------------------------------
         with open(par_path, "w") as file:
             file.write("# Parameters file for 1D M1 Core Collapse with MLT\n")
-            file.write("basenm                      = \"stir_"+runname+"_s"+str(m)+"_alpha"+str(a)+"_\"\n")
+            file.write("basenm                      = \"run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b)+"\"\n")
             if restart:
                 file.write("restart                 = .true.\n")
                 file.write("checkpointFileNumber    = "+str(refile)+"\n")
@@ -177,7 +181,7 @@ def setup(step_path):
                 file.write("restart                 = .false.\n")
                 file.write("checkpointFileNumber    = 0000 \n")
             file.write("plotFileNumber              = 0\n")
-            file.write("output_directory            = \"output\"\n")
+            file.write("output_directory            = \"sim_output\"\n")
             file.write("\n")
             file.write("# IO\n")
             file.write("wr_integrals_freq              = 20\n")
@@ -220,7 +224,7 @@ def setup(step_path):
             if (m == 9.0 or m==9.25):
                 file.write("xmax                           = 1.3e9\n")
             else:
-                file.write("xmax                           = 1.5e9\n")
+                file.write("xmax                           = 1e9\n")
             file.write("xl_boundary_type               = \"reflect\"\n")
             file.write("xr_boundary_type               = \"user\"\n")
             file.write("\n")

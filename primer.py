@@ -17,7 +17,7 @@ import sys, os
 from optparse import OptionParser
 import glob
 from helper_functions import *
-
+from ps_setup import *
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     #trial_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0"
     #output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step0"
-    trial_directory = "./trial_test"
+    trial_directory = "/mnt/home/f0004519/parameter_study/trial_test"
     output_directory = os.path.join(trial_directory, "step0")
     
     #----Hard-coded results from single-parameter alpha_lambda study----#
@@ -127,9 +127,10 @@ if __name__ == '__main__':
             
     #----Set up and run next simulation batch----#
     
-    setup_command = "python ps_setup.py"
-    print(setup_command)
-    os.system(setup_command)
+    #setup_command = "python ps_setup.py"
+    #print(setup_command)
+    #os.system(setup_command)
+    setup(output_directory)
     run_command = "python ps_runjob.py"
     print(run_command)
     os.system(run_command)

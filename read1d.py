@@ -24,7 +24,7 @@ def read1d(dataDir):
 
 
 
-    fn_1d = "stir_may10_s13.3_alpha0.9_hdf5_chk_0100"
+    fn_1d = os.getcwd()+"_hdf5_chk_0012"
     ds_1d = yt.load(fn_1d)
 
     #ray1 = ds_1d.ray([0,0,0],[1.665e7,0,0])

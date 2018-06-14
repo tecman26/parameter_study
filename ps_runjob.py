@@ -34,6 +34,7 @@ for a,b in zip(alphaL,alphaD):
     #cmd = fullpath
 
     #os.system(perm)
+    print(cmd)
     os.system(cmd)
     #os.system("command1 > out.txt 2> err.txt")
     #os.system("command2 -f -z -y > out.txt 2> err.txt")
