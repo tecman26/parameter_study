@@ -24,12 +24,15 @@ module purge
 module load Intel/16.3
 module load OpenMPI/2.0.1
 module load HDF5/1.8.18
-module load Python/3.6.5
+
+module unload python
+
+export PATH="/mnt/home/f0004519/anaconda3/bin:$PATH"
 
 ### change to the working directory where your code is located
 cd /mnt/home/f0004519/parameter_study/
 
 ### call your executable
-mpirun -np 1 run_python.sh
+python directive.py 
 ~                                                                                                                       
 ~                                                                                                                       
