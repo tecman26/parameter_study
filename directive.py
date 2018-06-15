@@ -18,6 +18,7 @@ from optparse import OptionParser
 import glob
 from helper_functions import *
 from ps_setup import *
+from ps_runjob import *
 import time
 
 #import ps_setup
@@ -28,6 +29,12 @@ import time
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
+
+def isReady():
+    command = "qs > q_file.txt"
+    if os.stat("q_file.txt").st_size == 0:
+        return True
+    else return False
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -120,6 +127,8 @@ if __name__ == '__main__':
         pos_g_dict[i] = [lambda_guess, d_guess]
     
     #----Write guess positions to file----#
+    print("pos_prev_list = "+str(pos_prev_list))
+    print("pos_prev_list = "+str(pos_g_list))
     
     writePositions(output_directory, pos_g_list) #See helper_functions.py for documentations
     
@@ -130,10 +139,15 @@ if __name__ == '__main__':
     # os.system(command)
     setup(output_directory) #run the "setup" function from the ps_setup.py script
     
-    run_command = "./ps_runjob.py"
-    print(run_command)
-    os.system(run_command)
+    runjob(output_directory)
     
+    interval = 300 #seconds to sleep between checking
+    ready = isReady()
+    
+    while ready == False:
+        time.sleep(interval)
+        ready = isReady()
+        
     #----Read and compare results of simulations----#
     
     final_positions = []
