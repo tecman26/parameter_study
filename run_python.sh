@@ -14,6 +14,8 @@
 ### mem: amount of memory that the job will need
 #PBS -l mem=4gb
 
+#PBS -A ptg
+
 ### you can give your job a name for easier identification
 #PBS -N /mnt/home/f0004519/parameter_study/run_python
 
