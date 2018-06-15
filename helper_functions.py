@@ -19,8 +19,26 @@ def readOutput(pathname, dim):
     
     if dim == 3:
         data_array, r_sh = read3d(pathname) #read data from output file
+        #----readOutput return format----#
+        # Shock radius
+        #
+        # n x 4 numpy array with columns:
+        # # Column 1: radius
+        # # Column 2: convective velocity
+        # # Column 3: entropy
+        # # Column 4: electron fraction
+        #--------------------------------#
+
+        r = data_array[:,0]
+        v_con = data_array[:,1]
+        y_e_prof = data_array[:,2]
+        s_prof = data_array[:,3]
+
+        return (r_sh, r, v_con, y_e_prof, s_prof)
+    
     elif dim == 1:
-        data_array, r_sh = read1d(pathname)
+        r, v_con, y_e_prof, s_prof, r_sh = read1d(pathname)
+        return (r_sh, r, v_con, y_e_prof, s_prof)
     else:
         print("Enter either '1' or '3' for number of dimensions")
     

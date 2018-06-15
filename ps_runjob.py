@@ -24,7 +24,7 @@ def runjob(step_path):
     mcmcRun = "1"
 
     i = 1
-    job_id_file = os.join(step_path,"job_ids.txt")
+    job_id_file = os.path.join(step_path,"job_ids.txt")
     os.system("touch "+job_id_file)
     
     for a,b in zip(alphaL,alphaD):

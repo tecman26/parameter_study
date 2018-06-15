@@ -1,0 +1,7 @@
+
+mgr-04.i: 
+                                                                                  Req'd       Req'd       Elap
+Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+58204086.mgr-04.i       f0004519    main     /mnt/home/f00045  17802     1      2       4gb  04:00:00 R  00:16:21
+58204088.mgr-04.i       f0004519    main     /mnt/home/f00045  30035     1      2       4gb  04:00:00 R  00:16:20

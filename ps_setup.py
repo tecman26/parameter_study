@@ -78,15 +78,15 @@ def setup(step_path):
                 file.write("#PBS -l walltime=04:00:00\n")
                 file.write("\n")
                 file.write("### nodes:ppn - how many nodes & cores per node (ppn) that you require\n")
-                file.write("#PBS -l nodes=1:ppn=28,feature=intel16\n")
+                file.write("#PBS -l nodes=1:ppn=2,feature=intel16\n")
                 file.write("\n")
                 file.write("### mem: amount of memory that the job will need\n")
                 file.write("#PBS -l mem=4gb\n")
-                #file.write("#PBS -A ptg\n") # Can Theo and I use this?
+                file.write("#PBS -A ptg\n") # Can Theo and I use this?
                 file.write("###Batch job\n")
                 # file.write("#PBS -t 1-138\n") # Will have to edit this
                 file.write("### you can give your job a name for easier identification\n")
-                file.write("#PBS -N "+os.path.join(dir_loc,"param_study"+str(a)+"_"+str(b)+"\n"))
+                file.write("#PBS -N param_study"+str(a)+"_"+str(b)+"\n")
                 file.write("\n")
                 file.write("### load necessary modules, e.g.\n")
                 file.write("module purge\n")

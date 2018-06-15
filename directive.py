@@ -31,10 +31,11 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
 
 def isReady():
-    command = "qs > q_file.txt"
+    command = "qstat -u f0004519 > q_file.txt"
+    os.system(command)
     if os.stat("q_file.txt").st_size == 0:
         return True
-    else return False
+    else: return False
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -47,7 +48,7 @@ if __name__ == '__main__':
     print('************************************\n')
 
     data_dir = "/mnt/research/SNAPhU/STIR/3dData"
-    trial_pathname = "./trial_test/"    
+    trial_pathname = "/mnt/home/f0004519/parameter_study/trial_test/"    
 
     #----Read in 3D simulation data for comparison----#
     
@@ -57,7 +58,8 @@ if __name__ == '__main__':
 
     #----specify which walker step is being run----#
     
-    step_num = input("Enter step number ")
+    #step_num = input("Enter step number ")
+    step_num = 1
     output_directory = os.path.join(trial_pathname,"step"+str(step_num))
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
@@ -141,13 +143,15 @@ if __name__ == '__main__':
     
     runjob(output_directory)
     
-    interval = 300 #seconds to sleep between checking
+    interval = 60 #seconds to sleep between checking
     ready = isReady()
     
     while ready == False:
+        #print("Not ready")
         time.sleep(interval)
         ready = isReady()
         
+    print("done!")
     #----Read and compare results of simulations----#
     
     final_positions = []
