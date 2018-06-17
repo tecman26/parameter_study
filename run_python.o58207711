@@ -1,0 +1,20 @@
+
+************************************
+**          directive 
+************************************
+
+ -- TRUNCATE AT INDEX 663.000000 ---
+Warning: step directory already exists
+{1: [0.666009, 0.680198], 2: [1.782984, 0.809642]}
+2
+[0.666009, 0.680198]
+[1.782984, 0.809642]
+pos_prev_list = [[0.666009, 0.680198], [1.782984, 0.809642]]
+pos_prev_list = [[0.6507312479265481, 0.6880051050057701], [1.7569400730127325, 0.7931602532723301]]
+Making /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_1_a0.650731_b0.688005
+/mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_1_a0.650731_b0.688005/output/flash4
+Making /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_2_a1.75694_b0.79316
+/mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_2_a1.75694_b0.79316/output/flash4
+qsub /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_1_a0.650731_b0.688005/run.mlt >> /mnt/home/f0004519/parameter_study/trial_test/step1/job_ids.txt
+qsub /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_2_a1.75694_b0.79316/run.mlt >> /mnt/home/f0004519/parameter_study/trial_test/step1/job_ids.txt
+Usage: /var/spool/torque/mom_priv/epilogue [-hkbv]
