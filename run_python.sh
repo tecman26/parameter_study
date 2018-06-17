@@ -32,6 +32,9 @@ export PATH="/mnt/home/f0004519/anaconda3/bin:$PATH"
 ### change to the working directory where your code is located
 cd /mnt/home/f0004519/parameter_study/
 
+### put job id in file
+${PBS_JOBID} > directive_jobid.txt
+
 ### call your executable
 python directive.py 
 ~                                                                                                                       

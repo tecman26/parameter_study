@@ -30,12 +30,26 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
 
+def getLastLine(filename):
+    line_list = []
+    with open(filename, "r+") as f:
+        line_list.append(f.readline())
+    last_line = line_list[-1]
+    job_id = last_line.split()[0]
+    return job_id
+
+def getJobID():
+    filename = "directive_jobid.txt"
+    f = open(filename, "r+")
+    job_id = f.readline()
+    return job_id
+
 def isReady():
     command = "qstat -u f0004519 > q_file.txt"
     os.system(command)
-    if os.stat("q_file.txt").st_size == 0:
-        return True
-    else: return False
+    condition = getLastLine("q_file.txt") == getJobID()
+
+    return condition
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
