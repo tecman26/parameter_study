@@ -1,0 +1,473 @@
+
+************************************
+**          directive 
+************************************
+
+ -- TRUNCATE AT INDEX 663.000000 ---
+Warning: step directory already exists
+{1: [0.666009, 0.680198], 2: [1.782984, 0.809642]}
+2
+[0.666009, 0.680198]
+[1.782984, 0.809642]
+pos_prev_list = [[0.666009, 0.680198], [1.782984, 0.809642]]
+pos_prev_list = [[0.6436674907913337, 0.7032741144298286], [1.7896721489274117, 0.7798130881312955]]
+Making /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_1_a0.643667_b0.703274
+/mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_1_a0.643667_b0.703274/output/flash4
+Making /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_2_a1.789672_b0.779813
+/mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_2_a1.789672_b0.779813/output/flash4
+qsub /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_1_a0.643667_b0.703274/run.mlt >> /mnt/home/f0004519/parameter_study/trial_test/step1/job_ids.txt
+qsub /mnt/home/f0004519/parameter_study/trial_test/step1/run_mcmcPS_2_a1.789672_b0.779813/run.mlt >> /mnt/home/f0004519/parameter_study/trial_test/step1/job_ids.txt
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:05:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:03:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:03:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:10:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:08:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:08:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:15:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:13:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:13:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:20:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:18:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:18:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:25:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:23:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:23:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:30:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:28:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:28:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:35:11
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:33:05
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:33:05
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:40:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:38:06
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:38:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:45:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:43:06
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:43:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:50:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:48:06
+
+line = 58240308.mgr-04.i       f0004519    main     param_study1.789   3836     1      2       4gb  04:00:00 R  00:48:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  00:55:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:53:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:00:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  00:58:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:05:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:03:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:10:12
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:08:06
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:15:13
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:13:07
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:20:13
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:18:07
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:25:13
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:23:07
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:30:13
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:28:07
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:35:13
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:33:07
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:40:13
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:38:07
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:45:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:43:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:50:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:48:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  01:55:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:53:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:00:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  01:58:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:05:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  02:03:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:10:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  02:08:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:15:14
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  02:13:08
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:20:15
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  02:18:09
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:25:15
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 R  02:23:09
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:30:15
+
+line = 58240307.mgr-04.i       f0004519    main     param_study0.643   2568     1      2       4gb  04:00:00 C       -- 
+
+line = 
+
+line = mgr-04.i: 
+
+line =                                                                                   Req'd       Req'd       Elap
+
+line = Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory      Time    S   Time
+
+line = ----------------------- ----------- -------- ---------------- ------ ----- ------ --------- --------- - ---------
+
+line = 58240302.mgr-04.i       f0004519    main     /mnt/home/f00045   8510     1      1       4gb  06:00:00 R  02:35:15
+
+done!
+[]

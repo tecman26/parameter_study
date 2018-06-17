@@ -33,15 +33,18 @@ chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # ret
 def getLastLine(filename):
     line_list = []
     with open(filename, "r+") as f:
-        line_list.append(f.readline())
+        for line in f:
+            #print("line = "+str(line))
+            line_list.append(line)
     last_line = line_list[-1]
+    #print(last_line)
     job_id = last_line.split()[0]
     return job_id
 
 def getJobID():
     filename = "directive_jobid.txt"
     f = open(filename, "r+")
-    job_id = f.readline()
+    job_id = f.readline().rstrip('\n')
     return job_id
 
 def isReady():
@@ -157,8 +160,8 @@ if __name__ == '__main__':
     
     runjob(output_directory)
     
-    interval = 60 #seconds to sleep between checking
-    ready = isReady()
+    interval = 300 #seconds to sleep between checking
+    ready = False
     
     while ready == False:
         #print("Not ready")

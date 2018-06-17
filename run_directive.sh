@@ -17,7 +17,7 @@
 #PBS -A ptg
 
 ### you can give your job a name for easier identification
-#PBS -N /mnt/home/f0004519/parameter_study/run_python
+#PBS -N /mnt/home/f0004519/parameter_study/run_directive
 
 ### load necessary modules, e.g.
 module purge
