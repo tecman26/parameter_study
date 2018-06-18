@@ -65,7 +65,7 @@ if __name__ == '__main__':
     alpha_lambda_max = 1.3 # We can narrow these down once we have data from the previous alpha_lambda parameter study
     
     alpha_d_min = 0
-    alpha_d_max = 1
+    alpha_d_max = 0.9
     
     alpha_lambda_range = (alpha_lambda_min,alpha_lambda_max)
     alpha_d_range = (alpha_d_min,alpha_d_max)

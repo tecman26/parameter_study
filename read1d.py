@@ -27,7 +27,10 @@ def read1d(data_dir1D, step, data_dir3D):
     runname = os.path.basename(data_dir1D)
     fn_1d = os.path.join(pathname,runname+"hdf5_chk_0012")
     print(fn_1d)
-    ds_1d = yt.load(fn_1d)
+    try:
+        ds_1d = yt.load(fn_1d)
+    except:
+        return 0, 0, 0, 0, 0
 
     #ray1 = ds_1d.ray([0,0,0],[1.665e7,0,0])
 

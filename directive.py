@@ -6,7 +6,7 @@
 # Version 0.0 (June 2018)
 # Authors: Theo Cooper and Brandon Barker
 #
-# Description: For use in paramter studies for the mixing length parameter
+# Description: For use in parameter studies for the mixing length parameter
 # and diffusion parameters for matching 1D models to 3D data.
 #
 ############################################################################
@@ -77,6 +77,11 @@ if __name__ == '__main__':
     
     #step_num = input("Enter step number ")
     step_num = 1
+    parser = OptionParser()
+    parser.add_option("-s", "--step", action="store_const", dest="step_num", \
+                      default=1)
+
+
     output_directory = os.path.join(trial_pathname,"step"+str(step_num))
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
@@ -186,8 +191,21 @@ if __name__ == '__main__':
         r_sh_p, r_p, v_con_p, y_e_p, s_p = readOutput(data_dir3D, 1, prev_data_pathname, step_num-1)
         r_sh_g, r_g, v_con_g, y_e_g, s_g = readOutput(data_dir3D, 1, guess_data_pathname, step_num)
 
+        if r_sh_p == 0 or r_p == 0 or v_con_p == 0 or y_e_p == 0 or s_p == 0:
 
+            final_positions.append(pos_prev_dict[i])
 
+            os.system("rm "+guess_data_pathname)
+            os.system("cp "+prev_data_pathname+" "+output_directory)
+            
+            continue
+        if r_sh_g == 0 or r_g == 0 or v_con_g == 0 or y_e_g == 0 or s_g == 0:
+            final_positions.append(pos_prev_dict[i])
+
+            os.system("rm "+guess_data_pathname)
+            os.system("cp "+prev_data_pathname+" "+output_directory)
+
+            continue
         #----Metropolis-Hastings Algorithm----#
 
         # Calculate chi-squared for prev position and guess position
