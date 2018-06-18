@@ -32,11 +32,12 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    #trial_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0"
-    #output_directory = "/mnt/research/SNAPhU/STIR/run_ps/trial0/step0"
-    trial_directory = "/mnt/home/f0004519/parameter_study/trial_test"
+    trial_directory = "/mnt/research/SNAPhU/STIR/parameter_study/trial0"
     output_directory = os.path.join(trial_directory, "step0")
-    
+    if os.path.isdir(output_directory) == True:
+        print("Warning: step directory already exists")
+    else:
+        os.mkdirs(output_directory)
     #----Hard-coded results from single-parameter alpha_lambda study----#
     
     #pathname_sing = "" #path name for single-parameter study output
@@ -49,8 +50,8 @@ if __name__ == '__main__':
     #-------------------------------------------------------------------#
 
     #IMPORTANT PARAMETERS: these determines how many simulation walkers to set up
-    alpha_lambda_num = 8 # number of alpha_lambda options (for method 2)
-    alpha_d_num = 4 # number of alpha_d options (for method 2)
+    alpha_lambda_num = 32 # number of alpha_lambda options (for method 2)
+    alpha_d_num = 16 # number of alpha_d options (for method 2)
     num_walkers = alpha_lambda_num*alpha_d_num
     
     next_positions = []

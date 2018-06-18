@@ -29,7 +29,7 @@ def readOutput(pathname3D, dim, pathname1D ="", step = 1):
         time_array = r_sh_array[:,0]
         time_closest = find_nearest(time_array, 0.135)
         time_closest_val = np.array([x[1] if x[0] == time_closest else 0 for x in r_sh_array])
-        print(time_closest_val[np.flatnonzero(time_closest_val)][0])
+        #print(time_closest_val[np.flatnonzero(time_closest_val)][0])
         r_sh = time_closest_val[np.nonzero(time_closest_val)][0]
         
         #----readOutput return format----#

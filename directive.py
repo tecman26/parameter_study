@@ -65,7 +65,7 @@ if __name__ == '__main__':
     print('************************************\n')
 
     data_dir3D = "/mnt/research/SNAPhU/STIR/3dData"
-    trial_pathname = "/mnt/home/f0004519/parameter_study/trial_test/"    
+    trial_pathname = "/mnt/research/SNAPhU/STIR/parameter_study/trial0/"    
 
     #----Read in 3D simulation data for comparison----#
     

@@ -17,7 +17,7 @@
 #PBS -A ptg
 
 ### you can give your job a name for easier identification
-#PBS -N /mnt/home/f0004519/parameter_study/run_directive
+#PBS -N /mnt/research/SNAPhU/STIR/parameter_study/run_directive
 
 ### load necessary modules, e.g.
 module purge
@@ -30,7 +30,7 @@ module unload python
 export PATH="/mnt/home/f0004519/anaconda3/bin:$PATH"
 
 ### change to the working directory where your code is located
-cd /mnt/home/f0004519/parameter_study/
+cd /mnt/research/SNAPhU/STIR/parameter_study/
 
 ### put job id in file
 echo ${PBS_JOBID} > directive_jobid.txt

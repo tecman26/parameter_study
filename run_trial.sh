@@ -1,12 +1,12 @@
 #!/bin/bash
 
 
-###Shell script for running primer.py once
+###Shell script for running entire trial
 
 
 ### define resources needed:
 ### walltime - how long you expect the job to run
-#PBS -l walltime=06:00:00
+#PBS -l walltime=24:00:00
 
 ### nodes:ppn - how many nodes & cores per node (ppn) that you require
 #PBS -l nodes=1:ppn=1,feature=intel16
@@ -17,7 +17,7 @@
 #PBS -A ptg
 
 ### you can give your job a name for easier identification
-#PBS -N /mnt/research/SNAPhU/STIR/parameter_study/run_primer
+#PBS -N /mnt/research/SNAPhU/STIR/parameter_study/
 
 ### load necessary modules, e.g.
 module purge
@@ -32,10 +32,12 @@ export PATH="/mnt/home/f0004519/anaconda3/bin:$PATH"
 ### change to the working directory where your code is located
 cd /mnt/research/SNAPhU/STIR/parameter_study/
 
-### put job id in file
-echo ${PBS_JOBID} > primer_jobid.txt
 
 ### call your executable
 python primer.py 
-~                                                                                                                       
-~                                                                                                                       
+
+for i in 1 2 3 4 5 6
+do
+        wait $! ###Waits for last process to finish
+	python directive.py -s i
+done                                                                                                     
