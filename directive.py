@@ -64,13 +64,13 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    data_dir = "/mnt/research/SNAPhU/STIR/3dData"
+    data_dir3D = "/mnt/research/SNAPhU/STIR/3dData"
     trial_pathname = "/mnt/home/f0004519/parameter_study/trial_test/"    
 
     #----Read in 3D simulation data for comparison----#
     
 
-    r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir, 3)
+    r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D, 3)
 
 
     #----specify which walker step is being run----#
@@ -168,33 +168,32 @@ if __name__ == '__main__':
         time.sleep(interval)
         ready = isReady()
         
-    print("done!")
     #----Read and compare results of simulations----#
-    
+
     final_positions = []
-    
-    for i in range(num_walkers):
-        
+
+    for i in range(1,num_walkers+1):
+
         # glob function returns a list that should have only one file (the one with sim_num = i)
         prev_data_pathname = glob.glob(os.path.join(input_directory,"run_mcmcPS_"+str(i)+"*"))
-        print(prev_data_pathname)
+        print("prev_data_pathname = "+str(prev_data_pathname))
         prev_data_pathname = prev_data_pathname[0]
-        
+
         guess_data_pathname = glob.glob(os.path.join(output_directory,"run_mcmcPS_"+str(i)+"*"))
         guess_data_pathname = guess_data_pathname[0]
-        
-        
-        r_sh_p, r_p, v_con_p, y_e_p, s_p = readOutput(prev_data_pathname, 1)
-        r_sh_g, r_g, v_con_g, y_e_g, s_g = readOutput(guess_data_pathname, 1)
-        
-        
+
+
+        r_sh_p, r_p, v_con_p, y_e_p, s_p = readOutput(data_dir3D, 1, prev_data_pathname, step_num-1)
+        r_sh_g, r_g, v_con_g, y_e_g, s_g = readOutput(data_dir3D, 1, guess_data_pathname, step_num)
+
+
 
         #----Metropolis-Hastings Algorithm----#
 
         # Calculate chi-squared for prev position and guess position
-        
+
         """r = []
-        
+
         if len(r_p) < len(r_3D):
             r = r_p
         else:
@@ -203,32 +202,33 @@ if __name__ == '__main__':
         # These chi2 terms can be weighted later
         chi2_p = chi2_mod(r_sh_p, r_sh_3D) + chi2_mod(v_con_p, v_con_3D) + chi2_mod(y_e_p, y_e_3D) + chi2_mod(s_p, s_3D)
         chi2_g = chi2_mod(r_sh_g, r_sh_3D) + chi2_mod(v_con_g, v_con_3D) + chi2_mod(y_e_g, y_e_3D) + chi2_mod(s_g, s_3D)
+        print(r_sh_p.shape)
+        print(r_sh_3D.shape)
 
         # Likelihood ratio of both sets of data (also known as acceptance probability)
         p_acc = np.exp(-chi2_g + chi2_p)
-        
-        p_thresh = np.random() # threshold probability, chosen randomly between 0 and 1
-        
+
+        p_thresh = np.random.random_sample() # threshold probability, chosen randomly between 0 and 1
+
         if p_acc < p_thresh: # if acceptance probability doesn't exceed threshold
-            
+
             final_positions.append(pos_prev_dict[i])
-            
+
             # Remove the guess data files from directory and replace with previous data, for use in
             # next step.
             os.system("rm "+guess_data_pathname)
             os.system("cp "+prev_data_pathname+" "+output_directory)
-            
+
         else: # if acceptance probability exceeds the threshold
-            
+
             final_positions.append(pos_g_dict[i])
-            
+
     #----Write new positions file----#
     
     writePositions(final_positions, output_directory)
     
     #----Append new positions to all_positions file---#
 
-    trial_pathname = os.path.join(output_directory,"..")
     all_positions_filename = os.path.join(trial_pathname,"all_positions.txt")
     
     with open(all_positions_filename, "a+") as f:

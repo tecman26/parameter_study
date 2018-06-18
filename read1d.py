@@ -13,8 +13,7 @@ from settings import *
 from read3d import *
 import yt
 
-def read1d(data_dir3D, step, runname):
-
+def read1d(data_dir1D, step, data_dir3D):
 
     # ---------------------
     # Read 3D Data
@@ -22,9 +21,10 @@ def read1d(data_dir3D, step, runname):
     data_array, r_sh = read3d(data_dir3D)
     r_shock = r_sh[:,1]
 
-
-    pathname = "./sim_output" #Should start in output directory!
+    #data_dir1d is run directory
+    pathname = os.path.join(data_dir1D,"output/sim_output") #Should start in output directory!
     #pathname = "/mnt/home/f0004519/parameter_study/trial_test/step"+step+"/"+runname+"/output/sim_output"
+    runname = os.path.basename(data_dir1D)
     fn_1d = os.path.join(pathname,runname+"hdf5_chk_0012")
     ds_1d = yt.load(fn_1d)
 
@@ -56,5 +56,6 @@ def read1d(data_dir3D, step, runname):
     v_con_interp = np.interp(xvals, x, v_con)
     entr_interp = np.interp(xvals, x, entr)
     ye_interp = np.interp(xvals, x, ye)
+    
 
     return radius_interp, v_con_interp, ye_interp, entr_interp, max(radius_interp)
