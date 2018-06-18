@@ -26,6 +26,7 @@ def read1d(data_dir1D, step, data_dir3D):
     #pathname = "/mnt/home/f0004519/parameter_study/trial_test/step"+step+"/"+runname+"/output/sim_output"
     runname = os.path.basename(data_dir1D)
     fn_1d = os.path.join(pathname,runname+"hdf5_chk_0012")
+    print(fn_1d)
     ds_1d = yt.load(fn_1d)
 
     #ray1 = ds_1d.ray([0,0,0],[1.665e7,0,0])
