@@ -61,7 +61,6 @@ def setup(step_path):
         path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
         dir_loc = os.path.join(step_path, path1)
         if not os.path.isdir(dir_loc): # returns true if a directory exists.
-            print("Making "+str(dir_loc))
             os.makedirs(dir_loc) # Creates a run directory if it doesn't exist
         mlt_filename = "run.mlt"
         mlt_path = os.path.join(dir_loc, mlt_filename)

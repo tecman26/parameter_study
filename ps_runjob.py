@@ -39,7 +39,7 @@ def runjob(step_path):
         #cmd = fullpath
 
         #os.system(perm)
-        print(cmd)
+        #print(cmd)
         os.system(cmd)
         
         

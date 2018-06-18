@@ -18,6 +18,7 @@ from optparse import OptionParser
 import glob
 from helper_functions import *
 from ps_setup import *
+from ps_runjob import *
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
@@ -48,8 +49,8 @@ if __name__ == '__main__':
     #-------------------------------------------------------------------#
 
     #IMPORTANT PARAMETERS: these determines how many simulation walkers to set up
-    alpha_lambda_num = 2 # number of alpha_lambda options (for method 2)
-    alpha_d_num = 1 # number of alpha_d options (for method 2)
+    alpha_lambda_num = 8 # number of alpha_lambda options (for method 2)
+    alpha_d_num = 4 # number of alpha_d options (for method 2)
     num_walkers = alpha_lambda_num*alpha_d_num
     
     next_positions = []
@@ -60,8 +61,8 @@ if __name__ == '__main__':
     """Method 1 creates array of totally random starting points within the area. Method 2 creates two arrays with
     16 alpha_lambda values and 32 alpha_d values and takes their Cartesian product"""
     
-    alpha_lambda_min = 0
-    alpha_lambda_max = 2 # We can narrow these down once we have data from the previous alpha_lambda parameter study
+    alpha_lambda_min = 0.3
+    alpha_lambda_max = 1.3 # We can narrow these down once we have data from the previous alpha_lambda parameter study
     
     alpha_d_min = 0
     alpha_d_max = 1
@@ -127,11 +128,5 @@ if __name__ == '__main__':
             
     #----Set up and run next simulation batch----#
     
-    #setup_command = "python ps_setup.py"
-    #print(setup_command)
-    #os.system(setup_command)
     setup(output_directory)
-    run_command = "python ps_runjob.py"
-    print(run_command)
-    os.system(run_command)
-        
+    runjob(output_directory)    
