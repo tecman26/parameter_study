@@ -32,6 +32,8 @@ export PATH="/mnt/home/f0004519/anaconda3/bin:$PATH"
 ### change to the working directory where your code is located
 cd /mnt/research/SNAPhU/STIR/parameter_study/
 
+### put job id in file
+echo ${PBS_JOBID} > trial_jobid.txt
 
 ### call your executable
 python primer.py 

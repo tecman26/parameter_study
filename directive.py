@@ -42,7 +42,7 @@ def getLastLine(filename):
     return job_id
 
 def getJobID():
-    filename = "directive_jobid.txt"
+    filename = "trial_jobid.txt"
     f = open(filename, "r+")
     job_id = f.readline().rstrip('\n')
     return job_id
