@@ -19,6 +19,7 @@ import glob
 from helper_functions import *
 from ps_setup import *
 from ps_runjob import *
+from settings import *
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
@@ -32,7 +33,6 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    trial_directory = "/mnt/research/SNAPhU/STIR/parameter_study/trial0"
     output_directory = os.path.join(trial_directory, "step0")
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
@@ -50,8 +50,6 @@ if __name__ == '__main__':
     #-------------------------------------------------------------------#
 
     #IMPORTANT PARAMETERS: these determines how many simulation walkers to set up
-    alpha_lambda_num = 32 # number of alpha_lambda options (for method 2)
-    alpha_d_num = 16 # number of alpha_d options (for method 2)
     num_walkers = alpha_lambda_num*alpha_d_num
     
     next_positions = []
@@ -62,28 +60,20 @@ if __name__ == '__main__':
     """Method 1 creates array of totally random starting points within the area. Method 2 creates two arrays with
     16 alpha_lambda values and 32 alpha_d values and takes their Cartesian product"""
     
-    alpha_lambda_min = 0.3
-    alpha_lambda_max = 1.3 # We can narrow these down once we have data from the previous alpha_lambda parameter study
-    
-    alpha_d_min = 0
-    alpha_d_max = 0.9
-    
-    alpha_lambda_range = (alpha_lambda_min,alpha_lambda_max)
-    alpha_d_range = (alpha_d_min,alpha_d_max)
     
     print("method == "+str(method))
     if method == 1:
 
         for i in range(num_walkers):
-            alpha_lambda = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample() + alpha_lambda_min
-            alpha_d = (alpha_d_max-alpha_d_min)*np.random.random_sample() + alpha_d_min
+            alpha_lambda = (lmax-lmin)*np.random.random_sample() + lmin
+            alpha_d = (dmax-dmin)*np.random.random_sample() + dmin
 
             next_positions.append([alpha_lambda, alpha_d])
             
     else:
         
-        alpha_lambda_options = (alpha_lambda_max-alpha_lambda_min)*np.random.random_sample(alpha_lambda_num) + alpha_lambda_min
-        alpha_d_options = (alpha_d_max-alpha_d_min)*np.random.random_sample(alpha_d_num) + alpha_d_min
+        alpha_lambda_options = (lmax-lmin)*np.random.random_sample(alpha_lambda_num) + lmin
+        alpha_d_options = (dmax-dmin)*np.random.random_sample(alpha_d_num) + dmin
         
         for i in range(alpha_lambda_options):
             for j in range(alpha_d_options):

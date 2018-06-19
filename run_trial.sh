@@ -38,7 +38,7 @@ echo ${PBS_JOBID} > trial_jobid.txt
 ### call your executable
 python primer.py 
 
-for i in 1 2 3 4 5 6
+for i in 1 2 3 4 5
 do
         wait $! ###Waits for last process to finish
 	python directive.py i

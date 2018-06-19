@@ -20,10 +20,9 @@ from helper_functions import *
 from ps_setup import *
 from ps_runjob import *
 import time
+from settings import *
 
-#import ps_setup
 
-# import yt?
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
@@ -64,8 +63,6 @@ if __name__ == '__main__':
     print('**          %s ' % ScriptName )
     print('************************************\n')
 
-    data_dir3D = "/mnt/research/SNAPhU/STIR/3dData"
-    trial_pathname = "/mnt/research/SNAPhU/STIR/parameter_study/trial0/"    
 
     #----Read in 3D simulation data for comparison----#
     
@@ -82,13 +79,13 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("s", default=1, help="step number of simulation", type=int)
     args = parser.parse_args()
-    step_num = args.s output_directory = os.path.join(trial_pathname,"step"+str(step_num))
+    step_num = args.s output_directory = os.path.join(trial_directory,"step"+str(step_num))
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
     else:
         os.mkdir(output_directory)
 
-    input_directory = os.path.join(trial_pathname,"step"+str(int(step_num)-1))
+    input_directory = os.path.join(trial_directory,"step"+str(int(step_num)-1))
     
     positions_filename_ref = input_directory+"/positions.txt"
     
@@ -144,17 +141,17 @@ if __name__ == '__main__':
         lambda_prev = pos_prev_dict[i][0]
         d_prev = pos_prev_dict[i][1]
 
-        mbda_pos = False
-        while lambda_pos == False:
+        mbda_ok = False
+        while lambda_ok == False:
             lambda_guess = lambda_prev + 2*lambda_step*np.random.random_sample() - lambda_step
-            if lambda_guess > 0:
-                lambda_pos = True
-        
-        d_pos = False
-        while d_pos == False:
+            if lambda_guess > lmin and lambda_guess < lmax:
+                lambda_ok = True
+       
+        d_ok = False
+        while d_ok == False:
             d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
-            if d_guess > 0:
-                d_pos == True
+            if d_guess > dmin and d_guess < dmax:
+                d_ok == True
 
         pos_g_list.append([lambda_guess, d_guess])
         pos_g_dict[i] = [lambda_guess, d_guess]
@@ -246,7 +243,7 @@ if __name__ == '__main__':
     
     #----Append new positions to all_positions file---#
 
-    all_positions_filename = os.path.join(trial_pathname,"all_positions.txt")
+    all_positions_filename = os.path.join(trial_directory,"all_positions.txt")
     
     with open(all_positions_filename, "a+") as f:
         for i in range(num_walkers-1):

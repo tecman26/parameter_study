@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import ast
 
 
-trial_pathname = "/mnt/home/f0004519/parameter_study/trial_test"
+trial_pathname = "/mnt/research/SNAPhU/STIR/parameter_study/trial0"
 ap_pathname = os.path.join(trial_pathname, "all_positions.txt")
 
 alpha_arr = [] 
@@ -38,11 +38,20 @@ with open(ap_pathname, "r") as ap:
 alpha_arr = np.array(alpha_arr)
 
 def plotStep(step_num): #Plot all walkers at a single step of the simulation
+    print(alpha_arr[step_num][0])
+    print(alpha_arr[step_num][1])
     plt.scatter(alpha_arr[step_num][0], alpha_arr[step_num][1])
 
-#plotStep(0)
-#plt.show()
+plotStep(0)
+
 
 def hist2d():
-     
+    lambda_data = np.ndarray.flatten(alpha_arr[:,0,:])
+    d_data = np.ndarray.flatten(alpha_arr[:,1,:])
 
+    plt.hist2d(lambda_data, d_data, bins=20, cmap='plasma')
+
+hist2d()
+ 
+
+plt.show()
