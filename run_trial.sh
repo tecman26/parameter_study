@@ -17,7 +17,7 @@
 #PBS -A ptg
 
 ### you can give your job a name for easier identification
-#PBS -N /mnt/research/SNAPhU/STIR/parameter_study/
+#PBS -N /mnt/research/SNAPhU/STIR/parameter_study/run_trial
 
 ### load necessary modules, e.g.
 module purge
@@ -39,5 +39,5 @@ python primer.py
 for i in 1 2 3 4 5 6
 do
         wait $! ###Waits for last process to finish
-	python directive.py -s i
+	python directive.py i
 done                                                                                                     

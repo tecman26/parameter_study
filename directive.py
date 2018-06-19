@@ -14,7 +14,7 @@
 from scipy.stats import chisquare
 import numpy as np
 import sys, os
-from optparse import OptionParser
+from argparse import ArgumentParser
 import glob
 from helper_functions import *
 from ps_setup import *
@@ -76,13 +76,13 @@ if __name__ == '__main__':
     #----specify which walker step is being run----#
     
     #step_num = input("Enter step number ")
+
+
     step_num = 1
-    parser = OptionParser()
-    parser.add_option("-s", "--step", action="store_const", dest="step_num", \
-                      default=1)
-
-
-    output_directory = os.path.join(trial_pathname,"step"+str(step_num))
+    parser = ArgumentParser()
+    parser.add_argument("s", default=1, help="step number of simulation", type=int)
+    args = parser.parse_args()
+    step_num = args.s output_directory = os.path.join(trial_pathname,"step"+str(step_num))
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
     else:
@@ -119,12 +119,12 @@ if __name__ == '__main__':
     # Fill a dictionary and a list with the sets of parameters output by the previous sim
     pos_prev_dict, pos_prev_list = readPositions(positions_filename_ref)
     
-    print(pos_prev_dict)
+    #print(pos_prev_dict)
 
     num_walkers = len(pos_prev_list) #number of Markov chain walkers
     num_parameters = len(pos_prev_list[0]) #number of parameters being varied
     
-    print(num_walkers)    
+    #print(num_walkers)    
     #dictionary relating simulation number to positions and list containing tuples of positions
 
     
@@ -136,23 +136,32 @@ if __name__ == '__main__':
     for i in range(1,num_walkers+1):
         #In this loop, 'alpha' is left out of variable names to save space
         
-        lambda_step = 0.03
-        d_step = 0.03
+        lambda_step = 0.05
+        d_step = 0.05
         
         #Pull previous parameter positions
-        print(pos_prev_dict[i])
+        #print(pos_prev_dict[i])
         lambda_prev = pos_prev_dict[i][0]
         d_prev = pos_prev_dict[i][1]
 
-        lambda_guess = lambda_prev + 2*lambda_step*np.random.random_sample() - lambda_step
-        d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
+        mbda_pos = False
+        while lambda_pos == False:
+            lambda_guess = lambda_prev + 2*lambda_step*np.random.random_sample() - lambda_step
+            if lambda_guess > 0:
+                lambda_pos = True
         
+        d_pos = False
+        while d_pos == False:
+            d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
+            if d_guess > 0:
+                d_pos == True
+
         pos_g_list.append([lambda_guess, d_guess])
         pos_g_dict[i] = [lambda_guess, d_guess]
     
     #----Write guess positions to file----#
-    print("pos_prev_list = "+str(pos_prev_list))
-    print("pos_prev_list = "+str(pos_g_list))
+    #print("pos_prev_list = "+str(pos_prev_list))
+    #print("pos_prev_list = "+str(pos_g_list))
     
     writePositions(output_directory, pos_g_list) #See helper_functions.py for documentations
     
@@ -208,20 +217,10 @@ if __name__ == '__main__':
             continue
         #----Metropolis-Hastings Algorithm----#
 
-        # Calculate chi-squared for prev position and guess position
-
-        """r = []
-
-        if len(r_p) < len(r_3D):
-            r = r_p
-        else:
-            r = r_3D """
 
         # These chi2 terms can be weighted later
         chi2_p = chi2_mod(r_sh_p, r_sh_3D) + chi2_mod(v_con_p, v_con_3D) + chi2_mod(y_e_p, y_e_3D) + chi2_mod(s_p, s_3D)
         chi2_g = chi2_mod(r_sh_g, r_sh_3D) + chi2_mod(v_con_g, v_con_3D) + chi2_mod(y_e_g, y_e_3D) + chi2_mod(s_g, s_3D)
-        print(r_sh_p.shape)
-        print(r_sh_3D.shape)
 
         # Likelihood ratio of both sets of data (also known as acceptance probability)
         p_acc = np.exp(-chi2_g + chi2_p)

@@ -36,6 +36,6 @@ cd /mnt/research/SNAPhU/STIR/parameter_study/
 echo ${PBS_JOBID} > directive_jobid.txt
 
 ### call your executable
-python directive.py 
+python directive.py
 ~                                                                                                                       
 ~                                                                                                                       

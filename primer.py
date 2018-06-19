@@ -37,7 +37,7 @@ if __name__ == '__main__':
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
     else:
-        os.mkdirs(output_directory)
+        os.makedirs(output_directory)
     #----Hard-coded results from single-parameter alpha_lambda study----#
     
     #pathname_sing = "" #path name for single-parameter study output
