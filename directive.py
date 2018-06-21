@@ -181,7 +181,8 @@ if __name__ == '__main__':
             try:
                 with open(os.path.join(output_directory,"ch_sq.txt"), "a+") as chi_file:
                     chi_file.write(str(pos_prev_dict[i][0])+","+str(pos_prev_dict[i][1])+",0")
-
+            except:
+                pass
 
             os.system("rm -r "+guess_data_pathname)
             os.system("cp -r "+prev_data_pathname+" "+output_directory)
@@ -192,6 +193,9 @@ if __name__ == '__main__':
             try:
                 with open(os.path.join(output_directory,"ch_sq.txt"), "a+") as chi_file:
                     chi_file.write(str(pos_prev_dict[i][0])+","+str(pos_prev_dict[i][1])+",0")
+            except:
+                pass
+
 
 
             os.system("rm -r "+guess_data_pathname)

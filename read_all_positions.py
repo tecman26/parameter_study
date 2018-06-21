@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import ast
 
 
-trial_pathname = "/mnt/research/SNAPhU/STIR/parameter_study/trial0"
+trial_pathname = "/mnt/research/SNAPhU/STIR/parameter_study/trial1"
 ap_pathname = os.path.join(trial_pathname, "all_positions.txt")
 
 alpha_arr = [] 
@@ -42,7 +42,7 @@ def plotStep(step_num): #Plot all walkers at a single step of the simulation
     print(alpha_arr[step_num][1])
     plt.scatter(alpha_arr[step_num][0], alpha_arr[step_num][1])
 
-plotStep(0)
+plotStep(1)
 
 
 def hist2d():

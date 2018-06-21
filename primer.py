@@ -46,7 +46,6 @@ if __name__ == '__main__':
     #----Generate array of random starting points using latin hypercube sampling----#
     
     
-    next_positions = lhs(2,num_samples) 
 
     #----Output positions file----#
     
