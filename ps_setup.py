@@ -85,7 +85,7 @@ def setup(step_path):
                 file.write("###Batch job\n")
                 # file.write("#PBS -t 1-138\n") # Will have to edit this
                 file.write("### you can give your job a name for easier identification\n")
-                file.write("#PBS -N param_study_"+str(k)+"_"+str(a)+"_"+str(b)+"\n")
+                file.write("#PBS -N param_study_"+str(k+1)+"_"+str(a)+"_"+str(b)+"\n")
                 file.write("\n")
                 file.write("### load necessary modules, e.g.\n")
                 file.write("module purge\n")
@@ -215,7 +215,7 @@ def setup(step_path):
             file.write("dtinit                         = 1.E-8\n")
             file.write("dtmax                          = 1.E5\n")
             file.write("dtmin                          = 1.E-20\n")
-            #file.write("useHPCC                       = .false.\n") # What's this?
+            file.write("useHPCC                       = .true.\n")
             file.write("\n")
             file.write("# Domain\n")
             file.write("geometry                       = \"spherical\"\n")

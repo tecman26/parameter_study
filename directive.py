@@ -29,29 +29,6 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
 
-def getLastLine(filename):
-    line_list = []
-    with open(filename, "r+") as f:
-        for line in f:
-            #print("line = "+str(line))
-            line_list.append(line)
-    last_line = line_list[-1]
-    #print(last_line)
-    job_id = last_line.split()[0]
-    return job_id
-
-def getJobID():
-    filename = "trial_jobid.txt"
-    f = open(filename, "r+")
-    job_id = f.readline().rstrip('\n')
-    return job_id
-
-def isReady():
-    command = "qstat -u f0004519 > q_file.txt"
-    os.system(command)
-    condition = getLastLine("q_file.txt") == getJobID()
-
-    return condition
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -79,7 +56,8 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("s", default=1, help="step number of simulation", type=int)
     args = parser.parse_args()
-    step_num = args.s output_directory = os.path.join(trial_directory,"step"+str(step_num))
+    step_num = args.s 
+    output_directory = os.path.join(trial_directory,"step"+str(step_num))
     if os.path.isdir(output_directory) == True:
         print("Warning: step directory already exists")
     else:
@@ -141,7 +119,7 @@ if __name__ == '__main__':
         lambda_prev = pos_prev_dict[i][0]
         d_prev = pos_prev_dict[i][1]
 
-        mbda_ok = False
+        lambda_ok = False
         while lambda_ok == False:
             lambda_guess = lambda_prev + 2*lambda_step*np.random.random_sample() - lambda_step
             if lambda_guess > lmin and lambda_guess < lmax:
@@ -151,7 +129,7 @@ if __name__ == '__main__':
         while d_ok == False:
             d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
             if d_guess > dmin and d_guess < dmax:
-                d_ok == True
+                d_ok = True
 
         pos_g_list.append([lambda_guess, d_guess])
         pos_g_dict[i] = [lambda_guess, d_guess]
@@ -200,16 +178,24 @@ if __name__ == '__main__':
         if r_sh_p == 0 or r_p == 0 or v_con_p == 0 or y_e_p == 0 or s_p == 0:
 
             final_positions.append(pos_prev_dict[i])
+            try:
+                with open(os.path.join(output_directory,"ch_sq.txt"), "a+") as chi_file:
+                    chi_file.write(str(pos_prev_dict[i][0])+","+str(pos_prev_dict[i][1])+",0")
 
-            os.system("rm "+guess_data_pathname)
-            os.system("cp "+prev_data_pathname+" "+output_directory)
+
+            os.system("rm -r "+guess_data_pathname)
+            os.system("cp -r "+prev_data_pathname+" "+output_directory)
             
             continue
         if r_sh_g == 0 or r_g == 0 or v_con_g == 0 or y_e_g == 0 or s_g == 0:
             final_positions.append(pos_prev_dict[i])
+            try:
+                with open(os.path.join(output_directory,"ch_sq.txt"), "a+") as chi_file:
+                    chi_file.write(str(pos_prev_dict[i][0])+","+str(pos_prev_dict[i][1])+",0")
 
-            os.system("rm "+guess_data_pathname)
-            os.system("cp "+prev_data_pathname+" "+output_directory)
+
+            os.system("rm -r "+guess_data_pathname)
+            os.system("cp -r "+prev_data_pathname+" "+output_directory)
 
             continue
         #----Metropolis-Hastings Algorithm----#
@@ -227,15 +213,22 @@ if __name__ == '__main__':
         if p_acc < p_thresh: # if acceptance probability doesn't exceed threshold
 
             final_positions.append(pos_prev_dict[i])
+            try:
+                with open(os.path.join(output_directory,"ch_sq.txt"), "a+") as chi_file:
+                    chi_file.write(str(pos_prev_dict[i][0])+","+str(pos_prev_dict[i][1])+","+str(chi2_p))
+
 
             # Remove the guess data files from directory and replace with previous data, for use in
             # next step.
-            os.system("rm "+guess_data_pathname)
-            os.system("cp "+prev_data_pathname+" "+output_directory)
-
+            os.system("rm -r "+guess_data_pathname)
+            os.system("cp -r "+prev_data_pathname+" "+output_directory)
+            
         else: # if acceptance probability exceeds the threshold
 
             final_positions.append(pos_g_dict[i])
+            try:
+                with open(os.path.join(output_directory,"ch_sq.txt"), "a+") as chi_file:
+                    chi_file.write(str(pos_g_dict[i][0])+","+str(pos_g_dict[i][1])+","+str(chi2_g))
 
     #----Write new positions file----#
     
@@ -243,20 +236,19 @@ if __name__ == '__main__':
     
     #----Append new positions to all_positions file---#
 
-    all_positions_filename = os.path.join(trial_directory,"all_positions.txt")
-    
-    with open(all_positions_filename, "a+") as f:
+    positions_filename_out = os.path.join(trial_directory,"all_positions.txt")
+    with open(positions_filename_out, "w+") as f:
         for i in range(num_walkers-1):
-            parameters = final_positions[i]
+            parameters = next_positions[i]
             f.write(("(").rstrip('\n'))
-            f.write((parameters[0]).rstrip('\n'))
+            f.write(str(parameters[0]).rstrip('\n'))
             for parameter in parameters[1:]:
                 f.write((", %f" % parameter).rstrip('\n'))
             f.write(("), ").rstrip('\n'))
-        parameters = final_positions[num_walkers-1]
+        parameters = next_positions[num_walkers-1]
         f.write(("(").rstrip('\n'))
-        f.write((parameters[0]).rstrip('\n'))
+        f.write(str(parameters[0]).rstrip('\n'))
         for parameter in parameters[1:]:
             f.write((", %f" % parameter).rstrip('\n'))
-        f.write(")")
-                                       
+        f.write(")\n")
+               

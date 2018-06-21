@@ -38,8 +38,9 @@ echo ${PBS_JOBID} > trial_jobid.txt
 ### call your executable
 python primer.py 
 
-for i in 1 2 3 4 5
-do
-        wait $! ###Waits for last process to finish
-	python directive.py i
+COUNTER=1
+while [  $COUNTER -lt 7 ]; do
+	python directive.py $COUNTER
+	wait $!
+	let COUNTER=COUNTER+1
 done                                                                                                     

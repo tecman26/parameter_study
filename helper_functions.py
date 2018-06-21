@@ -10,6 +10,30 @@ import os
 from read3d import *
 from read1d import *
 
+def getLastLine(filename):
+    line_list = []
+    with open(filename, "r+") as f:
+        for line in f:
+            #print("line = "+str(line))
+            line_list.append(line)
+    last_line = line_list[-1]
+    #print(last_line)
+    job_id = last_line.split()[0]
+    return job_id
+
+def getJobID():
+    filename = "trial_jobid.txt"
+    f = open(filename, "r+")
+    job_id = f.readline().rstrip('\n')
+    return job_id
+
+def isReady():
+    command = "qstat -u f0004519 > q_file.txt"
+    os.system(command)
+    condition = getLastLine("q_file.txt") == getJobID()
+
+    return condition
+
 def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
@@ -50,7 +74,7 @@ def readOutput(pathname3D, dim, pathname1D ="", step = 1):
         return (r_sh, r, v_con, y_e_prof, s_prof)
     
     elif dim == 1:
-        r, v_con, y_e_prof, s_prof, r_sh = read1d(pathname1D, step, pathname3D)
+        r, v_con, y_e_prof, s_prof, r_sh = read1d(pathname1D, pathname3D)
         return (r_sh, r, v_con, y_e_prof, s_prof)
     else:
         print("Enter either '1' or '3' for number of dimensions")

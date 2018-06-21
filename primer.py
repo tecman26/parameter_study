@@ -20,6 +20,7 @@ from helper_functions import *
 from ps_setup import *
 from ps_runjob import *
 from settings import *
+import time
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
@@ -120,4 +121,12 @@ if __name__ == '__main__':
     #----Set up and run next simulation batch----#
     
     setup(output_directory)
-    runjob(output_directory)    
+    runjob(output_directory) 
+
+    interval = 300 #seconds to sleep between checking    
+    ready = False
+
+    while ready == False:
+        #print("Not ready")
+        time.sleep(interval)
+        ready = isReady()   
