@@ -74,7 +74,7 @@ def setup(step_path):
                 file.write("\n")
                 file.write("### define resources needed:\n")
                 file.write("### walltime - how long you expect the job to run\n")
-                file.write("#PBS -l walltime=06:00:00\n")
+                file.write("#PBS -l walltime=10:00:00\n")
                 file.write("\n")
                 file.write("### nodes:ppn - how many nodes & cores per node (ppn) that you require\n")
                 file.write("#PBS -l nodes=1:ppn=2,feature=intel16\n")

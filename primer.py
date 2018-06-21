@@ -40,12 +40,20 @@ if __name__ == '__main__':
 #----Hard-coded results from single-parameter alpha_lambda study----#
     
     #IMPORTANT PARAMETER: this determines how many sample points to set up
-    num_samples = 512
+    num_samples = alpha_lambda_num*alpha_d_num
     
     
-    #----Generate array of random starting points using latin hypercube sampling----#
-    
-    
+    #----Generate array of evenly spaced starting points----#
+    next_positions = []
+
+    alpha_lambda_options = np.linspace(lmin, lmax, alpha_lambda_num)
+    alpha_d_options = np.linspace(dmin, dmax, alphda_d_num)
+     
+    for i,j in zip(alpha_lambda_options, alpha_d_options):
+        alpha_lambda = alpha_lambda[i]
+        alpha_d = alpha_d[j]
+        next_positions.append([alpha_lambda, alpha_d])
+
 
     #----Output positions file----#
     
