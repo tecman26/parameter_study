@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-###Shell script for running entire trial
+###Shell script for running calibration simulations
 
 
 ### define resources needed:

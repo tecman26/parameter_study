@@ -6,10 +6,10 @@
 
 ### define resources needed:
 ### walltime - how long you expect the job to run
-#PBS -l walltime=04:00:00
+#PBS -l walltime=24:00:00
 
 ### nodes:ppn - how many nodes & cores per node (ppn) that you require
-#PBS -l nodes=1:ppn=1,feature=intel16
+#PBS -l nodes=1:ppn=2,feature=intel16
 
 ### mem: amount of memory that the job will need
 #PBS -l mem=4gb
@@ -18,6 +18,9 @@
 
 ### you can give your job a name for easier identification
 #PBS -N /mnt/research/SNAPhU/STIR/parameter_study/run_emulator
+
+#PBS -M tecnerd3@gmail.com
+#PBS -m abe
 
 ### load necessary modules, e.g.
 module purge

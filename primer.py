@@ -47,12 +47,13 @@ if __name__ == '__main__':
     next_positions = []
 
     alpha_lambda_options = np.linspace(lmin, lmax, alpha_lambda_num)
-    alpha_d_options = np.linspace(dmin, dmax, alphda_d_num)
+    alpha_d_options = np.linspace(dmin, dmax, alpha_d_num)
      
-    for i,j in zip(alpha_lambda_options, alpha_d_options):
-        alpha_lambda = alpha_lambda[i]
-        alpha_d = alpha_d[j]
-        next_positions.append([alpha_lambda, alpha_d])
+    for i in range(alpha_lambda_num):
+        for j in range(alpha_d_num):    
+            alpha_lambda = alpha_lambda_options[i]
+            alpha_d = alpha_d_options[j]
+            next_positions.append([alpha_lambda, alpha_d])
 
 
     #----Output positions file----#

@@ -39,6 +39,10 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     y_e_arr = []
     s_arr = []
     
+    bad_runs_file = os.path.join(trial_directory, "bad_runs.txt")
+    if os.path.isfile(bad_runs_file) == True:
+        os.system("rm "+bad_runs_file)
+    os.system("touch "+ bad_runs_file)
     for i in range(1,num_samples+1):
         data_pathname = glob.glob(os.path.join(data_dir,"run_mcmcPS_"+str(i)+"*"))
         data_pathname = data_pathname[0]
@@ -48,22 +52,30 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
         if i == 1:
             radius_ref = r
         
-        r_sh_arr.append(r_sh)
-        v_con_arr.append(v_con)
-        y_e_arr.append(y_e_prof)
-        s_arr.append(s_prof)
+
+        if type(v_con) is not np.ndarray or len(v_con) == 1:
+            with open(bad_runs_file, "a+") as br:
+                br.write(data_pathname)
+                br.write("\n")
+        else: 
+            r_sh_arr.append(r_sh)
+            v_con_arr.append(v_con)
+            y_e_arr.append(y_e_prof)
+            s_arr.append(s_prof)
     
     r_sh_arr = np.transpose(np.array(r_sh_arr))
     v_con_arr = np.array(v_con_arr)
     y_e_arr = np.array(y_e_arr)
     s_arr = np.array(s_arr)
     
-    r_sh_emul.fit(pos_arr,r_sh_emul)
+    print(v_con_arr)
+
+    r_sh_emul.fit(pos_arr,r_sh_arr)
     v_con_emul.fit(pos_arr,v_con_arr)
     y_e_emul.fit(pos_arr,y_e_arr)
-    s_emul.fit(pos_arr,s_emul)
+    s_emul.fit(pos_arr,s_arr)
 
-def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_emul_file):
+def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
     with open(file1, "w+b") as f1:
         pickle.dump(r_sh_emul, f1, pickle.HIGHEST_PROTOCOL)
     with open(file2, "w+b") as f2: 
@@ -73,7 +85,7 @@ def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_em
     with open(file2, "w+b") as f4: 
         pickle.dump(s_emul, f4, pickle.HIGHEST_PROTOCOL)
     
-def loadEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_emul_file):
+def loadEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
     r_sh_load = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
     v_con_load = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
     y_e_load = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
