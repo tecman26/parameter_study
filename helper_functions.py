@@ -98,7 +98,7 @@ def readPositions(positions_filename_ref):
             positions_list.append(parameters)
             sim_dict[sim_num] = parameters
             
-    return sim_dict, positions_list
+    return positions_list, sim_dict
 
 def writePositions(output_directory, positions_list):
     """Function writes new positions.txt file to 'output_directory'"""

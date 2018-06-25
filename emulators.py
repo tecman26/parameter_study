@@ -26,10 +26,10 @@ s_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 def calibrateEmulators(data_dir): #positions file should have same format as positions.txt
     #data directory contains all run directories from calibration run
     pos_pathname = os.path.join(data_dir, "positions.txt")
-    pos_dict, pos_arr = readPositions(pos_pathname)
+    pos_arr, pos_dict = readPositions(pos_pathname)
     pos_arr = np.array(pos_arr)
     num_samples = pos_arr.shape[0]
-    
+
     #list of radius values, for reference
     radius_ref = []
     #shock radius column vector
@@ -67,8 +67,11 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     v_con_arr = np.array(v_con_arr)
     y_e_arr = np.array(y_e_arr)
     s_arr = np.array(s_arr)
-    
-    print(v_con_arr)
+
+    global r_sh_emul
+    global v_con_emul
+    global y_e_emul
+    global s_emul
 
     r_sh_emul.fit(pos_arr,r_sh_arr)
     v_con_emul.fit(pos_arr,v_con_arr)
@@ -76,13 +79,13 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     s_emul.fit(pos_arr,s_arr)
 
 def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
-    with open(file1, "w+b") as f1:
+    with open(file1, "wb") as f1:
         pickle.dump(r_sh_emul, f1, pickle.HIGHEST_PROTOCOL)
-    with open(file2, "w+b") as f2: 
+    with open(file2, "wb") as f2: 
         pickle.dump(v_con_emul, f2, pickle.HIGHEST_PROTOCOL)
-    with open(file3, "w+b") as f3: 
-        pickle.dump(y_e_emul, f2, pickle.HIGHEST_PROTOCOL)
-    with open(file2, "w+b") as f4: 
+    with open(file3, "wb") as f3: 
+        pickle.dump(y_e_emul, f3, pickle.HIGHEST_PROTOCOL)
+    with open(file4, "wb") as f4: 
         pickle.dump(s_emul, f4, pickle.HIGHEST_PROTOCOL)
     
 def loadEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
@@ -92,32 +95,40 @@ def loadEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_fil
     s_load = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 
 
-    with open(file1, "r+b") as f1:
+    with open(file1, "rb") as f1:
         r_sh_load = pickle.load(f1)
-    with open(file2, "r+b") as f2: 
+    with open(file2, "rb") as f2: 
         v_con_load = pickle.load(f2)
-    with open(file3, "r+b") as f3: 
+    with open(file3, "rb") as f3: 
         y_e_load = pickle.load(f3)
-    with open(file2, "r+b") as f4: 
+    with open(file4, "rb") as f4: 
         s_load = pickle.load(f4)
- 
-    return r_sh_load, v_con_load, y_e_load, s_load
+
+    global r_sh_emul
+    global v_con_emul
+    global y_e_emul
+    global s_emul
+
+    r_sh_emul = r_sh_load
+    v_con_emul = v_con_load
+    y_e_emul = y_e_load
+    s_emul = s_load 
 
 def radii():
     return radius_ref
     
 def emulRShock(arr): #Should be fed one set of n parameters or n arrays of parameters
-    return r_sh_emul.predict(arr,return_std=True)
+    return r_sh_emul.predict(arr,return_std=False)
 
 def emulVCon(arr):
-    return v_con_emul.predict(arr,return_std=True)
+    return v_con_emul.predict(arr,return_std=False)
 
 def emulYE(arr):
-    return y_e_emul.predict(arr,return_std=True)
+    return y_e_emul.predict(arr,return_std=False)
 
 def emulS(arr):
-    return s_emul.predict(arr,return_std=True)
+    return s_emul.predict(arr,return_std=False)
 
-
-calibrateEmulators(trial_directory)
-storeEmulators()
+if __name__ == '__main__':
+    calibrateEmulators(trial_directory)
+    storeEmulators()
