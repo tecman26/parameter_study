@@ -36,10 +36,16 @@ def read1d(data_dir1D, data_dir3D=data_dir3D):
 
     ad = ds_1d.all_data()
     shocked_region =  ad.cut_region(['(obj["dens"] < 1e11) & (obj["entr"] > 8)'])
-    radius = np.array(shocked_region["r"].in_units("cm").v)
-    v_con = np.array(shocked_region["vcon"].v)
-    entr = np.array(shocked_region["entr"].v)
-    ye = np.array(shocked_region["ye  "].v)
+    
+    radius = np.array(ad["r"].in_units("cm").v)
+    v_con = np.array(ad["vcon"].v)
+    entr = np.array(ad["entr"].v)
+    ye = np.array(ad["ye  "].v)
+
+    radius_shocked = np.array(shocked_region["r"].in_units("cm").v)
+    #v_con = np.array(shocked_region["vcon"].v)
+    #entr = np.array(shocked_region["entr"].v)
+    #ye = np.array(shocked_region["ye  "].v)
 
     #radius = np.array(ray1['r'].in_units("km").v)
     #v_con = np.array(ray1['vcon'].v)
@@ -56,10 +62,11 @@ def read1d(data_dir1D, data_dir3D=data_dir3D):
     x = np.linspace(0, size_3d, radius.shape[0])
     xvals = np.linspace(0, size_3d, size_3d)
 
+    radius_shocked_interp = np.interp(xvals, x, radius_shocked)
     radius_interp = np.interp(xvals, x, radius)
     v_con_interp = np.interp(xvals, x, v_con)
     entr_interp = np.interp(xvals, x, entr)
     ye_interp = np.interp(xvals, x, ye)
     
 
-    return radius_interp, v_con_interp, ye_interp, entr_interp, max(radius_interp)
+    return radius_interp, v_con_interp, ye_interp, entr_interp, max(radius_shocked_interp)

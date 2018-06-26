@@ -11,10 +11,10 @@ import numpy as np
 #  We will want to read in all of the
 #  alpha values from input files.
 # ----------------------------------------
-def runjob(step_path):
+def runjob(dir_path):
     #path = "/mnt/research/SNAPhU/STIR/run_ps/"
     #path = "./trial_test/step0"
-    paramFile = os.path.join(step_path,"positions.txt")
+    paramFile = os.path.join(dir_path,"positions.txt")
     param = np.loadtxt(paramFile, delimiter=",")
     alphaL = param[:,1]
     alphaD = param[:,2]
@@ -24,13 +24,13 @@ def runjob(step_path):
     mcmcRun = "1"
 
     i = 1
-    job_id_file = os.path.join(step_path,"job_ids.txt")
+    job_id_file = os.path.join(dir_path,"job_ids.txt")
     os.system("touch "+job_id_file)
     
     for a,b in zip(alphaL,alphaD):
         path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
         filename = "run.mlt"
-        fullpath = os.path.join(step_path, os.path.join(path1, filename))
+        fullpath = os.path.join(dir_path, os.path.join(path1, filename))
 
         #perm = "chmod u+x "+fullpath #give permission
         

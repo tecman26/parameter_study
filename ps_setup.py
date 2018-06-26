@@ -22,10 +22,10 @@ import numpy as np
 #  alpha values from input files.
 # ----------------------------------------
 
-def setup(step_path):
+def setup(dir_path):
     #path = "/mnt/research/SNAPhU/STIR/run_ps/"
     #path = "./trial_test/step0"
-    paramFile = os.path.join(step_path,"positions.txt")
+    paramFile = os.path.join(dir_path,"positions.txt")
     param = np.loadtxt(paramFile, delimiter=",")
     alphaL = param[:,1]
     alphaD = param[:,2]
@@ -59,7 +59,7 @@ def setup(step_path):
         mass = [20.0]
 
         path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
-        dir_loc = os.path.join(step_path, path1)
+        dir_loc = os.path.join(dir_path, path1)
         if not os.path.isdir(dir_loc): # returns true if a directory exists.
             os.makedirs(dir_loc) # Creates a run directory if it doesn't exist
         mlt_filename = "run.mlt"
@@ -116,7 +116,7 @@ def setup(step_path):
         outfull = ""
         for m in mass:
             #path = "output"#+str(mass.index(m)+1) # We don't need so many
-            dest1 = os.path.join(step_path,path1)
+            dest1 = os.path.join(dir_path,path1)
             if not os.path.isdir(dest1):
                 os.makedirs(dest1)
             out = "output"

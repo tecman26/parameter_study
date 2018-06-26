@@ -66,10 +66,10 @@ def readOutput(pathname3D, dim, pathname1D ="", step = 1):
         # # Column 4: electron fraction
         #--------------------------------#
 
-        r = data_array[:,0]
-        v_con = 10**5*data_array[:,1]
-        y_e_prof = data_array[:,2]
-        s_prof = data_array[:,3]
+        r = data_array[0]
+        v_con = 10**5*data_array[1]
+        y_e_prof = data_array[2]
+        s_prof = data_array[3]
 
         return (r_sh, r, v_con, y_e_prof, s_prof)
     

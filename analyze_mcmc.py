@@ -29,8 +29,14 @@ def hist2d():
     lambda_data = lambda_vec
     d_data = d_vec
 
-    plt.hist2d(lambda_data, d_data, bins=30, cmap='plasma')
+    h, xbins, ybins, img = plt.hist2d(lambda_data, d_data, bins=30, cmap='plasma')
     plt.colorbar()
+
+    best_vals = np.argwhere(h==h.max())
+    lbest = xbins[best_vals[0,0]]
+    dbest = ybins[best_vals[0,1]]
+    plt.plot(lbest,dbest,'kD',markersize=8)
+
 hist2d()
  
 

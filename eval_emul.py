@@ -11,7 +11,7 @@ from emulators import *
 test_dir = "/mnt/research/SNAPhU/STIR/parameter_study/emul_test"
 pos_filename = os.path.join(test_dir, "positions.txt")
 pos_list, pos_arr = readPositions(pos_filename)
-test_sim_id = 1
+test_sim_id = 2
 
 data_pathname = glob.glob(os.path.join(test_dir,"run_mcmcPS_"+str(test_sim_id)+"*")) #Choose results from first simulation
 data_pathname = data_pathname[0]
@@ -22,35 +22,29 @@ r_sim, v_con_sim, y_e_sim, s_sim, r_sh_sim = read1d(data_pathname)
 params = pos_arr[test_sim_id] #should be a two-element list
 params = np.array(params)
 params = np.reshape(params,(1,-1))
-print(params.shape)
 
 loadEmulators()
-r_sh_emul = emulRShock(params)
-v_con_emul = emulVCon(params)
-print(v_con_emul.shape)
-y_e_emul = emulYE(params)
-s_emul = emulS(params)
-
-chi2_exp = len(r_sim) - 2 #expected value of chi-square test (number of samples - degrees of freedom)
+r_sh_emul, r_sh_std = emulRShock(params)
+v_con_emul, v_con_std = emulVCon(params)
+y_e_emul, y_e_std = emulYE(params)
+s_emul, s_std = emulS(params)
 
 def rShockCompare():
     print("r_sh_sim = "+str(r_sh_sim))
     print("r_sh_emul = "+str(r_sh_emul))
     
 def vConCompare():
-    chisq, p = chisquare(v_con_emul, v_con_sim)
-    print(v_con_emul[:10])
-    print(v_con_sim[:10])
-    print("Convective velocity chi-square = "+str(chisq))
-    
+    norm = l2_norm(v_con_emul, v_con_sim)
+    print("Convective velocity L2 norm = "+str(norm))
+
 def yECompare():
-    chisq, p = chisquare(y_e_emul, y_e_sim)
-    print("Electron Fraction chi-square = "+str(chisq))
+    norm = l2_norm(y_e_emul, y_e_sim)
+    print("Electron Fraction L2 norm = "+str(norm))
 
 def SCompare():
-    chisq, p = chisquare(s_emul, s_sim)
-    print("Entropy chi-square = "+str(chisq))
-    
+    norm = l2_norm(s_emul, s_sim)
+    print("Entropy L2 norm = "+str(norm))
+
 def plot():
     plt.figure("Convective Velocity")
     plt.plot(r_sim, v_con_sim, color = 'b')
@@ -64,9 +58,11 @@ def plot():
     plt.plot(r_sim, s_sim, color = 'b')
     plt.plot(r_sim, s_emul, color = 'g')
     
+    plt.show()
+
 if __name__ == "__main__":
     rShockCompare()
     vConCompare()
     yECompare()
     SCompare()
-    
+    plot()   
