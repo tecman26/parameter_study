@@ -118,16 +118,19 @@ def radii():
     return radius_ref
     
 def emulRShock(arr): #Should be fed one set of n parameters or n arrays of parameters
-    return r_sh_emul.predict(arr,return_std=False)
-
+    out_arr = r_sh_emul.predict(arr,return_std=True)
+    return out_arr[0][0], out_arr[1][0]
 def emulVCon(arr):
-    return v_con_emul.predict(arr,return_std=False)
+    out_arr = v_con_emul.predict(arr,return_std=True)
+    return out_arr[0][0], out_arr[1][0]
 
 def emulYE(arr):
-    return y_e_emul.predict(arr,return_std=False)
+    out_arr = y_e_emul.predict(arr,return_std=True)
+    return out_arr[0][0], out_arr[1][0]
 
 def emulS(arr):
-    return s_emul.predict(arr,return_std=False)
+    out_arr = s_emul.predict(arr,return_std=True)
+    return out_arr[0][0], out_arr[1][0]
 
 if __name__ == '__main__':
     calibrateEmulators(trial_directory)

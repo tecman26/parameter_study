@@ -29,8 +29,8 @@ def read3d(dataDir):
 
     radius = data_vcon[:,0]
     vcon = np.sqrt( abs( data_vcon[:,1] ) / 2 )
-    entropy = data_profile[:,9]
-    ye = data_profile[:,11]
+    entropy = data_profile[:,8]
+    ye = data_profile[:,10]
 
     trunc = np.where(vcon == 0)
     print(" -- TRUNCATE AT INDEX %f ---" % trunc[0][0])
