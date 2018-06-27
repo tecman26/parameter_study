@@ -65,9 +65,9 @@ def readOutput(pathname3D, dim, pathname1D ="", step = 1):
         # # Column 3: entropy
         # # Column 4: electron fraction
         #--------------------------------#
-
+        
         r = data_array[0]
-        v_con = 10**5*data_array[1]
+        v_con = data_array[1]
         y_e_prof = data_array[2]
         s_prof = data_array[3]
 
@@ -121,5 +121,8 @@ def l2_norm(obs, exp): #Returns L2 norm instead of chi^2
         #print("obs = "+str(obs[i]))
         #print("exp = "+str(exp[i]))
         #print((obs[i] - exp[i])**2 / exp[i]**2)
-        norm += ((obs[i] - exp[i])**2 / exp[i]**2)
+        if exp[i] != 0:
+            norm += ((obs[i] - exp[i])**2 / exp[i]**2)
+        #else:
+            #norm += obs[i]**2
     return norm/(len(obs)-1)

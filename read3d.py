@@ -27,15 +27,24 @@ def read3d(dataDir):
     data_vcon = np.genfromtxt(vconFile)
     data_profile = np.loadtxt(profileFile)
 
-    radius = data_vcon[:,0]
-    vcon = np.sqrt( abs( data_vcon[:,6] ) / 2 )
+    rey_stress = data_vcon[:,6]
+    neg_values = rey_stress < 0
+    rey_stress[neg_values] = 0
+
+    vcon_radius = data_vcon[:,0]
+    vcon = np.sqrt( rey_stress / 2 )
+    prof_radius = data_profile[:,0]
     entropy = data_profile[:,8]
     ye = data_profile[:,10]
 
-    trunc = (np.abs(radius - 5*10**7)).argmin()
-    print(" -- TRUNCATE AT INDEX %f ---" % trunc[0][0])
+    vcon_interp = np.interp(prof_radius, vcon_radius, vcon)
 
-    data = np.array([radius[:trunc[0][0]], vcon[:trunc[0][0]], \
-      entropy[:trunc[0][0]], ye[:trunc[0][0]]])
 
-    return np.transpose(data), np.transpose( mean_rs )
+    trunc = (np.abs(prof_radius - 5*10**7)).argmin()
+    #print(trunc)
+    print(" -- TRUNCATE AT INDEX %f ---" % trunc)
+
+    data = np.array([prof_radius[:(trunc+1)], vcon_interp[:(trunc+1)], \
+      entropy[:(trunc+1)], ye[:(trunc+1)]])
+
+    return data, np.transpose( mean_rs )

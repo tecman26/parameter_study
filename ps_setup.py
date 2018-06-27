@@ -147,12 +147,12 @@ def setup(dir_path):
         ## Source for opacity table:
         src = "/mnt/research/SNAPhU/Tables/NuLib_SFHo_noweakrates_rho82_temp65_ye60_ng12_ns3_Itemp65_Ieta61_version1.0_20170719.h5"
         os.symlink(src,dest)
-        dest = os.path.join(outfull,"s"+str(m)+"_5mspb.FLASH")
+        dest = os.path.join(outfull,"mesa20_SFHo_GREP_15.82ms_12.flash")
         if os.path.isfile(dest):
             print('file exists')
             os.remove(dest)
         ## Source for progenitor:
-        src = os.path.join("/mnt/research/SNAPhU/Progenitors2","s"+str(m)+"_5mspb.FLASH")
+        src = os.path.join("/mnt/research/SNAPhU/Progenitors2","mesa20_SFHo_GREP_15.82ms_12.flash")
         os.symlink(src,dest)
         path2 = outfull
         if restart:
@@ -246,7 +246,7 @@ def setup(dir_path):
             file.write("refine_cutoff_4            = 0.8\n")
             file.write("\n")
             file.write("# Simulation\n")
-            file.write("model_file = \"s"+str(m)+"_5mspb.FLASH\"\n")
+            file.write("model_file = \"mesa20_SFHo_GREP_15.82ms_12.flash\"\n")
             file.write("#rnd_seed           = 1000\n")
             file.write("#rnd_scale          = 0.001\n")
             file.write("nsub                           = 4\n")
