@@ -42,6 +42,8 @@ def read3d(dataDir):
 
     trunc = (np.abs(prof_radius - 5*10**7)).argmin()
     #print(trunc)
+    #print(len(prof_radius))
+    #print(prof_radius)
     print(" -- TRUNCATE AT INDEX %f ---" % trunc)
 
     data = np.array([prof_radius[:(trunc+1)], vcon_interp[:(trunc+1)], \

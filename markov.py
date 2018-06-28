@@ -28,6 +28,7 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
 
+burn_steps = 100
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
@@ -123,7 +124,7 @@ if __name__ == '__main__':
     
         #----Compare results from emulator map----#
 
-        param_prev = np.array([lambda_prev, lambda_guess])
+        param_prev = np.array([lambda_prev, d_prev])
         param_guess = np.array([lambda_guess, d_guess])
 
         param_prev = np.reshape(param_prev,(1,-1))
@@ -141,8 +142,9 @@ if __name__ == '__main__':
 
 
         #----Metropolis-Hastings Algorithm----#
-
-
+        #print(v_con_p[-45])
+        #print(v_con_g[-45])
+        #print(l2_norm(v_con_g, v_con_3D))
         # These norm terms can be weighted later
 
         norm_p = (r_sh_p - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_p, v_con_3D) + l2_norm(y_e_p, y_e_3D) + l2_norm(s_p, s_3D)
@@ -158,13 +160,13 @@ if __name__ == '__main__':
                 norm_file.write(str(lambda_prev)+","+str(d_prev)+","+str(norm_p)+"\n")
         
         if p_acc < p_thresh: # if acceptance probability doesn't exceed threshold
-
-            pos_list.append([lambda_prev, d_prev])
             
+            if i >= burn_steps:
+                pos_list.append([lambda_prev, d_prev])         
 
         else: # if acceptance probability exceeds the threshold
-
-            pos_list.append([lambda_guess, d_guess])
+            if i >= burn_steps:
+                pos_list.append([lambda_guess, d_guess])
 
             with open(os.path.join(output_directory,"norms.txt"), "a+") as norm_file:
                 norm_file.write(str(lambda_guess)+","+str(d_guess)+","+str(norm_g)+"\n")

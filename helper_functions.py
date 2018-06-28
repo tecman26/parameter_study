@@ -106,8 +106,8 @@ def writePositions(output_directory, positions_list):
          os.makedirs(output_directory)
     positions_filename = os.path.join(output_directory,"positions.txt")
     with open(positions_filename, "w+") as f:
-        num_walkers = len(positions_list)
-        for i in range(0,num_walkers):
+        num_samples = len(positions_list)
+        for i in range(0,num_samples):
             f.write(("%d" % (i+1)).rstrip('\n'))
             parameters = positions_list[i]
             for parameter in parameters:

@@ -28,7 +28,7 @@ def read1d(data_dir1D, data_dir3D=data_dir3D):
     #pathname = "/mnt/home/f0004519/parameter_study/trial_test/step"+step+"/"+runname+"/output/sim_output"
     runname = os.path.basename(data_dir1D)
     fn_1d = os.path.join(pathname,runname+"hdf5_chk_0013")
-    print(fn_1d)
+    #print(fn_1d)
     try:
         ds_1d = yt.load(fn_1d)
     except:
