@@ -13,10 +13,10 @@ import pickle
 
 #initialize emulators
 kernel_choice = gaussian_process.kernels.RBF(0.05)
-r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage.pkl")
-v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
-y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
-s_file = os.path.join(trial_directory,"s_emul_storage.pkl")
+r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage5d.pkl")
+v_con_file = os.path.join(trial_directory,"v_con_emul_storage5d.pkl")
+y_e_file = os.path.join(trial_directory,"y_e_emul_storage5d.pkl")
+s_file = os.path.join(trial_directory,"s_emul_storage5d.pkl")
 
 r_sh_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 v_con_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)

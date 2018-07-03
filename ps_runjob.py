@@ -17,18 +17,21 @@ def runjob(dir_path):
     paramFile = os.path.join(dir_path,"positions.txt")
     param = np.loadtxt(paramFile, delimiter=",")
     alphaL = param[:,1]
-    alphaD = param[:,2]
+    dneut = param[:,2]
+    dye = param[:,3]
+    deint = param[:,4]
+    detrb = param[:,5]
 
     runname = "mcmcPS"
     restart = False
     mcmcRun = "1"
 
-    i = 1
+
     job_id_file = os.path.join(dir_path,"job_ids.txt")
     os.system("touch "+job_id_file)
     
-    for a,b in zip(alphaL,alphaD):
-        path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
+    for i in range(1,param.shape[0]+1):
+        path1 = "run_"+runname+"_"+str(i) # Sets the name of the run.
         filename = "run.mlt"
         fullpath = os.path.join(dir_path, os.path.join(path1, filename))
 
@@ -45,4 +48,3 @@ def runjob(dir_path):
         
         #os.system("command1 > out.txt 2> err.txt")
         #os.system("command2 -f -z -y > out.txt 2> err.txt")
-        i = i + 1

@@ -1,6 +1,7 @@
 mcmc_step = 2
 n_steps = 10**6
-nBurn = 1
+n_walkers = 10
+burn_steps = 100
 dA = 0.02
 alpha_lambda_num = 16
 alpha_d_num = 16

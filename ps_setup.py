@@ -8,7 +8,7 @@
 #    /mnt/research/SNAPhU/STIR/mesa20/mesa20_v_LR.dat
 #  3D Other: /mnt/research/SNAPhU/STIR/3dData/
 #    vconData, profileData.
-#  1D Data: /mnt/research/SNAPhU/STIR/run_mesa20/output_may6_b*
+#  1D Data: /mnt/research/SNAPhU/STIR/run_mesa20/output_flash_jul2_b*
 #
 # ----------------------------------------------------------------
 import io
@@ -28,7 +28,10 @@ def setup(dir_path):
     paramFile = os.path.join(dir_path,"positions.txt")
     param = np.loadtxt(paramFile, delimiter=",")
     alphaL = param[:,1]
-    alphaD = param[:,2]
+    dneut = param[:,2]
+    dye = param[:,3]
+    deint = param[:,4]
+    detrb = param[:,5]
 
     #alphaL = (0.0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.4)
     #alphaD = (0.3333333333, 0.666666666)
@@ -41,10 +44,11 @@ def setup(dir_path):
     #for (a,b) in [(a,b) for a in alphaL for b in alphaD]:
     for k in range(len(alphaL)):
         a = alphaL[k]
-        b = alphaD[k]
-        print("a = "+str(a))
-        print("b = "+str(b))
-         # counter for file names
+        b = dneut[k]
+        c = dye[k]
+        d = deint[k]
+        e = detrb[k]
+        # counter for file names
         #mass = (9.0,9.25,9.5,9.75,10.0,10.25,10.5,10.75,11.0,11.25,11.5,11.75,12.0,12.25,12.5,12.75,13.0, \
         #            13.1,13.2,13.3,13.4,13.5,13.6,13.7,13.8,13.9, \
         #            14.0,14.1,14.2,14.3,14.4,14.5,14.6,14.7,14.8,14.9, \
@@ -60,7 +64,7 @@ def setup(dir_path):
         #            30.0,31,32,33,35,40,45,50,55,60,70,80,100,120)
         mass = [20.0]
 
-        path1 = "run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b) # Sets the name of the run.
+        path1 = "run_"+runname+"_"+str(i) # Sets the name of the run.
         dir_loc = os.path.join(dir_path, path1)
         if not os.path.isdir(dir_loc): # returns true if a directory exists.
             os.makedirs(dir_loc) # Creates a run directory if it doesn't exist
@@ -87,7 +91,7 @@ def setup(dir_path):
                 file.write("###Batch job\n")
                 # file.write("#PBS -t 1-138\n") # Will have to edit this
                 file.write("### you can give your job a name for easier identification\n")
-                file.write("#PBS -N param_study_"+str(k+1)+"_"+str(a)+"_"+str(b)+"\n")
+                file.write("#PBS -N param_study_"+str(k+1)+"\n")
                 file.write("\n")
                 file.write("### load necessary modules, e.g.\n")
                 file.write("module purge\n")
@@ -127,7 +131,7 @@ def setup(dir_path):
                    os.makedirs(outfull)
             ## Now make symlinks to copied executable
             #src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289" #change this once in HPC
-            src = "/mnt/research/SNAPhU/STIR/run_sukhbold/flash4_may6"
+            src = "/mnt/research/SNAPhU/STIR/run_sukhbold/flash4_jul2"
             dest = os.path.join(outfull,"flash4")
             if os.path.isfile(dest):
                   os.remove(dest)
@@ -174,7 +178,7 @@ def setup(dir_path):
         # ----------------------------------------
         with open(par_path, "w") as file:
             file.write("# Parameters file for 1D M1 Core Collapse with MLT\n")
-            file.write("basenm                      = \"run_"+runname+"_"+str(i)+"_a"+str(a)+"_b"+str(b)+"\"\n")
+            file.write("basenm                      = \"run_"+runname+"_"+str(i)+"\"\n")
             if restart:
                 file.write("restart                 = .true.\n")
                 file.write("checkpointFileNumber    = "+str(refile)+"\n")
@@ -351,7 +355,10 @@ def setup(dir_path):
             file.write("#MLT\n")
             file.write("useMLT = .true.\n")
             file.write("mlt_alphaL = "+str(a)+"\n")
-            file.write("mlt_alphaD = "+str(b)+"\n")
+            file.write("mlt_Dneut = "+str(b)+"\n")
+            file.write("mlt_Dye = "+str(c)+"\n")
+            file.write("mlt_Deint = "+str(d)+"\n")
+            file.write("mlt_Detrb = "+str(e)+"\n")
             file.write("\n")
             file.write("# EOS\n")
             file.write("eos_file = \"./SFHo.h5\"\n")

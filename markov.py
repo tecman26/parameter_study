@@ -27,7 +27,6 @@ ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
 
 chi2_mod = lambda obs_array, exp_array: chisquare(obs_array, exp_array)[0] # returns chi2 without p-value
 
-burn_steps = 100
 
 if __name__ == '__main__':
     # Put initialization stuff here. Define timestep etc etc etc
