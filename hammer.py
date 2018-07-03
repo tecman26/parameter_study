@@ -35,7 +35,7 @@ def lnprob(params):
 
     chi2 = (r_sh - r_sh_3D)**2/r_sh_3D + chi2(v_con, v_con_3D) + chi2(y_e, y_e_3D) + chi2(s, s_3D)
     
-    return -chi2
+    return -chi2/2
 
 # Generate starting positions
 init_pos = []

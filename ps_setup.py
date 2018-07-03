@@ -131,7 +131,7 @@ def setup(dir_path):
                    os.makedirs(outfull)
             ## Now make symlinks to copied executable
             #src = "/mnt/research/SNAPhU/STIR/run_ps/flash4_1f31289" #change this once in HPC
-            src = "/mnt/research/SNAPhU/STIR/run_sukhbold/flash4_jul2"
+            src = "/mnt/research/SNAPhU/STIR/run_sukhbold/flash4_jul3"
             dest = os.path.join(outfull,"flash4")
             if os.path.isfile(dest):
                   os.remove(dest)

@@ -125,6 +125,6 @@ def l2_norm(obs, exp): #Returns L2 norm instead of chi^2
     return norm/(len(obs))
 
 def globfind(run_num): #Find run based on run number 
-    data_pathname = glob.glob(os.path.join(trial_directory,"run_mcmcPS_"+str(run_num)))
+    data_pathname = glob.glob(os.path.join(trial_directory,"run_mcmcPS_"+str(run_num)+"_*"))
     data_pathname = data_pathname[0]
     return data_pathname
