@@ -13,15 +13,17 @@ import pickle
 
 #initialize emulators
 kernel_choice = gaussian_process.kernels.RBF(0.05)
-r_sh_file = "r_sh_emul_storage.pkl"
-v_con_file = "v_con_emul_storage.pkl"
-y_e_file = "y_e_emul_storage.pkl"
-s_file = "s_emul_storage.pkl"
+r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage.pkl")
+v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
+y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
+s_file = os.path.join(trial_directory,"s_emul_storage.pkl")
 
 r_sh_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 v_con_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 y_e_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 s_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+#list of radius values, for reference
+radius_ref = []
 
 def calibrateEmulators(data_dir): #positions file should have same format as positions.txt
     #data directory contains all run directories from calibration run
@@ -30,8 +32,6 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     pos_arr = np.array(pos_arr)
     num_samples = pos_arr.shape[0]
 
-    #list of radius values, for reference
-    radius_ref = []
     #shock radius column vector
     r_sh_arr = []
     #2d arrays containing v_con vectors
@@ -44,12 +44,11 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
         os.system("rm "+bad_runs_file)
     os.system("touch "+ bad_runs_file)
     for i in range(1,num_samples+1):
-        data_pathname = glob.glob(os.path.join(data_dir,"run_mcmcPS_"+str(i)+"*"))
-        data_pathname = data_pathname[0]
-        
+        data_pathname = globfind(i) 
         r, v_con, y_e_prof, s_prof, r_sh = read1d(data_pathname)
         
         if i == 1:
+            global radius_ref
             radius_ref = r
         
 

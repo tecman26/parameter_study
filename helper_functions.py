@@ -9,6 +9,7 @@ import numpy as np
 import os
 from read3d import *
 from read1d import *
+import glob
 
 def getLastLine(filename):
     line_list = []
@@ -114,15 +115,21 @@ def writePositions(output_directory, positions_list):
                 f.write((", %f" % parameter).rstrip('\n'))
             f.write('\n')
 
+def chi2(obs, exp): #Returns chi^2
+    chisq = 0
+    for i in range(len(obs)):
+        if exp[i] != 0:
+            chisq += ((obs[i] - exp[i])**2 / exp[i])
+    return chisq/(len(obs))
 
 def l2_norm(obs, exp): #Returns L2 norm instead of chi^2
     norm = 0
-    for i in range(len(obs)-1):
-        #print("obs = "+str(obs[i]))
-        #print("exp = "+str(exp[i]))
-        #print((obs[i] - exp[i])**2 / exp[i]**2)
+    for i in range(len(obs)):
         if exp[i] != 0:
             norm += ((obs[i] - exp[i])**2 / exp[i]**2)
-        #else:
-            #norm += obs[i]**2
-    return norm/(len(obs)-1)
+    return norm/(len(obs))
+
+def globfind(run_num): #Find run based on run number 
+    data_pathname = glob.glob(os.path.join(trial_directory,"run_mcmcPS_"+str(run_num)+"_*"))
+    data_pathname = data_pathname[0]
+    return data_pathname

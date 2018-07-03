@@ -3,27 +3,49 @@ import matplotlib.pyplot as plt
 from settings import *
 from read1d import *
 from read3d import *
+import argparse
+import glob
 
-loadEmulators()
-lcomp = 0.8
-dcomp = 0.333
-#lcomp = 0.3433438
-#dcomp = 0.843309333333333
-params = np.reshape(np.array([[lcomp,dcomp]]),(1,-1))
-plot1_v, plot1_v_std = emulVCon(params)
-plot1_y, plot1_y_std = emulYE(params)
-plot1_s, plot1_s_std = emulS(params)
-r = radii()
+sim_num = 1
+pathname = "/mnt/research/SNAPhU/STIR/parameter_study/calib2/run_mcmcPS_20_a0.343333_b0.22/output/"
+lcomp = 0.7983325666666667
+dcomp = 0.4183353
+r = []
+plot1_v = []
+plot1_y = []
+plot1_s = []
+r_sh_1D = 0
 
-#pathname = "/mnt/research/SNAPhU/STIR/parameter_study/calib2/run_mcmcPS_171_a0.733333_b0.616667"
-#r, plot1_v, plot1_y, plot1_s, r_sh_1D = read1d(pathname, data_dir3D)
+parser = argparse.ArgumentParser(description="Compare 1D to 3D simulations")
+parser.add_argument('--sim', action='store', nargs=1)
+parser.add_argument('--emul', action='append', nargs=2)
+args = parser.parse_args()
 
+if args.sim != None:
+    sim_num = int(args.sim[0])
+    pathname = globfind(sim_num)
+    r, plot1_v, plot1_y, plot1_s, r_sh_1D = read1d(pathname, data_dir3D)
+    plot1_v = np.transpose(plot1_v)
+    plot1_y = np.transpose(plot1_y)
+    plot1_s = np.transpose(plot1_s)
+
+else:
+    lcomp = float(args.emul[0][0])
+    dcomp = float(args.emul[0][1])
+    loadEmulators()
+
+
+    params = np.reshape(np.array([[lcomp,dcomp]]),(1,-1))
+    plot1_v, plot1_v_std = emulVCon(params)
+    plot1_y, plot1_y_std = emulYE(params)
+    plot1_s, plot1_s_std = emulS(params)
+    r = radii()
+    r_sh_1D = emulRShock(params)[0]
 
 r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D, 3)
 plot2 = v_con_3D
 
-print("Shock radius (1D) = "+str(emulRShock(params)[0]))
-#print("Shock radius (1D) = "+str(r_sh_1D))
+print("Shock radius (1D) = "+str(r_sh_1D))
 print("Shock radius (3D) = "+str(r_sh_3D))
 
 plt.figure("Convective Velocity")

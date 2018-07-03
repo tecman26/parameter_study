@@ -18,7 +18,6 @@ import glob
 from helper_functions import *
 from ps_setup import *
 from ps_runjob import *
-import time
 from settings import *
 from emulators import *
 
@@ -94,7 +93,7 @@ if __name__ == '__main__':
     lambda_start = (lmax-lmin)*np.random.random_sample() + lmin
     d_start = (dmax-dmin)*np.random.random_sample() + dmin
     
-    pos_list = [[lambda_start, d_start]] # Position guess list
+    pos_list = [] # Position guess list
 
     lambda_prev = lambda_start
     d_prev = d_start
@@ -142,34 +141,39 @@ if __name__ == '__main__':
 
 
         #----Metropolis-Hastings Algorithm----#
-        #print(v_con_p[-45])
-        #print(v_con_g[-45])
-        #print(l2_norm(v_con_g, v_con_3D))
         # These norm terms can be weighted later
 
-        norm_p = (r_sh_p - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_p, v_con_3D) + l2_norm(y_e_p, y_e_3D) + l2_norm(s_p, s_3D)
-        norm_g = (r_sh_g - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_g, v_con_3D) + l2_norm(y_e_g, y_e_3D) + l2_norm(s_g, s_3D)
+        #norm_p = (r_sh_p - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_p, v_con_3D) + l2_norm(y_e_p, y_e_3D) + l2_norm(s_p, s_3D)
+        #norm_g = (r_sh_g - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_g, v_con_3D) + l2_norm(y_e_g, y_e_3D) + l2_norm(s_g, s_3D)
+
+        chi2_p = (r_sh_p - r_sh_3D)**2/r_sh_3D + chi2(v_con_p, v_con_3D) + chi2(y_e_p, y_e_3D) + chi2(s_p, s_3D)
+        chi2_g = (r_sh_g - r_sh_3D)**2/r_sh_3D + chi2(v_con_g, v_con_3D) + chi2(y_e_g, y_e_3D) + chi2(s_g, s_3D)
 
         # Likelihood ratio of both sets of data (also known as acceptance probability)
         #p_acc = np.exp(norm_p - norm_g)
-        p_acc = norm_p/norm_g
+        #p_acc = norm_p/norm_g
+        p_acc = chi2_p/chi2_g
 
         p_thresh = np.random.random_sample() # threshold probability, chosen randomly between 0 and 1
         if i == 0:
-            with open(os.path.join(output_directory,"norms.txt"), "w+") as norm_file:
-                norm_file.write(str(lambda_prev)+","+str(d_prev)+","+str(norm_p)+"\n")
+            with open(os.path.join(output_directory,"chi2s.txt"), "w+") as norm_file:
+                norm_file.write(str(lambda_prev)+","+str(d_prev)+","+str(chi2_p)+"\n")
         
         if p_acc < p_thresh: # if acceptance probability doesn't exceed threshold
             
             if i >= burn_steps:
+                print(lambda_prev)
+                print(d_prev)
                 pos_list.append([lambda_prev, d_prev])         
 
         else: # if acceptance probability exceeds the threshold
             if i >= burn_steps:
+                print(lambda_guess)
+                print(d_guess)
                 pos_list.append([lambda_guess, d_guess])
 
-            with open(os.path.join(output_directory,"norms.txt"), "a+") as norm_file:
-                norm_file.write(str(lambda_guess)+","+str(d_guess)+","+str(norm_g)+"\n")
+            with open(os.path.join(output_directory,"chi2s.txt"), "a+") as norm_file:
+                norm_file.write(str(lambda_guess)+","+str(d_guess)+","+str(chi2_g)+"\n")
 
             lambda_prev = lambda_guess
             d_prev = d_guess
