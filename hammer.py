@@ -33,9 +33,9 @@ def lnprob(params):
     y_e, y_e_std = emulYE(params)
     s, s_std = emulS(params)
 
-    chi2 = (r_sh - r_sh_3D)**2/r_sh_3D + chi2(v_con, v_con_3D) + chi2(y_e, y_e_3D) + chi2(s, s_3D)
+    chisq = (r_sh - r_sh_3D)**2/r_sh_3D + chi2(v_con, v_con_3D) + chi2(y_e, y_e_3D) + chi2(s, s_3D)
     
-    return -chi2/2
+    return -chisq/2
 
 # Generate starting positions
 init_pos = []
@@ -48,7 +48,7 @@ for i in range(n_walkers):
 
     init_pos.append([l, dneut, dye, deint, detrb])
 
-sampler = emcee.EnsembleSampler(n_walkers, 5, lnprob, args=params)
+sampler = emcee.EnsembleSampler(n_walkers, 5, lnprob, threads=32)
 sampler.run_mcmc(init_pos, n_steps)
 writePositions(output_directory, sampler.flatchain)
 

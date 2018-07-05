@@ -101,6 +101,7 @@ def writePositions(output_directory, positions_list):
     if os.path.isdir(output_directory) == False:
          os.makedirs(output_directory)
     positions_filename = os.path.join(output_directory,"positions.txt")
+    positions_list = list(positions_list)
     with open(positions_filename, "w+") as f:
         num_samples = len(positions_list)
         for i in range(0,num_samples):
@@ -114,7 +115,7 @@ def chi2(obs, exp): #Returns chi^2
     chisq = 0
     for i in range(len(obs)):
         if exp[i] != 0:
-            chisq += ((obs[i] - exp[i])**2 / exp[i])
+            chisq += ((obs[i] - exp[i])**2)
     return chisq/(len(obs))
 
 def l2_norm(obs, exp): #Returns L2 norm instead of chi^2
@@ -125,6 +126,6 @@ def l2_norm(obs, exp): #Returns L2 norm instead of chi^2
     return norm/(len(obs))
 
 def globfind(run_num): #Find run based on run number 
-    data_pathname = glob.glob(os.path.join(trial_directory,"run_mcmcPS_"+str(run_num)+"_*"))
+    data_pathname = glob.glob(os.path.join(trial_directory,"run_mcmcPS_"+str(run_num)))
     data_pathname = data_pathname[0]
     return data_pathname
