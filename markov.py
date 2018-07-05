@@ -150,7 +150,7 @@ if __name__ == '__main__':
         chi2_g = (r_sh_g - r_sh_3D)**2/r_sh_3D + chi2(v_con_g, v_con_3D) + chi2(y_e_g, y_e_3D) + chi2(s_g, s_3D)
 
         # Likelihood ratio of both sets of data (also known as acceptance probability)
-        p_acc = np.exp(-norm_p + norm_g)
+        p_acc = np.exp(-chi2_p + chi2_g)
         #p_acc = norm_p/norm_g
         #p_acc = chi2_p/chi2_g
 
