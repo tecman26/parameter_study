@@ -111,11 +111,11 @@ def writePositions(output_directory, positions_list):
                 f.write((", %f" % parameter).rstrip('\n'))
             f.write('\n')
 
-def chi2(obs, exp): #Returns chi^2
+def chi2(obs, exp, sigma): #Returns chi^2
     chisq = 0
     for i in range(len(obs)):
         if exp[i] != 0:
-            chisq += ((obs[i] - exp[i])**2)
+            chisq += ((obs[i] - exp[i])**2)/sigma[i]
     return chisq/(len(obs))
 
 def l2_norm(obs, exp): #Returns L2 norm instead of chi^2

@@ -89,13 +89,19 @@ if __name__ == '__main__':
     
     loadEmulators()
 
-    lambda_start = (lmax-lmin)*np.random.random_sample() + lmin
-    d_start = (dmax-dmin)*np.random.random_sample() + dmin
-    
+    l_start = (lmax-lmin)*np.random.random_sample() + lmin
+    d1_start = (dmax-dmin)*np.random.random_sample() + dmin
+    d2_start = (dmax-dmin)*np.random.random_sample() + dmin
+    d3_start = (dmax-dmin)*np.random.random_sample() + dmin
+    d4_start = (dmax-dmin)*np.random.random_sample() + dmin
+
     pos_list = [] # Position guess list
 
-    lambda_prev = lambda_start
-    d_prev = d_start
+    l_prev = l_start
+    d1_prev = d1_start
+    d2_prev = d2_start
+    d3_prev = d3_start
+    d4_prev = d4_start
     
     lambda_step = 0.03
     d_step = 0.03
@@ -104,26 +110,30 @@ if __name__ == '__main__':
 
         #----Generate guesses----#
         
-        lambda_guess = 0
-        d_guess = 0
+        l_guess = 0
+        d1_guess = 0
+        d2_guess = 0
+        d3_guess = 0
+        d4_guess = 0
         
         lambda_ok = False
         while lambda_ok == False:
-            lambda_guess = lambda_prev + 2*lambda_step*np.random.random_sample() - lambda_step
-            if lambda_guess > lmin and lambda_guess < lmax:
+            l_guess = l_prev + 2*lambda_step*np.random.random_sample() - lambda_step
+            if l_guess > lmin and lambda_guess < lmax:
                 lambda_ok = True
-       
-        d_ok = False
-        while d_ok == False:
-            d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
-            if d_guess > dmin and d_guess < dmax:
-                d_ok = True
+
+        for d_guess in [d1_guess, d2_guess, d3_guess, d4_guess]:
+            d_ok = False
+            while d_ok == False:
+                d_guess = d_prev + 2*d_step*np.random.random_sample() - d_step
+                if d_guess > dmin and d_guess < dmax:
+                    d_ok = True
 
     
         #----Compare results from emulator map----#
 
-        param_prev = np.array([lambda_prev, d_prev])
-        param_guess = np.array([lambda_guess, d_guess])
+        param_prev = np.array([l_prev, d1_prev, d2_prev, d3_prev, d4_prev])
+        param_guess = np.array([l_guess, d1_guess, d2_guess, d3_guess, d4_guess])
 
         param_prev = np.reshape(param_prev,(1,-1))
         param_guess = np.reshape(param_guess,(1,-1))
@@ -140,10 +150,9 @@ if __name__ == '__main__':
 
 
         #----Metropolis-Hastings Algorithm----#
-        # These norm terms can be weighted later
 
-        #norm_p = (r_sh_p - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_p, v_con_3D) + l2_norm(y_e_p, y_e_3D) + l2_norm(s_p, s_3D)
-        #norm_g = (r_sh_g - r_sh_3D)**2/r_sh_3D**2 + l2_norm(v_con_g, v_con_3D) + l2_norm(y_e_g, y_e_3D) + l2_norm(s_g, s_3D)
+
+        #sigma_rsh_p = np.sqrt(0.1*r_sh_3D+
 
         chi2_p = (r_sh_p - r_sh_3D)**2/r_sh_3D + chi2(v_con_p, v_con_3D) + chi2(y_e_p, y_e_3D) + chi2(s_p, s_3D)
         chi2_g = (r_sh_g - r_sh_3D)**2/r_sh_3D + chi2(v_con_g, v_con_3D) + chi2(y_e_g, y_e_3D) + chi2(s_g, s_3D)
@@ -156,25 +165,25 @@ if __name__ == '__main__':
         p_thresh = np.random.random_sample() # threshold probability, chosen randomly between 0 and 1
         if i == 0:
             with open(os.path.join(output_directory,"chi2s.txt"), "w+") as norm_file:
-                norm_file.write(str(lambda_prev)+","+str(d_prev)+","+str(chi2_p)+"\n")
+                norm_file.write(str(l_prev)+","+str(d_prev)+","+str(chi2_p)+"\n")
         
         if p_acc < p_thresh: # if acceptance probability doesn't exceed threshold
             
             if i >= burn_steps:
-                print(lambda_prev)
+                print(l_prev)
                 print(d_prev)
-                pos_list.append([lambda_prev, d_prev])         
+                pos_list.append([l_prev, d_prev])         
 
         else: # if acceptance probability exceeds the threshold
             if i >= burn_steps:
-                print(lambda_guess)
+                print(l_guess)
                 print(d_guess)
-                pos_list.append([lambda_guess, d_guess])
+                pos_list.append([l_guess, d_guess])
 
             with open(os.path.join(output_directory,"chi2s.txt"), "a+") as norm_file:
-                norm_file.write(str(lambda_guess)+","+str(d_guess)+","+str(chi2_g)+"\n")
+                norm_file.write(str(l_guess)+","+str(d_guess)+","+str(chi2_g)+"\n")
 
-            lambda_prev = lambda_guess
+            l_prev = l_guess
             d_prev = d_guess
 
     writePositions(output_directory, pos_list)
