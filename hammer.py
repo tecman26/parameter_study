@@ -26,6 +26,11 @@ os.makedirs(output_directory)
 
 r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D)
 
+r_sh_3D_std = 0.1*r_sh_3D
+v_con_3D_std = 0.1*v_con_3D
+y_e_3D_std = 0.1*y_e_3D
+s_3D_std = 0.1*s_3D
+
 def lnprob(params):
 
     r_sh, r_sh_std = emulRShock(params)
@@ -33,7 +38,17 @@ def lnprob(params):
     y_e, y_e_std = emulYE(params)
     s, s_std = emulS(params)
 
-    chisq = (r_sh - r_sh_3D)**2/r_sh_3D + chi2(v_con, v_con_3D) + chi2(y_e, y_e_3D) + chi2(s, s_3D)
+    r_sh_std_tot = r_sh_std + r_sh_3D_std
+    v_con_std_tot = v_con_std + v_con_3D_std
+    y_e_std_tot = y_e_std + y_e_3D_std
+    s_std_tot = s_std + s_3D_std
+
+
+    #chisq = (r_sh - r_sh_3D)**2/r_sh_std_tot**2 + chi2_sigma(v_con, v_con_3D, v_con_std_tot) \
+    #         + chi2_sigma(y_e, y_e_3D, y_e_std_tot) + chi2_sigma(s, s_3D,s_std_tot)
+    
+    chisq = (r_sh - r_sh_3D)**2/r_sh_3D + chi2(v_con, v_con_3D) \
+             + chi2(y_e, y_e_3D) + chi2(s, s_3D)
     
     return -chisq/2
 

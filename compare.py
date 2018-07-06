@@ -43,8 +43,13 @@ elif args.emul != None:
     plot1_v, plot1_v_std = emulVCon(params)
     plot1_y, plot1_y_std = emulYE(params)
     plot1_s, plot1_s_std = emulS(params)
+    print(plot1_v_std)
+    print(plot1_y_std)
+    print(plot1_s_std)
+
     r = radii()
-    r_sh_1D = emulRShock(params)[0]
+    r_sh_1D, r_sh_1D_std = emulRShock(params)
+    print(r_sh_1D_std)
 
 r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D)
 

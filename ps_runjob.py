@@ -30,7 +30,7 @@ def runjob(dir_path):
     job_id_file = os.path.join(dir_path,"job_ids.txt")
     os.system("touch "+job_id_file)
     
-    for i in range(1,param.shape[0]+1):
+    for i in range(1000,param.shape[0]+1):
         path1 = "run_"+runname+"_"+str(i) # Sets the name of the run.
         filename = "run.mlt"
         fullpath = os.path.join(dir_path, os.path.join(path1, filename))
