@@ -15,7 +15,7 @@ import yt
 
 def read1d(data_dir1D, data_dir3D=data_dir3D):
 
-
+    print(data_dir1D)
     radius_cutoff = 5*10**7
     # ---------------------
     # Read 3D Data

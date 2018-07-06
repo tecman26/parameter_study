@@ -20,8 +20,8 @@ from helper_functions import *
 from ps_setup import *
 from ps_runjob import *
 from settings import *
-import time
 from pyDOE import *
+import itertools
 
 # This "gets" the program name and assigns it to a variable.
 ScriptName = os.path.split(sys.argv[0])[1].split('.')[0]
@@ -40,21 +40,25 @@ if __name__ == '__main__':
 #----Hard-coded results from single-parameter alpha_lambda study----#
     
     #IMPORTANT PARAMETER: this determines how many sample points to set up
-    num_samples = alpha_lambda_num*alpha_d_num
+    num_samples = n_lambda*n_dneut*n_dye*n_deint*n_detrb
     
     
-    #----Generate array of evenly spaced starting points----#
+    #----Generate array of evenly spaced sample points----#
     next_positions = []
 
-    alpha_lambda_options = np.linspace(lmin, lmax, alpha_lambda_num)
-    alpha_d_options = np.linspace(dmin, dmax, alpha_d_num)
+    #lambda_op = np.linspace(lmin, lmax, n_lambda)
+    #dneut_op = dye_op = deint_op = detrb_op = np.linspace(dmin, dmax, n_lambda)
      
-    for i in range(alpha_lambda_num):
-        for j in range(alpha_d_num):    
-            alpha_lambda = alpha_lambda_options[i]
-            alpha_d = alpha_d_options[j]
-            next_positions.append([alpha_lambda, alpha_d])
+    #next_positions = itertools.product(lambda_op, dneut_op, dye_op, deint_op, detrb_op)
 
+    #----Generate sample points based on Latin Hypercube----#
+    
+    next_positions = lhs(5, samples=num_samples)
+    next_positions[:,0] *= (lmax-lmin)
+    next_positions[:,0] += lmin
+    for i in range(1,5):
+        next_positions[:,i] *= (dmax-dmin)
+        next_positions[:,i] += dmin
 
     #----Output positions file----#
     

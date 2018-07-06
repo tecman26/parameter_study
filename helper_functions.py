@@ -111,12 +111,26 @@ def writePositions(output_directory, positions_list):
                 f.write((", %f" % parameter).rstrip('\n'))
             f.write('\n')
 
-def chi2(obs, exp, sigma): #Returns chi^2
+def chi2(obs, exp): #Returns chi^2
     chisq = 0
     for i in range(len(obs)):
         if exp[i] != 0:
-            chisq += ((obs[i] - exp[i])**2)/sigma[i]
+            chisq += ((obs[i] - exp[i])**2)/exp[i]
     return chisq/(len(obs))
+
+def chi2_sigma(obs, exp, sigma): #Returns reduced chi^2
+    length = len(obs)
+    chisq = 0
+    sigma_arr = []
+    if np.isscalar(sigma) == True:
+        sigma_arr = sigma*np.ones(length)
+    else:
+        sigma_arr = sigma
+
+    for i in range(length):
+        if exp[i] != 0:
+            chisq += ((obs[i] - exp[i])**2)/sigma_arr[i]**2
+    return chisq/length
 
 def l2_norm(obs, exp): #Returns L2 norm instead of chi^2
     norm = 0

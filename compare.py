@@ -18,32 +18,35 @@ r_sh_1D = 0
 
 parser = argparse.ArgumentParser(description="Compare 1D to 3D simulations")
 parser.add_argument('--sim', action='store', nargs=1)
-parser.add_argument('--emul', action='append', nargs=2)
+parser.add_argument('--emul', action='append', nargs=5)
 args = parser.parse_args()
 
 if args.sim != None:
     sim_num = int(args.sim[0])
     pathname = globfind(sim_num)
-    r, plot1_v, plot1_y, plot1_s, r_sh_1D = read1d(pathname, data_dir3D)
+    r, plot1_v, plot1_y, plot1_s, r_sh_1D = read1d(pathname)
     plot1_v = np.transpose(plot1_v)
     plot1_y = np.transpose(plot1_y)
     plot1_s = np.transpose(plot1_s)
 
-else:
+elif args.emul != None:
     lcomp = float(args.emul[0][0])
-    dcomp = float(args.emul[0][1])
+    d1comp = float(args.emul[0][1])
+    d2comp = float(args.emul[0][2])
+    d3comp = float(args.emul[0][3])
+    d4comp = float(args.emul[0][4])
+
     loadEmulators()
 
 
-    params = np.reshape(np.array([[lcomp,dcomp]]),(1,-1))
+    params = np.reshape(np.array([[lcomp,d1comp,d2comp,d3comp,d4comp]]),(1,-1))
     plot1_v, plot1_v_std = emulVCon(params)
     plot1_y, plot1_y_std = emulYE(params)
     plot1_s, plot1_s_std = emulS(params)
     r = radii()
     r_sh_1D = emulRShock(params)[0]
 
-r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D, 3)
-plot2 = v_con_3D
+r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D)
 
 print("Shock radius (1D) = "+str(r_sh_1D))
 print("Shock radius (3D) = "+str(r_sh_3D))
