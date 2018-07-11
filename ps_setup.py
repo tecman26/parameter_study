@@ -27,6 +27,8 @@ def setup(dir_path):
     #path = "./trial_test/step0"
     paramFile = os.path.join(dir_path,"positions.txt")
     param = np.loadtxt(paramFile, delimiter=",")
+    if len(param.shape) == 0 or len(param.shape) == 1:
+        param = np.reshape(param, (1, -1))
     alphaL = param[:,1]
     dneut = param[:,2]
     dye = param[:,3]
