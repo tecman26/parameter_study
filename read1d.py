@@ -12,10 +12,11 @@ import os
 from settings import *
 from read3d import *
 import yt
+from yt.funcs import mylog
+mylog.setLevel(40) # This sets the log level to "ERROR"
 
 def read1d(data_dir1D, data_dir3D=data_dir3D):
 
-    print(data_dir1D)
     radius_cutoff = 5*10**7
     # ---------------------
     # Read 3D Data

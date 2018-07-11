@@ -21,28 +21,25 @@ import argparse
 run_num = 3
 parser = argparse.ArgumentParser(description="Plot run of MCMC")
 parser.add_argument('run_num', nargs=1, help="Choose which run to plot", metavar='n' )
-parser.add_argument('dim1', nargs=1, help="Choose first dimension of slice", metavar='d1')
-parser.add_argument('dim2', nargs=1, help="Choose second dimension of slice", metavar='d2')
+parser.add_argument('--plot', nargs=2, help="Choose dimensions to plot", metavar='p')
 
-bin_num = 30
+# Select the requested run directory
 args = parser.parse_args()
 run_num = int(args.run_num[0])
-d1 = int(args.dim1[0])
-d2 = int(args.dim2[0])
-
 trial_pathname = os.path.join(trial_directory,"runs/run_"+str(run_num))
-#trial_pathname = "test_dir"
 pos_pathname = os.path.join(trial_pathname, "positions.txt")
-
 pos_arr, pos_dict = readPositions(pos_pathname)
-
 pos_arr = np.array(pos_arr)
 
-vec1 = pos_arr[:,d1]
-vec2 = pos_arr[:,d2]
-#print(pos_arr)
+# Only plot if "--plot" is selected
+if args.plot != None:
+    d1 = int(args.plot[0])
+    d2 = int(args.plot[1])
+    vec1 = pos_arr[:,d1]
+    vec2 = pos_arr[:,d2]
 
 
+bin_num = 30
 H, edges = np.histogramdd(pos_arr, bins=(bin_num, bin_num, bin_num, bin_num, bin_num), \
                    range=((lmin,lmax),(dmin,dmax),(dmin,dmax),(dmin,dmax),(dmin,dmax)))
 
@@ -86,8 +83,10 @@ def hist2d():
     CS=plt.contour( 0.5*(xbins[1:]+xbins[:-1]),
                 0.5*(ybins[1:]+ybins[1:]),
                 h.transpose(), 5, colors=('r','g','b','c','g'),
-                linewidths=2)
-hist2d()
- 
+                norm=colors.LogNorm(), linewidths=2)
 
-plt.show()
+
+if args.plot != None:
+    hist2d()
+ 
+    plt.show()

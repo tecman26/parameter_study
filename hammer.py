@@ -23,6 +23,7 @@ else:
     run_num += 1
 output_directory = os.path.join(trial_directory,"runs/run_"+str(run_num))
 os.makedirs(output_directory)
+os.system("cp settings.py "+str(output_directory))
 
 r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D)
 

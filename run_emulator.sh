@@ -12,7 +12,7 @@
 #PBS -l nodes=1:ppn=2,feature=intel16
 
 ### mem: amount of memory that the job will need
-#PBS -l mem=4gb
+#PBS -l mem=16gb
 
 #PBS -A ptg
 
