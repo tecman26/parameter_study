@@ -47,10 +47,14 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     if os.path.isfile(bad_runs_file) == True:
         os.system("rm "+bad_runs_file)
     os.system("touch "+ bad_runs_file)
-    for i in range(1,num_samples+1):
+    start_num = 1
+    counter = start_num
+    for i in range(start_num,num_samples+1):
+
         data_pathname = globfind(i) 
         r, v_con, y_e_prof, s_prof, r_sh = read1d(data_pathname)
-        
+        print(str(pos_arr[counter-1])+": "+str(r_sh))
+
         if i == 1:
             global radius_ref
             radius_ref = r
@@ -60,11 +64,14 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
             with open(bad_runs_file, "a+") as br:
                 br.write(data_pathname)
                 br.write("\n")
+            pos_arr = np.delete(pos_arr, counter-1, 0)
+
         else: 
             r_sh_arr.append(r_sh)
             v_con_arr.append(v_con)
             y_e_arr.append(y_e_prof)
             s_arr.append(s_prof)
+            counter += 1
     
     r_sh_arr = np.transpose(np.array(r_sh_arr))
     v_con_arr = np.array(v_con_arr)
@@ -75,11 +82,19 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     global v_con_emul
     global y_e_emul
     global s_emul
+    
+    
+    if pos_arr.shape[0] != r_sh_arr.shape[0]:
+        print("Didn't work!")
+        os._exit()
+    else:
+        print("Did work!")
 
     r_sh_emul.fit(pos_arr,r_sh_arr)
     v_con_emul.fit(pos_arr,v_con_arr)
     y_e_emul.fit(pos_arr,y_e_arr)
     s_emul.fit(pos_arr,s_arr)
+    print("Worked again!")
 
 def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
     with open(file1, "wb") as f1:
@@ -90,6 +105,7 @@ def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_fi
         pickle.dump(y_e_emul, f3, pickle.HIGHEST_PROTOCOL)
     with open(file4, "wb") as f4: 
         pickle.dump(s_emul, f4, pickle.HIGHEST_PROTOCOL)
+    print("Dumped!")
     
 def loadEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
     r_sh_load = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)

@@ -1,6 +1,6 @@
 mcmc_step = 2
-n_steps = 10**6
-n_walkers = 20
+n_steps = 10**5
+n_walkers = 10
 burn_steps = 100
 dA = 0.02
 n_lambda = 4
@@ -11,7 +11,7 @@ n_detrb = 4
 #dataDir = "./data"
 runname = "mcmcPS"
 lmin = 0.5
-lmax = 0.95
+lmax = 0.9
 dmin = 0.05
 dmax = 0.9
 trial_num = 5
