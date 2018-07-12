@@ -64,7 +64,7 @@ for i in range(n_walkers):
 
     init_pos.append([l, dneut, dye, deint, detrb])
 
-sampler = emcee.EnsembleSampler(n_walkers, 5, lnprob, threads=32)
+sampler = emcee.EnsembleSampler(n_walkers, 5, lnprob, threads=n_threads)
 sampler.run_mcmc(init_pos, n_steps)
 writePositions(output_directory, sampler.flatchain)
 
