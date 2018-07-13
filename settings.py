@@ -1,7 +1,7 @@
 mcmc_step = 2
 n_steps = 10**6
 n_walkers = 28
-n_threads = 28
+n_threads = 20
 burn_steps = 100
 dA = 0.02
 n_lambda = 4

@@ -15,6 +15,9 @@ plot1_v = []
 plot1_y = []
 plot1_s = []
 r_sh_1D = 0
+plot1_v_std = []
+plot1_y_std = []
+plot1_s_std = []
 
 parser = argparse.ArgumentParser(description="Compare 1D to 3D simulations")
 parser.add_argument('--sim', action='store', nargs=1)
@@ -26,8 +29,11 @@ if args.sim != None:
     pathname = globfind(sim_num)
     r, plot1_v, plot1_y, plot1_s, r_sh_1D = read1d(pathname)
     plot1_v = np.transpose(plot1_v)
+    plot1_v_std = 0.05*plot1_v
     plot1_y = np.transpose(plot1_y)
+    plot1_y_std = 0.05*plot1_y
     plot1_s = np.transpose(plot1_s)
+    plot1_s_std = 0.05*plot1_s
 
 elif args.emul != None:
     lcomp = float(args.emul[0][0])
@@ -43,17 +49,13 @@ elif args.emul != None:
     plot1_v, plot1_v_std = emulVCon(params)
     plot1_y, plot1_y_std = emulYE(params)
     plot1_s, plot1_s_std = emulS(params)
-    print(plot1_v_std)
-    print(plot1_y_std)
-    print(plot1_s_std)
 
     r = radii()
     r_sh_1D, r_sh_1D_std = emulRShock(params)
-    print(r_sh_1D_std)
 
 r_sh_3D, r_3D, v_con_3D, y_e_3D, s_3D = readOutput(data_dir3D)
 
-print("Shock radius (1D) = "+str(r_sh_1D))
+print("Shock radius (1D) = "+str(r_sh_1D)+" +/- "+str(r_sh_1D_std))
 print("Shock radius (3D) = "+str(r_sh_3D))
 
 plt.figure("Convective Velocity")
@@ -62,17 +64,16 @@ plt.figure("Convective Velocity")
 #print(len(r_3D))
 #print(r_3D)
 
-#print(plot1_v)
-#print(plot1_y)
-#print(plot1_s)
 plt.plot(r_3D,plot1_v, color = 'b', label='1D') 
+plt.fill_between(r_3D, plot1_v-plot1_v_std, plot1_v+plot1_v_std, alpha=0.2)
 plt.plot(r_3D,v_con_3D, color = 'g', label = '3D')
 plt.legend()
 plt.xlabel("Radius (cm)")
 plt.ylabel("Convective velocity (cm/s)")
 
 plt.figure("Electron Fraction")
-plt.plot(r_3D,plot1_y, color = 'b', label='1D') 
+plt.plot(r_3D, plot1_y, color = 'b', label='1D') 
+plt.fill_between(r_3D, plot1_y-plot1_y_std, plot1_y+plot1_y_std, alpha=0.2)
 plt.plot(r_3D,y_e_3D, color = 'g', label='3D')
 plt.legend()
 plt.xlabel("Radius (cm)")
@@ -80,6 +81,7 @@ plt.ylabel("Electron fraction")
 
 plt.figure("Entropy")
 plt.plot(r_3D,plot1_s, color = 'b', label='1D') 
+plt.fill_between(r_3D, plot1_s-plot1_s_std, plot1_s+plot1_s_std, alpha=0.2)
 plt.plot(r_3D,s_3D, color = 'g', label='3D')
 plt.legend()
 plt.xlabel("Radius (cm)")

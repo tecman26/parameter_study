@@ -9,7 +9,7 @@
 #PBS -l walltime=36:00:00
 
 ### nodes:ppn - how many nodes & cores per node (ppn) that you require
-#PBS -l nodes=1:ppn=28,feature=intel16
+#PBS -l nodes=1:ppn=20,feature=intel16
 
 ### mem: amount of memory that the job will need
 #PBS -l mem=16gb
