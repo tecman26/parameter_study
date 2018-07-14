@@ -34,6 +34,15 @@ pos_arr = np.array(pos_arr)
 lambda_vec = pos_arr[:,0]
 d_vec = pos_arr[:,1]
 
+cov = np.cov(np.transpose(pos_arr))
+print("Covariance matrix:")
+print(cov)
+
+w, v = np.linalg.eig(cov)
+v_mod = v
+v_mod[:,0] = np.sqrt(w[0])*v_mod[:,0]
+v_mod[:,1] = np.sqrt(w[1])*v_mod[:,1]
+
 def hist2d():
     bin_num = 30
     lambda_data = lambda_vec
@@ -64,6 +73,8 @@ def hist2d():
                 0.5*(ybins[1:]+ybins[1:]),
                 h.transpose(), 5, colors=('r','g','b','c','g'),
                 linewidths=2)
+    plt.quiver(np.array([lbest, lbest]), np.array([dbest, dbest]), v_mod[0,:], v_mod[1,:])
+
 hist2d()
  
 
