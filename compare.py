@@ -34,6 +34,7 @@ if args.sim != None:
     plot1_y_std = 0.05*plot1_y
     plot1_s = np.transpose(plot1_s)
     plot1_s_std = 0.05*plot1_s
+    r_sh_1D_std = 0.05*r_sh_1D
 
 elif args.emul != None:
     lcomp = float(args.emul[0][0])
