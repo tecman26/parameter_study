@@ -12,7 +12,7 @@ import glob
 import pickle
 
 #initialize emulators
-kernel_choice = gaussian_process.kernels.RBF(0.05)
+kernel_choice = gaussian_process.kernels.Matern(0.05, nu=0.5)
 r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage.pkl")
 v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
 y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
@@ -44,7 +44,8 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
         os.system("rm "+bad_runs_file)
     os.system("touch "+ bad_runs_file)
     for i in range(1,num_samples+1):
-        data_pathname = globfind(i) 
+        data_pathname = globfind(i)
+        print(data_pathname) 
         r, v_con, y_e_prof, s_prof, r_sh = read1d(data_pathname)
         
         if i == 1:

@@ -1,5 +1,5 @@
 mcmc_step = 2
-n_steps = 10**6
+n_steps = 3*10**6
 nBurn = 1
 dA = 0.02
 alpha_lambda_num = 16
