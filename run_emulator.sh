@@ -6,7 +6,7 @@
 
 ### define resources needed:
 ### walltime - how long you expect the job to run
-#PBS -l walltime=24:00:00
+#PBS -l walltime=06:00:00
 
 ### nodes:ppn - how many nodes & cores per node (ppn) that you require
 #PBS -l nodes=1:ppn=2,feature=intel16

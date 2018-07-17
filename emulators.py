@@ -16,7 +16,7 @@ def resh(arr):
     return np.reshape(arr,(1,-1))
 
 #initialize emulators
-kernel_choice = gaussian_process.kernels.RBF(0.05)
+kernel_choice = gaussian_process.kernels.Matern(0.05, nu=0.5)
 r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage.pkl")
 v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
 y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
