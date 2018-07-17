@@ -11,25 +11,10 @@ from read1d import *
 import glob
 import pickle
 from settings import *
+from gp_extras.kernels import LocalLengthScalesKernel
 
 def resh(arr):
     return np.reshape(arr,(1,-1))
-
-#initialize emulators
-kernel_choice = gaussian_process.kernels.Matern(0.05, nu=0.5)
-r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage.pkl")
-v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
-y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
-s_file = os.path.join(trial_directory,"s_emul_storage.pkl")
-
-data_file = os.path.join(trial_directory, "data_storage.pkl")
-
-r_sh_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
-v_con_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
-y_e_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
-s_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
-#list of radius values, for reference
-radius_ref = []
 
 class DataSet:
 
@@ -49,9 +34,41 @@ class DataSet:
         self.y_e_arr = y_e_arr
         self.s_arr = s_arr
 
+kernel_choice = 0
 
-data = DataSet()
+#initialize emulators
+#kernel_choice = gaussian_process.kernels.Matern(0.05, nu=0.5)
 
+data_file = os.path.join(trial_directory, "data_storage.pkl")
+
+def defKernel():
+    loadfile = open(data_file, 'rb')
+    data = pickle.load(loadfile)
+    global kernel_choice
+    kernel_choice = LocalLengthScalesKernel(data.pos_arr)
+
+    global r_sh_emul
+    global v_con_emul
+    global y_e_emul
+    global s_emul
+
+    r_sh_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+    v_con_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+    y_e_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+    s_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+
+r_sh_file = os.path.join(trial_directory,"r_sh_emul_storage.pkl")
+v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
+y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
+s_file = os.path.join(trial_directory,"s_emul_storage.pkl")
+
+
+r_sh_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+v_con_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+y_e_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+s_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
+#list of radius values, for reference
+radius_ref = []
 
 def store_data(data_dir):
     #data directory contains all run directories from calibration run
@@ -105,13 +122,15 @@ def store_data(data_dir):
 
     data.set_all(pos_arr, r_sh_arr, v_con_arr, y_e_arr, s_arr)
     
-    dumpfile = open(data_file, wb)
+    dumpfile = open(data_file,'wb')
     pickle.dump(data, dumpfile, pickle.HIGHEST_PROTOCOL)
+
+data = DataSet()
 
 def calibrateEmulators(load=True):
     
     if load == True:
-        loadfile = open(data_file, rb)
+        loadfile = open(data_file, 'rb')
         data = pickle.load(loadfile)
 
     global r_sh_emul
@@ -192,5 +211,6 @@ def emulS(arr):
 
 if __name__ == '__main__':
     store_data(trial_directory)
-    #calibrateEmulators()
-    #storeEmulators()
+    defKernel()
+    calibrateEmulators()
+    storeEmulators()

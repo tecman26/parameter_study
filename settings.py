@@ -1,5 +1,5 @@
 mcmc_step = 2
-n_steps = 10**3
+n_steps = 10**4
 n_walkers = 28
 n_threads = 20
 burn_steps = 100
