@@ -22,6 +22,8 @@ v_con_file = os.path.join(trial_directory,"v_con_emul_storage.pkl")
 y_e_file = os.path.join(trial_directory,"y_e_emul_storage.pkl")
 s_file = os.path.join(trial_directory,"s_emul_storage.pkl")
 
+data_file = os.path.join(trial_directory, "data_storage.pkl")
+
 r_sh_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 v_con_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 y_e_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
@@ -29,13 +31,36 @@ s_emul = gaussian_process.GaussianProcessRegressor(kernel=kernel_choice)
 #list of radius values, for reference
 radius_ref = []
 
-def calibrateEmulators(data_dir): #positions file should have same format as positions.txt
+class DataSet:
+
+    pos_arr = [] 
+    #shock radius column vector
+    r_sh_arr = []
+    #2d arrays containing v_con vectors
+    v_con_arr = []
+    y_e_arr = []
+    s_arr = []
+
+
+    def set_all(self, pos_arr, r_sh_arr, v_con_arr, y_e_arr, s_arr):
+        self.pos_arr = pos_arr
+        self.r_sh_arr = r_sh_arr
+        self.v_con_arr = v_con_arr
+        self.y_e_arr = y_e_arr
+        self.s_arr = s_arr
+
+
+data = DataSet()
+
+
+def store_data(data_dir):
     #data directory contains all run directories from calibration run
     pos_pathname = os.path.join(data_dir, "positions.txt")
     pos_arr, pos_dict = readPositions(pos_pathname)
     pos_arr = np.array(pos_arr)
     num_samples = pos_arr.shape[0]
 
+    
     #shock radius column vector
     r_sh_arr = []
     #2d arrays containing v_con vectors
@@ -53,7 +78,7 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
 
         data_pathname = globfind(i) 
         r, v_con, y_e_prof, s_prof, r_sh = read1d(data_pathname)
-        print(str(pos_arr[counter-1])+": "+str(r_sh))
+        #print(str(pos_arr[counter-1])+": "+str(r_sh))
 
         if i == 1:
             global radius_ref
@@ -78,22 +103,32 @@ def calibrateEmulators(data_dir): #positions file should have same format as pos
     y_e_arr = np.array(y_e_arr)
     s_arr = np.array(s_arr)
 
+    data.set_all(pos_arr, r_sh_arr, v_con_arr, y_e_arr, s_arr)
+    
+    dumpfile = open(data_file, wb)
+    pickle.dump(data, dumpfile, pickle.HIGHEST_PROTOCOL)
+
+def calibrateEmulators(load=True):
+    
+    if load == True:
+        loadfile = open(data_file, rb)
+        data = pickle.load(loadfile)
+
     global r_sh_emul
     global v_con_emul
     global y_e_emul
     global s_emul
     
-    
-    if pos_arr.shape[0] != r_sh_arr.shape[0]:
+    if data.pos_arr.shape[0] != data.r_sh_arr.shape[0]:
         print("Didn't work!")
         os._exit()
     else:
         print("Did work!")
 
-    r_sh_emul.fit(pos_arr,r_sh_arr)
-    v_con_emul.fit(pos_arr,v_con_arr)
-    y_e_emul.fit(pos_arr,y_e_arr)
-    s_emul.fit(pos_arr,s_arr)
+    r_sh_emul.fit(data.pos_arr,data.r_sh_arr)
+    v_con_emul.fit(data.pos_arr,data.v_con_arr)
+    y_e_emul.fit(data.pos_arr,data.y_e_arr)
+    s_emul.fit(data.pos_arr,data.s_arr)
     print("Worked again!")
 
 def storeEmulators(file1=r_sh_file, file2=v_con_file, file3=y_e_file, file4=s_file):
@@ -156,5 +191,6 @@ def emulS(arr):
     return out_arr[0][0], out_arr[1][0]
 
 if __name__ == '__main__':
-    calibrateEmulators(trial_directory)
-    storeEmulators()
+    store_data(trial_directory)
+    #calibrateEmulators()
+    #storeEmulators()

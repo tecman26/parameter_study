@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from helper_functions import *
 import argparse
+import pandas as pd
+import seaborn as sns
 
 run_num = 3
 parser = argparse.ArgumentParser(description="Plot run of MCMC")
@@ -82,9 +84,14 @@ def hist2d():
     # also, contour() and hist2d() treat the array differently so we need to transpose the cts array.
     CS=plt.contour( 0.5*(xbins[1:]+xbins[:-1]),
                 0.5*(ybins[1:]+ybins[1:]),
-                h.transpose(), 5, colors=('r','g','b','c','g'),
+                h.transpose(), 5, cmap='plasma',
                 norm=colors.LogNorm(), linewidths=2)
 
+    pos_df = pd.DataFrame(pos_arr, columns=['alpha_Lambda', 'alpha_Dneut', 'alpha_Dye', 'alpha_Deint', 'alpha_Detrb'])
+    #sns.pairplot(pos_df)
+    g = sns.PairGrid(pos_df)
+    g.map_diag(plt.hist)
+    g.map_lower(sns.kdeplot, n_levels=5)
 
 if args.plot != None:
     hist2d()

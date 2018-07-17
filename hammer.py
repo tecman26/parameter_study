@@ -33,6 +33,13 @@ y_e_3D_std = 0.1*y_e_3D
 s_3D_std = 0.1*s_3D
 
 def lnprob(params):
+    
+    if params[0] >= lmax or params[0] <= lmin:
+        return -np.inf
+    else:
+        for i in range(1,5):
+            if params[i] >= dmax or params[i] <= dmin:
+                return -np.inf
 
     r_sh, r_sh_std = emulRShock(params)
     v_con, v_con_std = emulVCon(params)
