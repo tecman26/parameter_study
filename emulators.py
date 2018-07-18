@@ -44,8 +44,9 @@ data_file = os.path.join(trial_directory, "data_storage.pkl")
 def defKernel():
     loadfile = open(data_file, 'rb')
     data = pickle.load(loadfile)
+    print(data.pos_arr)
     global kernel_choice
-    kernel_choice = LocalLengthScalesKernel(data.pos_arr)
+    kernel_choice = LocalLengthScalesKernel.construct(data.pos_arr, nu=0.5)
 
     global r_sh_emul
     global v_con_emul
@@ -210,7 +211,7 @@ def emulS(arr):
     return out_arr[0][0], out_arr[1][0]
 
 if __name__ == '__main__':
-    store_data(trial_directory)
+    #store_data(trial_directory)
     defKernel()
     calibrateEmulators()
     storeEmulators()
