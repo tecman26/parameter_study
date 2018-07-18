@@ -11,7 +11,7 @@ from read1d import *
 import glob
 import pickle
 from settings import *
-from gp_extras.kernels import LocalLengthScalesKernel
+#from gp_extras.kernels import LocalLengthScalesKernel
 
 def resh(arr):
     return np.reshape(arr,(1,-1))
@@ -34,10 +34,10 @@ class DataSet:
         self.y_e_arr = y_e_arr
         self.s_arr = s_arr
 
-kernel_choice = 0
+#kernel_choice = 0
 
 #initialize emulators
-#kernel_choice = gaussian_process.kernels.Matern(0.05, nu=0.5)
+kernel_choice = gaussian_process.kernels.Matern(0.05, nu=0.5)
 
 data_file = os.path.join(trial_directory, "data_storage.pkl")
 
@@ -45,8 +45,8 @@ def defKernel():
     loadfile = open(data_file, 'rb')
     data = pickle.load(loadfile)
     print(data.pos_arr)
-    global kernel_choice
-    kernel_choice = LocalLengthScalesKernel.construct(data.pos_arr, nu=0.5)
+    #global kernel_choice
+    #kernel_choice = LocalLengthScalesKernel.construct(data.pos_arr, nu=0.5)
 
     global r_sh_emul
     global v_con_emul
