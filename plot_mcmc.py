@@ -92,20 +92,20 @@ def hist2d():
 def pairmap():
     hmax = np.max(H)
     level_list = [0.5*hmax*f(x) for x in reversed(range(1,6))]
-    print(level_list)
+    #print(level_list)
 
     pos_df = pd.DataFrame(pos_arr, columns=['alpha_Lambda', 'alpha_Dneut', 'alpha_Dye', 'alpha_Deint', 'alpha_Detrb'])
     #sns.pairplot(pos_df)
-    g = sns.PairGrid(pos_df)
+    #g = sns.PairGrid(pos_df)
     #g.map_upper(plt.scatter)
-    g.map_diag(plt.hist, log=True)
-    g.map_lower(sns.kdeplot, n_levels=5, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
+    #g.map_diag(plt.hist, log=True)
+    #g.map_lower(sns.kdeplot, n_levels=5, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
     #sns.kdeplot(pos_df['alpha_Detrb'], pos_df['alpha_Dneut'], n_levels=5, levels=level_list, cmap='plasma')
-    #sns.kdeplot(pos_df['alpha_Detrb'], pos_df['alpha_Dneut'], n_levels=5, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
+    sns.kdeplot(pos_df['alpha_Detrb'], pos_df['alpha_Dneut'], n_levels=10, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
 
 
 if args.plot != None:
     hist2d()
 
-    #pairmap()
+    pairmap()
     plt.show()

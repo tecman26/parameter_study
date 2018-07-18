@@ -18,3 +18,4 @@ dmax = 0.9
 trial_num = 5
 data_dir3D = "/mnt/research/SNAPhU/STIR/3dData"
 trial_directory = "/mnt/research/SNAPhU/STIR/parameter_study/calib"+str(trial_num)
+trial_directory_2 = "results_5_par"
