@@ -21,6 +21,16 @@ import argparse
 import pandas as pd
 import seaborn as sns
 
+font = {'family' : 'DejaVu Sans',
+        'weight' : 'normal',
+        'size'   : 32}
+
+matplotlib.rc('font', **font)
+
+
+def kde(pos_df):
+    return sns.kdeplot(pos_df['alpha_Detrb'], pos_df['alpha_Dneut'], n_levels=5, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
+
 run_num = 3
 parser = argparse.ArgumentParser(description="Plot run of MCMC")
 parser.add_argument('run_num', nargs=1, help="Choose which run to plot", metavar='n' )
@@ -91,21 +101,31 @@ def hist2d():
 
 def pairmap():
     hmax = np.max(H)
-    level_list = [0.5*hmax*f(x) for x in reversed(range(1,6))]
+    level_list = [10**(3-x) for x in reversed(range(1,3))]
     #print(level_list)
 
-    pos_df = pd.DataFrame(pos_arr, columns=['alpha_Lambda', 'alpha_Dneut', 'alpha_Dye', 'alpha_Deint', 'alpha_Detrb'])
+    pos_df = pd.DataFrame(pos_arr, columns=[r'$\alpha_\Lambda$', r'$\alpha_{Dneut}$', r'$\alpha_{Dye}$', r'$\alpha_{Deint}$', r'$\alpha_{Detrb}$'])
     #sns.pairplot(pos_df)
-    #g = sns.PairGrid(pos_df)
-    #g.map_upper(plt.scatter)
-    #g.map_diag(plt.hist, log=True)
-    #g.map_lower(sns.kdeplot, n_levels=5, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
-    #sns.kdeplot(pos_df['alpha_Detrb'], pos_df['alpha_Dneut'], n_levels=5, levels=level_list, cmap='plasma')
-    sns.kdeplot(pos_df['alpha_Detrb'], pos_df['alpha_Dneut'], n_levels=10, locator=matplotlib.ticker.LinearLocator(), cmap='plasma')
+    g = sns.PairGrid(pos_df)
+    g.map_upper(plt.scatter, s=1, cmap='plasma')
+    g.map_diag(sns.kdeplot)#, log=True)
+    #g.map_diag(plt.hist)
+    g.map_lower(sns.kdeplot,gridsize=40, n_levels = 10, cmap='plasma')
+    #g.map_lower(plt.contour, n_levels = 2, cmap='plasma', locator=matplotlib.ticker.LogLocator())
+    #plt.title("Markov chain positions (5-parameter trial)")
 
+    #sns.kdeplot(pos_df[r'$\alpha_{Detrb}$'], pos_df[r'$\alpha_{Dneut}$'], n_levels=1, gridsize=40, cmap='plasma', locator=matplotlib.ticker.LogLocator())    
+    #sns.kdeplot(pos_df[r'$\alpha_{Detrb}$'], pos_df[r'$\alpha_{Dneut}$'], n_levels=5, gridsize=40, cmap='plasma')#, locator=matplotlib.ticker.LogLocator(),vmax=hmax/2)    
 
 if args.plot != None:
-    hist2d()
+    #hist2d()
 
     pairmap()
+    ax = plt.gcf().get_axes()
+    for axis in ax:
+        axis.tick_params(labelsize=14)
+    #ax.ticklabel_format(useOffset=True)
+    plt.subplots_adjust(hspace=0.1, wspace=0.1)
+    #plt.tight_layout()
+    plt.savefig("pair_grid_1.pdf")
     plt.show()
