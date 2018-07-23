@@ -11,7 +11,7 @@ from read1d import *
 import glob
 import pickle
 from settings import *
-#from gp_extras.kernels import LocalLengthScalesKernel
+import argparse
 
 def resh(arr):
     return np.reshape(arr,(1,-1))
@@ -211,7 +211,18 @@ def emulS(arr):
     return out_arr[0][0], out_arr[1][0]
 
 if __name__ == '__main__':
-    #store_data(trial_directory)
+
+    parser = argparse.ArgumentParser(description="Contains functions for calibrating emulator for a particular calibration directory. Run the whole script to calibrate emulators.")
+    parser.add_argument('-s', action='store_true', help="Reads in calibration data and stores in pickled binary file. This option takes more time, and is only necessary if calibration data has not yet been read.")
+    
+    args = parser.parse_args()
+    store = args.s
+
+    if store == True: 
+        print("Storing 1D simulation sample data")
+        store_data(trial_directory)
+    else:
+        print("Loading previously stored sample data")
     defKernel()
     calibrateEmulators()
     storeEmulators()
